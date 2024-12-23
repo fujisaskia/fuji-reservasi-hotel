@@ -73,7 +73,7 @@
             <tbody>
                 @foreach ($reservations as $index => $reservation)
                 <tr class="hover:bg-gray-100 border-b border-gray-300">
-                    <td class="p-3 lg:p-2 text-sm lg:text-xs text-gray-600">{{ $index + 1 }}</td>
+                    <td class="p-3 lg:p-2 text-sm lg:text-xs text-gray-600 text-center">{{ $index + 1 }}</td>
                     <td class="p-3 lg:p-2 text-sm lg:text-xs text-gray-600">{{ $reservation->user->full_name }}</td>
                     <td class="p-3 lg:p-2 text-sm lg:text-xs text-gray-600">{{ $reservation->roomType->tipe_kamar }}</td>
                     <td class="p-3 lg:p-2 text-sm lg:text-xs text-gray-600">IDR  {{ number_format($reservation->total_price, 0, ',', ',') }}</td>

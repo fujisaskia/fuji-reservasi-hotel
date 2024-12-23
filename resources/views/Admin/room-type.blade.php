@@ -5,6 +5,21 @@
 
 @section('content')
 
+    @if (session('sweetalert'))
+    <script>
+        Swal.fire({
+            icon: '{{ session('sweetalert.type') }}', // 'success' atau 'error'
+            title: '{{ session('sweetalert.message') }}',
+            showConfirmButton: true,
+            customClass: {
+                title: 'swal-small-text' // Tambahkan kelas kustom
+            },
+        });
+    </script>
+    @endif
+
+
+
     <div class="max-w-5xl  mx-auto py-12 px-6 text-xs font-poppins bg-white rounded-lg shadow-md">
         <!-- Header -->
         <h2 class="text-lg md:text-2xl font-bold text-center mb-4">Tipe Kamar Hotel</h2>
@@ -59,11 +74,14 @@
                                     @include('components.button-edit')
                                 </a>
 
-                                <form action="{{ route('room-types.destroy', $roomType) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus tipe kamar ini?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    @include('components.button-delete')
-                                </form>
+                                <form id="delete-room-type-{{ $roomType->id }}" 
+                                    action="{{ route('room-types.destroy', $roomType) }}" 
+                                    method="POST" 
+                                    class="delete-room-type-form">
+                                  @csrf
+                                  @method('DELETE')
+                                  @include('components.button-delete')
+                              </form>                              
                             </div>
                         </td>
                     </tr>
@@ -73,6 +91,39 @@
             </table>
         </div>
     </div>
+
+<script>
+
+    //sweetalert untuk konfirmasi hapus
+    document.addEventListener('DOMContentLoaded', function () {
+        // Pilih semua form dengan kelas `delete-room-type-form`
+        const deleteForms = document.querySelectorAll('.delete-room-type-form');
+        
+        deleteForms.forEach(form => {
+            form.addEventListener('submit', function (event) {
+                event.preventDefault(); // Cegah submit default
+
+                // Tampilkan SweetAlert konfirmasi
+                Swal.fire({
+                    title: 'Apakah Anda yakin?',
+                    text: "Tipe kamar ini akan dihapus secara permanen!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ya, hapus!',
+                    cancelButtonText: 'Batal',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Jika dikonfirmasi, submit formulir
+                        form.submit();
+                    }
+                });
+            });
+        });
+    });
+</script>
+
 
 
 @endsection

@@ -13,12 +13,19 @@
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
      {{-- alpinejs --}}
      <script src="//unpkg.com/alpinejs" defer></script>
-     <!-- Add this to the head or before closing body tag -->
+
+    {{-- sweetALert --}}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
      {{-- chart js untuk grafik --}}
      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+     <style>
+        .swal-small-text {
+            font-size: 14px; /* Atur ukuran teks sesuai kebutuhan */
+        }
+
+     </style>
 
 </head>
 <body class="font-poppins bg-slate-100">

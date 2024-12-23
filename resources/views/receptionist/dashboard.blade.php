@@ -5,7 +5,7 @@
 
 @section('content')
 
-    <h4 class="bg-white py-3 px-4 text-sm md:text-xs rounded-lg shadow-md md:w-1/2 mb-8">Haloo... Selamat Datang, <span class="font-semibold text-rose-600">receptionist!</span></h4>
+    <h4 class="bg-white py-3 px-4 text-sm md:text-lg rounded-lg shadow-md md:w-1/2 mb-8 font-semibold">Haloo... Selamat Datang, <span class="font-semibold text-rose-600">{{ Auth::user()->full_name }}!</span></h4>
 
     <div class="container bg-white py-8 px-4 md:px-6 rounded-lg items-center justify-center md:justify-start text-xs">
         @include('components.room-status')
@@ -27,7 +27,7 @@
                             @forelse ($checkInReservations as $reservation)
                                 <tr class="border-b font-medium hover:bg-slate-100">
                                     <td class="p-3 text-left text-gray-600">{{ $reservation->user->full_name }}</td>
-                                    <td class="p-3 text-center text-gray-600">{{ $reservation->room->room_number }}</td>
+                                    <td class="p-3 text-center text-gray-600">{{ $reservation->room->first()->room_number ?? 'tidak diketahui' }}</td>
                                     <td class="p-3 text-left text-gray-600">
                                         {{ \Carbon\Carbon::parse($reservation->check_in_date)->format('M d, Y') }} - 14:00
                                     </td>
@@ -71,7 +71,7 @@
                             @forelse ($checkOutReservations as $reservation)
                                 <tr class="border-b font-medium hover:bg-slate-100">
                                     <td class="p-3 text-left text-gray-600">{{ $reservation->user->full_name }}</td>
-                                    <td class="p-3 text-left text-gray-600">{{ $reservation->room->room_number }}</td>
+                                    <td class="p-3 text-center text-gray-600">{{ $reservation->room->first()->room_number ?? 'tidak diketahui' }}</td>
                                     <td class="p-3 text-left text-gray-600">
                                         {{ \Carbon\Carbon::parse($reservation->check_out_date)->format('M d, Y') }} 12:00
                                     </td>

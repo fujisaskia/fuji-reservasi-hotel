@@ -16,7 +16,7 @@
             <i class="fa-solid fa-bed fa-4x"></i>
             <div class="lg:text-start z-10">
                 <h4 class="text-2xl font-semibold">{{ $countOccupied }}</h4>
-                <p class="">rooms terisi</p>                        
+                <p class="">kamar terisi</p>                        
             </div>
         </div>  
     </div>
@@ -27,7 +27,7 @@
             <i class="fa-solid fa-bed fa-4x"></i>
             <div class="lg:text-start z-10">
                 <h4 class="text-2xl font-semibold">{{ $countAvailable }}</h4>
-                <p class="">rooms tersedia</p>                        
+                <p class="">kamar tersedia</p>                        
             </div>
         </div>  
     </div>
@@ -37,7 +37,7 @@
             <i class="fa-solid fa-bed fa-4x"></i>
             <div class="lg:text-start z-10">
                 <h4 class="text-2xl font-semibold">{{ $countCleaning }}</h4>
-                <p class="">rooms perawatan</p>                        
+                <p class="">kamar perawatan</p>                        
             </div>
         </div>  
     </div>

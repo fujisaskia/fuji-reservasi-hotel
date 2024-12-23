@@ -4,6 +4,19 @@
 
 @section('content')
 
+@if (session('sweetalert'))
+<script>
+    Swal.fire({
+        icon: '{{ session('sweetalert.type') }}', // 'success' atau 'error'
+        title: '{{ session('sweetalert.message') }}',
+        showConfirmButton: true,
+        customClass: {
+            title: 'swal-small-text' // Tambahkan kelas kustom
+        },
+    });
+</script>
+@endif
+
 <div class="max-w-4xl mx-auto mt-10 bg-white p-6 rounded-lg shadow-md text-sm lg:text-xs">
     <h2 class="text-xl font-semibold space-y-2 pb-4 border-b border-gray-300">Edit Tipe Kamar</h2>
     <form action="{{ route('room-types.update', $roomType) }}" method="POST" enctype="multipart/form-data" class="my-4">

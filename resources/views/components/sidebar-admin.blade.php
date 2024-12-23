@@ -103,7 +103,7 @@
                     </div>
                 </div>
                 
-                <div x-data="{ open: false }" x-init="open = window.location.pathname.includes('/admin/guest') || window.location.pathname.includes('/users/admin')">
+                <div x-data="{ open: false }" x-init="open = window.location.pathname.includes('/admin/guest') || window.location.pathname.includes('/users')">
                     <!-- Trigger untuk dropdown -->
                     <a href="javascript:void(0)" @click="open = !open">
                         <li class="flex items-center  text-rose-800 hover:bg-slate-100 py-3 px-4 hover:text-red-800 mt-2 group">
@@ -130,8 +130,8 @@
                             </li>
                         </a>
                         
-                        <a href="/users/admin">
-                            <li class="flex items-center space-x-2 py-3 px-4 {{ Request::is('users/admin') ? 'border-l-4 border-rose-700 text-rose-900 bg-gray-100' : 'hover:bg-slate-100  text-red-800' }} group">
+                        <a href="/users">
+                            <li class="flex items-center space-x-2 py-3 px-4 {{ Request::is('users') ? 'border-l-4 border-rose-700 text-rose-900 bg-gray-100' : 'hover:bg-slate-100  text-red-800' }} group">
                                 <i class="fa-solid fa-user-tag fa-sm"></i>
                                 <p class="text-sm md:text-xs font-medium group-hover:translate-x-1 duration-500">Users</p>
                             </li>

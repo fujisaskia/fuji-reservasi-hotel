@@ -36,7 +36,11 @@ class RoomController extends Controller
             'room_status' => $request->room_status,
         ]);
 
-        return redirect()->route('rooms.index')->with('success', 'Kamar berhasil ditambahkan');
+        // Mengalihkan ke daftar tipe kamar dengan pesan sukses
+        return redirect()->route('rooms.index')->with('sweetalert', [
+            'type' => 'success',
+            'message' => 'Kamar berhasil ditambahkan',
+        ]);
     }
 
     public function edit($id)
@@ -67,7 +71,11 @@ class RoomController extends Controller
         $room->save();
 
         // Redirect kembali ke halaman daftar kamar dengan pesan sukses
-        return redirect()->route('rooms.index')->with('success', 'Data kamar berhasil diperbarui.');
+        // Mengalihkan ke daftar tipe kamar dengan pesan sukses
+        return redirect()->route('rooms.index')->with('sweetalert', [
+            'type' => 'success',
+            'message' => 'Kamar berhasil diperbaharui.',
+        ]);
     }
 
     public function destroy($id)
@@ -77,6 +85,10 @@ class RoomController extends Controller
         $room->delete();
     
         // Redirect kembali ke halaman daftar kamar dengan pesan sukses
-        return redirect()->route('rooms.index')->with('success', 'Data kamar berhasil dihapus.');
+        // Mengalihkan ke daftar tipe kamar dengan pesan sukses
+        return redirect()->route('rooms.index')->with('sweetalert', [
+            'type' => 'success',
+            'message' => 'Kamar berhasil dihapus!.',
+        ]);
     }
 }

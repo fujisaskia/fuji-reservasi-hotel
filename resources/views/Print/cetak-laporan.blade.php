@@ -122,7 +122,7 @@
                         <td class="text-center">{{ $loop->iteration }}</td>
                         <td>{{ $reservation->user->full_name }}</td>
                         <td>{{ $reservation->invoice->invoice_number }}</td>
-                        <td class="text-center">{{ $reservation->room->room_number }}</td>
+                        {{-- <td class="text-center">{{ $reservation->room->room_number }}</td> --}}
                         <td class="text-right">
                             {{ \Carbon\Carbon::parse($reservation->check_in_date)->diffInDays($reservation->check_out_date) }} Malam
                         </td>

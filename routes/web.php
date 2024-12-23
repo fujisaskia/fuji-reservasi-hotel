@@ -55,6 +55,7 @@ Route::get('/monthly-revenue', [DashboardController::class, 'getMonthlyRevenue']
 
 // rute manajemen reservation/
 Route::get('/admin/reservations', [AdminController::class, 'adminReservations'])->name('admin.reservations');
+Route::match(['get', 'post'], '/admin/reservation/{id}/confirm', [AdminController::class, 'adminConfirmReservation'])->name('admin.reservation.confirm');
 Route::get('/reservations/filter', [AdminController::class, 'filter'])->name('reservations.filter');
 Route::get('/admin/reservasi/cetak', [AdminController::class, 'cetakLaporan'])->name('admin.reservasi.cetak');
 
@@ -91,13 +92,18 @@ Route::get('/service-categories/{id}/edit', [ServiceCategoryController::class, '
 Route::put('/service-categories/{id}', [ServiceCategoryController::class, 'update'])->name('service-categories.update');
 Route::delete('/service-categories/{id}', [ServiceCategoryController::class, 'destroy'])->name('service-categories.destroy');
 
+// Rute untuk manajemen pengguna
 Route::get('/admin/guest', [AdminController::class, 'showGuest'])->name('guest.admin');
 Route::get('/lihat-layanan/{reservation}', [AdminController::class, 'showServiceRoomByReservation'])->name('lihat-layanan');
+Route::post('/delete-service', [AdminController::class, 'deleteServiceOrderGuest']);
+Route::post('/print-services', [AdminController::class, 'printSelectedServicesGuest'])->name('print.services');
 
-
-Route::get('/users/admin', function () {
-    return view('admin.users');
-});
+Route::get('/users', [AdminController::class, 'showUsers'])->name('users.index');
+Route::get('/users/create', [AdminController::class, 'userCreate'])->name('users.create');
+Route::post('/users', [AdminController::class, 'userStore'])->name('users.store');
+Route::get('/users/{id}/edit', [AdminController::class, 'userEdit'])->name('users.edit');
+Route::put('/users/{id}', [AdminController::class, 'userUpdate'])->name('users.update');
+Route::delete('/users/{id}', [AdminController::class, 'userDestroy'])->name('users.destroy');
 
 //rute untuk fitur Manajemen Ulasan
 Route::get('/admin/ulasan', [UlasanController::class, 'index'])->name('ulasans.index');
@@ -112,7 +118,6 @@ Route::get('/reservasi', [ReceptionistController::class, 'index'])->name('reserv
 Route::match(['get', 'post'], '/reservation/{id}/confirm', [ReceptionistController::class, 'confirmReservation'])
     ->name('reservation.confirm');
 
-
 // menampilkan data kamar "tersedia" di fitur check-in
 Route::get('/check-in/receptionist', [ReceptionistController::class, 'showAvailableRooms']);
 Route::get('/check-in/in-room/{id}', [ReceptionistController::class, 'showCheckInForm'])->name('checkin.form');
@@ -122,7 +127,10 @@ Route::post('/check-in/in-room/{id}', [ReceptionistController::class, 'processCh
 // Route untuk halaman index Guedt
 Route::get('/guest', [ReceptionistController::class, 'showCheckedInReservations'])->name('guest.checked_in');
 Route::get('/layanan-kamar/{reservation}', [ServiceOrderController::class, 'showForm'])->name('layanan.form');
-// Route::post('/layanan/create-order', [ServiceOrderController::class, 'createOrder'])->name('layanan.createOrder');
+// Route untuk filter layanan berdasarkan kategori
+Route::get('/layanan-kamar/category', [ServiceOrderController::class, 'showFilteredServices']);
+
+Route::post('/pesan-layanan', [ServiceOrderController::class, 'storeServiceOrder'])->name('pesan-layanan.store');
 Route::get('/detail-layanan/{reservation}', [ServiceOrderController::class, 'showServiceByReservation'])->name('detail-layanan');
 Route::post('/delete-service', [ServiceOrderController::class, 'deleteService']);
 Route::post('/print-services', [ServiceOrderController::class, 'printSelectedServices'])->name('print.services');
@@ -175,5 +183,5 @@ Route::post('/payment/snap-token', [PaymentController::class, 'getSnapToken']);
 Route::post('/payment/success', [PaymentController::class, 'updatePaymentStatus'])->name('payment.success');
 
 //Payment Service
-Route::post('/payment-service/snap-token', [PaymentServiceController::class, 'getSnapToken']);
-Route::post('/payment-service/success', [PaymentServiceController::class, 'updatePaymentStatus'])->name('service-payment.success');
+// Route::post('/payment-service/snap-token', [PaymentServiceController::class, 'getSnapToken']);
+// Route::post('/payment-service/success', [PaymentServiceController::class, 'updatePaymentStatus'])->name('service-payment.success');

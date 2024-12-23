@@ -19,7 +19,7 @@
 
 
 
-<div class="container bg-white py-8 px-4 rounded-lg">
+<div class="container mx-auto bg-white py-8 px-6 shadow-md border border-gray-200 rounded-lg">
     <h2 class="text-2xl font-bold text-center mb-4">Manajemen Reservasi</h2>
 
     <!-- Filter dan Search -->
@@ -102,7 +102,8 @@
                     <td class="p-3 lg:p-2 text-sm lg:text-xs text-gray-600">{{ \Carbon\Carbon::parse($reservation->check_in_date)->format('M d, Y') }}</td>
                     <td class="p-3 lg:p-2 text-sm lg:text-xs text-gray-600">{{ \Carbon\Carbon::parse($reservation->check_out_date)->format('M d, Y') }}</td>
                     <td class="p-2 text-[11px] text-white">
-                        <form>
+                        <form action="{{ route('admin.reservation.confirm', $reservation->id) }}" method="POST">
+                            @csrf
                             <button type="submit" class="p-1 w-full rounded-full justify-between italic shadow-xl hover:shadow-sm focus:shadow-none 
                                 @if ($reservation->reservation_status === 'Pending') 
                                     bg-yellow-100 text-yellow-700 

@@ -5,11 +5,20 @@
 
 @section('content')
 
-@if(session('success'))
-    <div class="bg-green-500 text-white text-center py-2 rounded-lg mb-4 text-xs z-10">
-        {{ session('success') }}
-    </div>
+
+@if (session('sweetalert'))
+    <script>
+        Swal.fire({
+            icon: '{{ session('sweetalert.type') }}', // 'success' atau 'error'
+            title: '{{ session('sweetalert.message') }}',
+            showConfirmButton: true,
+            customClass: {
+                title: 'swal-small-text' // Tambahkan kelas kustom
+            },
+        });
+    </script>
 @endif
+
 <div class="container mx-auto py-12 px-6 text-xs font-poppins bg-white rounded-lg shadow-md">
         <!-- Header -->
         <h2 class="text-lg md:text-2xl font-bold text-center mb-4">Manajement Kamar Hotel</h2>
@@ -62,7 +71,7 @@
                                     <i class="fa-solid fa-pen-nib"></i>
                                 </a>
                                 <!-- Tombol Hapus -->
-                                <form action="{{ route('rooms.destroy', $room->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus kamar ini?');">
+                                <form action="{{ route('rooms.destroy', $room->id) }}" method="POST" class="delete-room-form">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="lg:flex space-x-2 items-center justify-center bg-red-500 hover:bg-red-600 text-white p-2 rounded-md shadow-lg hover:shadow-none">
@@ -78,6 +87,39 @@
 
         </div>
     </div>
+
+    
+<script>
+
+    //sweetalert untuk konfirmasi hapus
+    document.addEventListener('DOMContentLoaded', function () {
+        // Pilih semua form dengan kelas `delete-room-type-form`
+        const deleteForms = document.querySelectorAll('.delete-room-form');
+        
+        deleteForms.forEach(form => {
+            form.addEventListener('submit', function (event) {
+                event.preventDefault(); // Cegah submit default
+
+                // Tampilkan SweetAlert konfirmasi
+                Swal.fire({
+                    title: 'Apakah Anda yakin?',
+                    text: "Tipe kamar ini akan dihapus secara permanen!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ya, hapus!',
+                    cancelButtonText: 'Batal',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Jika dikonfirmasi, submit formulir
+                        form.submit();
+                    }
+                });
+            });
+        });
+    });
+</script>
 
 
 @endsection

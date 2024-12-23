@@ -46,7 +46,7 @@
                     <th class="py-3 px-4 border-b text-center">No</th>
                     <th class="py-3 px-4 border-b">Nama Tamu</th>
                     <th class="py-3 px-4 border-b">Invoice</th>
-                    <th class="py-3 px-4 border-b text-center">Nomor Kamar</th>
+                    {{-- <th class="py-3 px-4 border-b text-center">Nomor Kamar</th> --}}
                     <th class="py-3 px-4 border-b text-center">Durasi Menginap</th>
                     <th class="py-3 px-4 border-b">Tgl. Check-Out</th>
                     <th class="py-3 px-4 border-b">Total Biaya</th>
@@ -59,7 +59,7 @@
                     <td class="py-3 px-4 border-b text-center">{{ $loop->iteration }}</td>
                     <td class="py-3 px-4 border-b">{{ $reservation->user->full_name }}</td>
                     <td class="py-3 px-4 border-b">{{ $reservation->invoice->invoice_number }}</td>
-                    <td class="py-3 px-4 border-b text-center">{{ $reservation->room->room_number }}</td>
+                    {{-- <td class="py-3 px-4 border-b text-center">{{ $reservation->room->room_number }}</td> --}}
                     <td class="py-3 px-4 border-b text-right">
                         {{ \Carbon\Carbon::parse($reservation->check_in_date)->diffInDays($reservation->check_out_date) }} Malam
                     </td>

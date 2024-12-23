@@ -5,7 +5,7 @@
 
 @section('content')
 
-    <h4 class="text-xs bg-rose-500 text-white py-3 px-4 rounded-lg shadow-md md:w-1/2 mb-8">Haloo... Selamat Datang, <span class="font-semibold text-white">Admin!</span></h4>
+    <h4 class="bg-white py-3 px-4 text-sm md:text-lg rounded-lg shadow-md md:w-1/2 mb-8 font-semibold">Haloo... Selamat Datang, <span class="font-semibold text-rose-600">{{ Auth::user()->full_name }}!</span></h4>
     
     <div class="container bg-white py-8 px-4 md:px-6 rounded-lg items-center justify-center md:justify-start text-xs">
 
@@ -17,7 +17,7 @@
                     <i class="fa-solid fa-tags fa-4x"></i>
                     <div class="lg:text-start z-10">
                         <h4 class="text-2xl font-semibold">{{ $totalPaymentSuccess }}</h4>
-                        <p>total reservasi</p>                        
+                        <p>total reservasi bulan ini</p>                        
                     </div>
                 </div>  
             </div>

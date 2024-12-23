@@ -96,7 +96,7 @@
             <h2>Invoice Layanan</h2>
             <div class="info-section">
                 <p><strong>Reservasi ID:</strong> {{ $reservation->invoice->invoice_number }}</p>
-                <p><strong>Nomor Kamar:</strong> {{ $reservation->roomType->tipe_kamar }} - {{ $reservation->room->room_number }}</p>
+                {{-- <p><strong>Nomor Kamar:</strong> {{ $reservation->roomType->tipe_kamar }} - {{ $reservation->room->first()->room_number }}</p> --}}
                 <p><strong>Nama Tamu:</strong> {{ $reservation->user->full_name }}</p>
             </div>
 

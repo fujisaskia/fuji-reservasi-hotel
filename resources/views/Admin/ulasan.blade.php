@@ -3,6 +3,7 @@
 @section('title', 'Ulasan Kamar | Admin')
 
 @section('content')
+
 @if(session('success'))
     <script>
         Swal.fire({
@@ -42,7 +43,8 @@
                         <form action="{{ route('ulasans.toggleVisibility', $ulasan->id) }}" method="POST">
                             @csrf
                             @method('POST') <!-- Menggunakan POST untuk toggle -->
-                            <button type="submit" class="text-blue-600 hover:text-blue-800">
+                            <button type="submit" 
+                                    class="{{ $ulasan->is_visible ? 'text-white bg-blue-600 p-1 rounded-md hover:bg-blue-700' : 'text-white bg-rose-600 p-1 rounded-md hover:bg-rose-700' }} text-[11px] focus:scale-95 duration-300">
                                 {{ $ulasan->is_visible ? 'Sembunyikan' : 'Tampilkan' }}
                             </button>
                         </form>

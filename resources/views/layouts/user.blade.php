@@ -72,7 +72,7 @@
                     <span class="font-semibold text-lg text-gray-800 font-playfair"><span class="text-rose-800">{{ $hotelSetting->name ?? 'Hotel' }}</span> Hotel</span>
                 </a>
     
-                <div class="relative inline-block text-left">
+                <div class="relative md:inline-block text-left hidden">
                     <!-- Button -->
                     <button onclick="toggleDropdown()" class="flex space-x-2 items-center text-sm lg:text-xs text-rose-700 bg-gray-200 hover:bg-gray-300 py-2 px-3 rounded-full">
                         <i class="fa-regular fa-user"></i>
@@ -90,7 +90,7 @@
                             </li>
                             <li>
                                 <a href="/my-booking" class="block px-4 py-3 text-sm md:text-xs font-medium text-gray-600 hover:text-gray-700 hover:bg-gray-100">
-                                    My Booking
+                                    Booking-Ku
                                 </a>
                             </li>
                             <li x-data="{ showModal: false }" class="">
@@ -100,6 +100,87 @@
 
                                 <!-- Popup Konfirmasi -->
                                 <div x-show="showModal" class="fixed inset-0 flex items-center justify-center text-xs font-medium bg-gray-900 bg-opacity-50 z-50 px-4">
+                                    <div class="bg-white w-full md:w-1/3 p-6 rounded shadow-lg">
+                                        <h2 class="text-lg font-bold mb-4">Konfirmasi Logout</h2>
+                                        <p class="mb-6">Apakah Anda yakin ingin keluar?</p>
+                                        <div class="flex justify-end space-x-4">
+                                            <button 
+                                                @click="showModal = false" 
+                                                class="bg-gray-300 px-4 py-2 rounded"
+                                            >
+                                                Batal
+                                            </button>
+                                            <form action="{{ route('logout') }}" method="POST">
+                                                @csrf
+                                                <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded">
+                                                    Logout
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    
+                    
+                </div>
+                <div x-data="{ showSidebar: false }" class="relative md:hidden flex">
+                    <!-- Tombol untuk membuka sidebar -->
+                    <button @click="showSidebar = true" class="p-2 bg-gray-200 rounded text-gray-700">
+                        <i class="fa-regular fa-user text-lg"></i>
+                    </button>
+                
+                    <!-- Sidebar -->
+                    <div 
+                        x-show="showSidebar" 
+                        x-transition:enter="transition ease-out duration-300 transform"
+                        x-transition:enter-start="translate-x-full"
+                        x-transition:enter-end="translate-x-0"
+                        x-transition:leave="transition ease-in duration-200 transform"
+                        x-transition:leave-start="translate-x-0"
+                        x-transition:leave-end="translate-x-full"
+                        class="fixed top-0 right-0 h-full w-64 bg-white shadow-lg z-50"
+                    >
+                        <!-- Header Sidebar -->
+                        <div class="flex justify-between items-center p-4 border-b">
+                            <h2 class="text-lg font-bold sr-only">Menu</h2>
+                            <button @click="showSidebar = false" class="text-gray-600 hover:text-gray-800">
+                                ✖
+                            </button>
+                        </div>
+                
+                        <!-- Isi Menu -->
+                        <ul class="py-12 px-4 space-y-2">
+                            <li>
+                                <a href="/profile" class="block px-4 py-3 text-sm md:text-xs font-medium text-gray-600 hover:text-gray-700 hover:bg-gray-100 {{ Request::is('profile') ? 'bg-gray-100 border-l-4 border-rose-600' : 'hover:bg-gray-100' }}">
+                                    <i class="fa-solid fa-user  mr-1"></i>
+                                    Profile
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/my-booking" class="block px-4 py-3 text-sm items-center md:text-xs font-medium text-gray-600 hover:text-gray-700 hover:bg-gray-100 {{ Request::is('my-booking') ? 'bg-gray-100 border-l-4 border-rose-600' : 'hover:bg-gray-100' }}">
+                                    <i class="fa-solid fa-tags mr-1"></i>
+                                    Booking-Ku
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/ulasan/form" class="block px-4 py-3 text-sm md:text-xs font-medium text-gray-600 hover:text-gray-700 hover:bg-gray-100 {{ Request::is('ulasan/form') ? 'bg-gray-100 border-l-4 border-rose-600' : 'hover:bg-gray-100' }}">
+                                    <i class="fa-regular fa-comment mr-1"></i>
+                                    Beri Ulasan
+                                </a>
+                            </li>
+                            <li x-data="{ showModal: false }">
+                                <button @click="showModal = true" class="block w-full text-left px-4 py-6 border-t text-sm md:text-xs font-medium text-gray-600 hover:text-gray-700 hover:bg-gray-100">
+                                    Logout
+                                </button>
+                
+                                <!-- Popup Konfirmasi -->
+                                <div 
+                                    x-show="showModal" 
+                                    class="fixed inset-0 flex items-center justify-center text-xs font-medium bg-gray-900 bg-opacity-50 z-50 px-4"
+                                >
                                     <div class="bg-white w-full md:w-1/3 p-6 rounded shadow-lg">
                                         <h2 class="text-lg font-bold mb-4">Konfirmasi Logout</h2>
                                         <p class="mb-6">Apakah Anda yakin ingin keluar?</p>

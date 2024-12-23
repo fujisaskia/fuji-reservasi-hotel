@@ -9,6 +9,7 @@ use App\Models\RoomType;
 use App\Models\Reservation;
 use App\Models\ServiceOrder;
 use Illuminate\Http\Request;
+use App\Models\PaymentService;
 use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
@@ -25,7 +26,7 @@ class DashboardController extends Controller
         $serviceRevenue = ServiceOrder::selectRaw('MONTH(created_at) as month, SUM(total_price) as total')
             ->groupBy('month')
             ->pluck('total', 'month')
-            ->toArray();
+            ->toArray();;
     
         // Format untuk 12 bulan (Jan - Dec)
         $formattedRoomRevenue = array_fill(1, 12, 0);

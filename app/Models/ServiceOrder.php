@@ -16,7 +16,9 @@ class ServiceOrder extends Model
         'service_id',
         'price',
         'total_price',
-        'status_order',
+        'quantity',
+        'order_date',
+        'notes',
     ];
 
     // Relasi ke model Reservation
@@ -29,15 +31,5 @@ class ServiceOrder extends Model
     public function service()
     {
         return $this->belongsTo(Service::class);
-    }
-
-    // Event Eloquent untuk menetapkan default status_order ke unpaid
-    protected static function booted()
-    {
-        static::creating(function ($serviceOrder) {
-            if (is_null($serviceOrder->status_order)) {
-                $serviceOrder->status_order = 'unpaid';
-            }
-        });
     }
 }

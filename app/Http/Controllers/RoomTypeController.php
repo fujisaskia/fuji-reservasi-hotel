@@ -77,7 +77,10 @@ class RoomTypeController extends Controller
         ]);
     
         // Mengalihkan ke daftar tipe kamar dengan pesan sukses
-        return redirect()->route('room-types.index')->with('success', 'Tipe kamar berhasil ditambahkan.');
+        return redirect()->route('room-types.index')->with('sweetalert', [
+            'type' => 'success',
+            'message' => 'Tipe kamar berhasil ditambahkan.',
+        ]);
     }
     
     
@@ -123,16 +126,33 @@ class RoomTypeController extends Controller
         ]);
     
         // Redirect ke daftar tipe kamar
-        return redirect()->route('room-types.index')->with('success', 'Tipe kamar berhasil diperbarui.');
+        return redirect()->route('room-types.index')->with('sweetalert', [
+            'type' => 'success',
+            'message' => 'Tipe kamar berhasil diperbaharui.',
+        ]);
     }
     
 
-    // // Menghapus tipe kamar
+    // Menghapus tipe kamar
     public function destroy(RoomType $roomType)
     {
-        $roomType->delete(); // Menghapus tipe kamar
-        return redirect()->route('room-types.index')->with('success', 'Tipe kamar berhasil dihapus.'); // Kembali ke daftar
+        // Cek apakah ada room dengan tipe kamar ini
+        if ($roomType->rooms()->exists()) {
+            // Simpan pesan error di session
+            return redirect()->route('room-types.index')->with('sweetalert', [
+                'type' => 'error',
+                'message' => 'Anda memiliki kamar dengan tipe ini.',
+            ]);
+        }
+
+        // Jika tidak ada, hapus tipe kamar
+        $roomType->delete();
+        return redirect()->route('room-types.index')->with('sweetalert', [
+            'type' => 'success',
+            'message' => 'Tipe kamar berhasil dihapus.',
+        ]);
     }
+
 }
 
 

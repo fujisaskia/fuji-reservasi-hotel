@@ -22,9 +22,7 @@ class ServiceOrderController extends Controller
             ? Service::where('service_category_id', $selectedCategory)->get()
             : Service::all();
     
-        $serviceOrders = ServiceOrder::where('reservation_id', $reservation->id)
-            ->where('status_order', 'unpaid')
-            ->get();
+        $serviceOrders = ServiceOrder::where('reservation_id', $reservation->id)->get();
     
         $totalAmount = $serviceOrders->isNotEmpty()
             ? $serviceOrders->sum('price')
@@ -36,45 +34,51 @@ class ServiceOrderController extends Controller
             'reservation', 
             'categories', 
             'services', 
-            'invoice', 
-            'serviceOrders', 
-            'totalAmount'
+            'invoice'
         ));
     }
-    
-    //menambah service order
-    public function addServiceOrder(Request $request)
+
+    // Menampilkan layanan berdasarkan kategori
+    public function showFilteredServices(Request $request)
     {
-        $serviceOrders = ServiceOrder::create([
-            'reservation_id' => $request->reservation_id,
-            'service_id' => $request->service_id,
-            'price' => $request->price,
-            'total_price' => $request->price, // Or calculate based on quantity if needed
-        ]);
-
-        // Return the updated service orders
-        $serviceOrders = ServiceOrder::where('reservation_id', $request->reservation_id)->get();
-
-        return response()->json([
-            'success' => true,
-            'serviceOrders' => $serviceOrders
-        ]);
+        $category_id = $request->input('category_id');
+        
+        // Filter layanan berdasarkan kategori
+        $services = Service::when($category_id, function ($query, $category_id) {
+            return $query->where('service_category_id', $category_id);
+        })->get();
+    
+        // Debugging: Log the services to see the output
+        // \Log::info($services);
+    
+        return response()->json(['services' => $services]);
     }
-    
-    
-
-    public function showReservationSummary($reservationId)
+                
+    //menambah service order
+    public function storeServiceOrder(Request $request)
     {
-        $reservationId = Reservation::with('room', 'user')->findOrFail($reservationId);
-        $serviceOrders = ServiceOrder::where('reservation_id', $reservationId)
-            ->where('status_order', 'unpaid')
-            ->get();
-    
-        // $totalAmount = $serviceOrders->sum('total_price');
-    
-        return response()->json([
-            'orders' => $serviceOrders
+        $validatedData = $request->validate([
+            'services' => 'required|array',
+            'services.*.name' => 'required|string',
+            'services.*.quantity' => 'required|integer|min:1',
+            'services.*.price' => 'required|integer|min:0',
+            'services.*.service_id' => 'required|integer|exists:services,id', // Pastikan service_id valid
         ]);
+
+        foreach ($validatedData['services'] as $service) {
+            // Hitung total_price
+            $totalPrice = $service['price'] * $service['quantity'];
+
+            \App\Models\ServiceOrder::create([
+                'reservation_id' => $request->reservation_id,
+                'service_id' => $service['service_id'], // Menyertakan service_id
+                'quantity' => $service['quantity'],
+                'price' => $service['price'],
+                'total_price' => $totalPrice, // Tambahkan total_price
+            ]);
+        }
+
+        return response()->json(['message' => 'Pesanan layanan berhasil disimpan!']);
     }
 
 
@@ -93,9 +97,7 @@ class ServiceOrderController extends Controller
         }
 
         // Ambil data service orders yang terkait dengan reservation
-        $serviceOrder = ServiceOrder::where('reservation_id', $reservation->id)
-            ->where('status_order', 'paid')
-            ->get();
+        $serviceOrder = ServiceOrder::where('reservation_id', $reservation->id)->get();
 
         // Hitung total harga
         $totalHarga = $serviceOrder->sum('total_price');
@@ -109,6 +111,9 @@ class ServiceOrderController extends Controller
         ]);
     }
 
+    /**
+     * Menghapus pesan layanan
+     */
     public function deleteService(Request $request)
     {
         $orderId = $request->input('order_id');
@@ -116,7 +121,9 @@ class ServiceOrderController extends Controller
         return response()->json(['message' => 'Layanan berhasil dihapus!']);
     }
 
-
+    /**
+     * mencetak invoice layanan sebagai bukti
+     */
     public function printSelectedServices(Request $request)
     {
         // Validasi bahwa service_ids ada dalam request dan merupakan array

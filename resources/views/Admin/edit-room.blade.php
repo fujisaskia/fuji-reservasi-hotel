@@ -2,6 +2,20 @@
 @extends('layouts.admin')
 
 @section('content')
+
+@if (session('sweetalert'))
+<script>
+    Swal.fire({
+        icon: '{{ session('sweetalert.type') }}', // 'success' atau 'error'
+        title: '{{ session('sweetalert.message') }}',
+        showConfirmButton: true,
+        customClass: {
+            title: 'swal-small-text' // Tambahkan kelas kustom
+        },
+    });
+</script>
+@endif
+
 <div class="max-w-lg mx-auto p-8 bg-white text-xs rounded-lg shadow-lg">
     <h2 class="text-xl font-semibold mb-4">Edit Data Kamar</h2>
 
