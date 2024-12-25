@@ -257,10 +257,19 @@ class AdminController extends Controller
 
 
 
-    // Menampilkan daftar pengguna
-    public function showUsers()
+    // Menampilkan daftar pengguna dengan fitur pencarian dan pagination
+    public function showUsers(Request $request)
     {
-        $users = User::all();
+        $query = User::query();
+
+        // Filter berdasarkan pencarian nama
+        if ($request->has('search') && $request->search != '') {
+            $query->where('full_name', 'like', '%' . $request->search . '%');
+        }
+
+        // Paginate data dengan 25 item per halaman
+        $users = $query->paginate(25);
+
         return view('admin.users', compact('users'));
     }
 
@@ -274,17 +283,17 @@ class AdminController extends Controller
     public function userStore(Request $request)
     {
         $request->validate([
-            'title' => 'required|string|max:10',
+            'title' => 'nullable|string|max:10',
             'full_name' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:6',
             'role' => 'required|in:admin,receptionist,user',
             'phone_number' => 'required|string|max:20',
-            'nationality' => 'required|string|max:50',
-            'identification_type' => 'required|string|max:50',
-            'identification_number' => 'required|string|max:50|unique:users',
+            'nationality' => 'nullable|string|max:50', // Opsional
+            'identification_type' => 'nullable|string|max:50', // Opsional
+            'identification_number' => 'nullable|string|max:50|unique:users', // Opsional
         ]);
-
+    
         User::create([
             'title' => $request->title,
             'full_name' => $request->full_name,
@@ -292,16 +301,17 @@ class AdminController extends Controller
             'password' => Hash::make($request->password),
             'role' => $request->role,
             'phone_number' => $request->phone_number,
-            'nationality' => $request->nationality,
-            'identification_type' => $request->identification_type,
-            'identification_number' => $request->identification_number,
+            'nationality' => $request->nationality, // Bisa null
+            'identification_type' => $request->identification_type, // Bisa null
+            'identification_number' => $request->identification_number, // Bisa null
         ]);
-
+    
         return redirect()->route('users.index')->with('sweetalert', [
             'type' => 'success',
             'message' => 'Pengguna berhasil ditambah',
         ]);
     }
+    
 
     // Menampilkan form edit pengguna
     public function userEdit($id)

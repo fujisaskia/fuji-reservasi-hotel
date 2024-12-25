@@ -28,7 +28,7 @@
         <!-- Title -->
         <div class="mb-4">
             <label for="title" class="block text-gray-700 mb-2">Title</label>
-            <select id="title" name="title" class="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-yellow-300" required>
+            <select id="title" name="title" class="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-yellow-300">
                 <option value="Mr">Mr</option>
                 <option value="Mrs">Mrs</option>
                 <option value="Ms">Ms</option>
@@ -39,12 +39,18 @@
         <div class="mb-4">
             <label for="full_name" class="block text-gray-700 mb-2">Nama Lengkap</label>
             <input type="text" id="full_name" name="full_name" class="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-yellow-300" placeholder="Masukkan nama lengkap" required>
+            @error('full_name')
+                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+            @enderror
         </div>
 
         <!-- Email -->
         <div class="mb-4">
             <label for="email" class="block text-gray-700 mb-2">Email</label>
             <input type="email" id="email" name="email" class="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-yellow-300" placeholder="Masukkan email" required>
+            @error('email')
+                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+            @enderror
         </div>
 
         <!-- Role -->
@@ -55,24 +61,30 @@
                 <option value="receptionist">receptionist</option>
                 <option value="admin">Admin</option>
             </select>
+            @error('role')
+                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+            @enderror
         </div>
 
         <!-- Nomor Telepon -->
         <div class="mb-4">
             <label for="phone_number" class="block text-gray-700 mb-2">Nomor Telepon</label>
             <input type="text" id="phone_number" name="phone_number" class="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-yellow-300" placeholder="Masukkan nomor telepon" required>
+            @error('phone_number')
+                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+            @enderror
         </div>
 
         <!-- Kewarganegaraan -->
         <div class="mb-4">
             <label for="nationality" class="block text-gray-700 mb-2">Kewarganegaraan</label>
-            <input type="text" id="nationality" name="nationality" class="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-yellow-300" placeholder="Contoh: Indonesia" required>
+            <input type="text" id="nationality" name="nationality" class="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-yellow-300" placeholder="Contoh: Indonesia">
         </div>
 
         <!-- Jenis Identitas -->
         <div class="mb-4">
             <label for="identification_type" class="block text-gray-700 mb-2">Jenis Identitas</label>
-            <select id="identification_type" name="identification_type" class="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-yellow-300" required>
+            <select id="identification_type" name="identification_type" class="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-yellow-300">
                 <option value="KTP">KTP</option>
                 <option value="Passport">Passport</option>
             </select>
@@ -81,13 +93,16 @@
         <!-- Nomor Identitas -->
         <div class="mb-4">
             <label for="identification_number" class="block text-gray-700 mb-2">Nomor Identitas</label>
-            <input type="text" id="identification_number" name="identification_number" class="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-yellow-300" placeholder="Masukkan nomor identitas" required>
+            <input type="text" id="identification_number" name="identification_number" class="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-yellow-300" placeholder="Masukkan nomor identitas">
         </div>
 
         <!-- Password -->
         <div class="mb-6">
             <label for="password" class="block text-gray-700 mb-2">Password</label>
             <input type="password" id="password" name="password" class="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-yellow-300" placeholder="Masukkan password" required>
+            @error('password')
+                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+            @enderror
         </div>
 
         <!-- Tombol Submit -->

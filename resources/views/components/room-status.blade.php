@@ -14,7 +14,7 @@
     <div class="text-start justify-start items-start p-8 bg-gradient-to-l from-rose-800 to-rose-500 text-white hover:shadow-xl rounded-md duration-300">
         <div class="flex space-x-2 lg:space-x-6 items-center mx-auto justify-center">
             <i class="fa-solid fa-bed fa-4x"></i>
-            <div class="lg:text-start z-10">
+            <div class="lg:text-start">
                 <h4 class="text-2xl font-semibold">{{ $countOccupied }}</h4>
                 <p class="">kamar terisi</p>                        
             </div>
@@ -25,7 +25,7 @@
     <div class="text-start justify-start items-start p-8 bg-gradient-to-l from-green-600 to-green-400 text-white hover:shadow-xl rounded-md duration-300">
         <div class="flex space-x-2 lg:space-x-6 items-center mx-auto justify-center">
             <i class="fa-solid fa-bed fa-4x"></i>
-            <div class="lg:text-start z-10">
+            <div class="lg:text-start">
                 <h4 class="text-2xl font-semibold">{{ $countAvailable }}</h4>
                 <p class="">kamar tersedia</p>                        
             </div>
@@ -35,7 +35,7 @@
     <div class="text-start justify-start items-start p-8 bg-gradient-to-l from-yellow-800 to-yellow-500 text-white hover:shadow-xl rounded-md duration-300">
         <div class="flex space-x-2 lg:space-x-6 items-center mx-auto justify-center">
             <i class="fa-solid fa-bed fa-4x"></i>
-            <div class="lg:text-start z-10">
+            <div class="lg:text-start">
                 <h4 class="text-2xl font-semibold">{{ $countCleaning }}</h4>
                 <p class="">kamar perawatan</p>                        
             </div>
@@ -44,7 +44,7 @@
     <div class="text-start justify-start items-start p-8 bg-gradient-to-l from-blue-800 to-blue-500 text-white hover:shadow-xl rounded-md duration-300">
         <div class="flex space-x-2 lg:space-x-6 items-center mx-auto justify-center">
             <i class="fa-solid fa-bed fa-4x"></i>
-            <div class="lg:text-start z-10">
+            <div class="lg:text-start">
                 <h4 class="text-2xl font-semibold">{{ $countOccupied }}</h4>
                 <p class="">Tamu Menginap</p>                        
             </div>

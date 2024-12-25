@@ -48,7 +48,7 @@
                 </div>
             
                 <div class="mt-6 mx-8">
-                    <button type="submit" class="font-bold w-full bg-rose-500 text-white p-2 rounded-lg hover:bg-rose-700 focus:outline-none focus:ring-2 focus:ring-rose-600 focus:ring-offset-2 transition-colors duration-200">
+                    <button type="submit" class="font-bold w-full bg-rose-500 text-white p-2 rounded-lg hover:bg-rose-700 focus:outline-none focus:scale-95 duration-200">
                       Masuk!
                     </button>
                 </div>
@@ -64,6 +64,7 @@
           </div>
         </div>
     </div>
+    
       
 </body>
 </html>

@@ -91,21 +91,18 @@
             <label for="photos" class="block font-medium text-gray-700">Foto Hotel (maksimum 3)</label>
             <input type="file" id="photos" name="photos[]" multiple accept="image/*" 
                 class="mt-1 block w-full p-2 border rounded">
-            {{-- <input type="file" id="photos" name="photos[]" multiple accept="image/*" 
-                class="mt-1 block w-full p-2 border rounded">
-            <input type="file" id="photos" name="photos[]" multiple accept="image/*" 
-                class="mt-1 block w-full p-2 border rounded"> --}}
-            @if ($hotelSetting && $hotelSetting->photos->count() > 0)
-                <div class="flex flex-col md:flex-row space-y-4 md:space-x-4 mt-2">
-                    @foreach ($hotelSetting->photos as $photo)
-                        <img src="{{ asset('storage/' . $photo->photo_path) }}" alt="Foto Hotel" class="h-20">
-                    @endforeach
-                </div>
-            @endif
+
+                @if ($hotelSetting && $hotelSetting->photos->count() > 0)
+                    <div class="flex flex-col md:flex-row space-y-4 md:space-x-4 mt-2">
+                        @foreach ($hotelSetting->photos as $photo)
+                            <img src="{{ asset('storage/' . $photo->photo_path) }}" alt="Foto Hotel" class="w-40 md:w-auto h-20">
+                        @endforeach
+                    </div>
+                @endif
         </div>
 
         <!-- Tombol Simpan -->
-        <div>
+        <div class="flex justify-end mt-8">
             <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700">
                 Simpan Pengaturan
             </button>

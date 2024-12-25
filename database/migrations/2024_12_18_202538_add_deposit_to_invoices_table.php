@@ -14,7 +14,7 @@ class AddDepositToInvoicesTable extends Migration
     public function up()
     {
         Schema::table('invoices', function (Blueprint $table) {
-            $table->decimal('deposit', 10, 2)->after('total_amount')->default(0);
+            $table->decimal('deposit', 10, 2)->nullable()->after('total_amount')->default(0);
         });
     }
 

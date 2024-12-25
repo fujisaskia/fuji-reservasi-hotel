@@ -61,10 +61,20 @@ class AuthController extends Controller
     
             // Cek role user dan arahkan ke halaman dashboard sesuai role
             if ($user->role === 'admin') {
+                //ditambahin sama mas Roy, buat middleware nya sampai baris 40 
+                Auth::guard('admin')->login($user);          
+                $request->session()->regenerate();
+
                 return redirect('/dashboard/admin')->with('success', 'Login successful!');
             } elseif ($user->role === 'receptionist') {
+                Auth::guard('receptionist')->login($user);          
+                $request->session()->regenerate();
+                
                 return redirect('/dashboard/receptionist')->with('success', 'Login successful!');
             } elseif ($user->role === 'user') {
+                Auth::login($user); 
+                $request->session()->regenerate();
+
                 return redirect('/offers')->with('success', 'Login successful!');
             }
     
@@ -85,6 +95,30 @@ class AuthController extends Controller
 
         // Hapus sesi jika diperlukan
         $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        // Redirect ke halaman login atau halaman utama
+        return redirect('/login')->with('success', 'Anda berhasil logout.');
+    }
+
+    // Fungsi untuk logout
+    public function logoutReceptionist(Request $request)
+    {
+        Auth::guard('receptionist')->logout();
+        $request->session()->invalidate();
+ 
+        $request->session()->regenerateToken();
+
+        // Redirect ke halaman login atau halaman utama
+        return redirect('/login')->with('success', 'Anda berhasil logout.');
+    }
+
+    // Fungsi untuk logout
+    public function logoutAdmin(Request $request)
+    {
+        Auth::guard('admin')->logout();
+        $request->session()->invalidate();
+ 
         $request->session()->regenerateToken();
 
         // Redirect ke halaman login atau halaman utama
