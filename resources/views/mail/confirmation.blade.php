@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Konfirmasi Reservasi</title>
     <style>
@@ -66,21 +67,31 @@
             margin: 20px 0;
         }
 
-        .info-title {
-            margin-bottom: 8px;
-            padding-bottom: 4px;
-            border-bottom: 1px solid #e5e7eb;
-        }
-
         .info-item {
             display: flex;
+            align-items: center;
+            /* Agar teks dan isi sejajar vertikal */
             justify-content: space-between;
+            /* Isi dan paragraf memiliki jarak */
+            gap: 8px;
+            /* Memberikan jarak antara paragraf dan isi */
             margin-top: 8px;
+            padding-right: 10px;
         }
 
+        .info-item p {
+            margin: 0;
+            /* Hilangkan margin default pada paragraf */
+            flex-shrink: 0;
+            /* Agar teks paragraf tidak mengecil */
+        }
+
+        .info-item span,
         .info-item a {
-            color: #2563eb;
-            text-decoration: none;
+            text-align: left;
+            /* Pastikan isi rata kiri */
+            flex-grow: 1;
+            /* Agar isi menyesuaikan ruang */
         }
 
         .room-section {
@@ -107,7 +118,8 @@
             margin-top: 16px;
         }
 
-        .table th, .table td {
+        .table th,
+        .table td {
             border: 1px solid #d1d5db;
             padding: 8px;
             text-align: left;
@@ -142,17 +154,23 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <!-- Header Section -->
         <div class="header">
             <div>
-                <img src="{{ $hotelSetting->logo_path ? asset('storage/' . $hotelSetting->logo_path) : asset('assets/default-logo.png') }}" 
-                alt="{{ $hotelSetting->name ?? 'Default Logo' }}">
+                <div>
+                    <img src="{{ $hotelSetting->logo_path ? asset('storage/' . $hotelSetting->logo_path) : asset('assets/default-logo.png') }}" alt="{{ $hotelSetting->name ?? 'Default Logo' }}"> 
+                </div>                
             </div>
             <div>
                 <p>Yth kepada <span>{{ $reservation->user->full_name }}</span></p>
-                <p>Terima kasih telah memilih {{ $hotelSetting->name }} untuk menginap mulai <span class="italic">{{ \Carbon\Carbon::parse($reservation->check_in_date)->format('D d F, Y') }}</span> to <span class="italic">{{ \Carbon\Carbon::parse($reservation->check_out_date)->format('D d F, Y') }}</span>. Kami berharap dapat membuat masa menginap Anda bersama kami menjadi nyaman dan menyenangkan.</p>
+                <p>Terima kasih telah memilih {{ $hotelSetting->name }} untuk menginap mulai <span
+                        class="italic">{{ \Carbon\Carbon::parse($reservation->check_in_date)->format('D d F, Y') }}</span>
+                    to <span
+                        class="italic">{{ \Carbon\Carbon::parse($reservation->check_out_date)->format('D d F, Y') }}</span>.
+                    Kami berharap dapat membuat masa menginap Anda bersama kami menjadi nyaman dan menyenangkan.</p>
             </div>
         </div>
 
@@ -185,7 +203,8 @@
             <div>
                 <div class="mb-3">
                     <p class="info-title">Tanggal</p>
-                    <p>{{ \Carbon\Carbon::parse($reservation->check_in_date)->format('M d, Y') }} - {{ \Carbon\Carbon::parse($reservation->check_out_date)->format('M d, Y') }}</p>
+                    <p>{{ \Carbon\Carbon::parse($reservation->check_in_date)->format('M d, Y') }} -
+                        {{ \Carbon\Carbon::parse($reservation->check_out_date)->format('M d, Y') }}</p>
                 </div>
 
                 <div class="mb-3">
@@ -223,11 +242,13 @@
                 <tfoot>
                     <tr>
                         <td colspan="3" class="font-bold">Total</td>
-                        <td class="text-right font-bold">IDR {{ number_format($reservation->total_price, 0, ',', ',') }}</td>
+                        <td class="text-right font-bold">IDR
+                            {{ number_format($reservation->total_price, 0, ',', ',') }}</td>
                     </tr>
                     <tr>
                         <td colspan="3" class="font-bold">Grand Total</td>
-                        <td class="text-right font-bold">IDR {{ number_format($reservation->payment->amount, 0, ',', ',') }}</td>
+                        <td class="text-right font-bold">IDR
+                            {{ number_format($reservation->payment->amount, 0, ',', ',') }}</td>
                     </tr>
                 </tfoot>
             </table>
@@ -236,8 +257,10 @@
         <!-- Policies -->
         <div class="policies">
             <p>Kebijakan Tidak Dapat Dikembalikan:</p>
-            <li>Jika Anda memilih untuk menjadwal ulang atau membatalkan pemesanan ini, Anda tidak akan menerima pengembalian uang apa pun</li>
+            <li>Jika Anda memilih untuk menjadwal ulang atau membatalkan pemesanan ini, Anda tidak akan menerima
+                pengembalian uang apa pun</li>
         </div>
     </div>
 </body>
+
 </html>

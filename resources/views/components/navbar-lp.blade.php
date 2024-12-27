@@ -16,11 +16,11 @@
     
     <!-- Menu Items -->
       <div class="hidden lg:flex space-x-6">
-        <a href="#" class="p-2 hover:text-rose-900 hover:border-b hover:border-rose-900 hover:-translate-y-0.5 focus:scale-95 duration-300">Beranda</a>
-        <a href="#" class="p-2 hover:text-rose-900 hover:border-b hover:border-rose-900 hover:-translate-y-0.5 focus:scale-95 duration-300">Tentang</a>
+        <a href="#home" class="p-2 hover:text-rose-900 hover:border-b hover:border-rose-900 hover:-translate-y-0.5 focus:scale-95 duration-300">Home</a>
+        <a href="#about" class="p-2 hover:text-rose-900 hover:border-b hover:border-rose-900 hover:-translate-y-0.5 focus:scale-95 duration-300">Tentang</a>
         <a href="/rooms" class="p-2 hover:text-rose-900 hover:border-b hover:border-rose-900 hover:-translate-y-0.5 focus:scale-95 duration-300">Kamar</a>
         <a href="#testimonials" class="p-2 hover:text-rose-900 hover:border-b hover:border-rose-900 hover:-translate-y-0.5 focus:scale-95 duration-300">Testimoni</a>
-        <a href="#" class="p-2 hover:text-rose-900 hover:border-b hover:border-rose-900 hover:-translate-y-0.5 focus:scale-95 duration-300">Kontak</a>
+        <a href="#contact" class="p-2 hover:text-rose-900 hover:border-b hover:border-rose-900 hover:-translate-y-0.5 focus:scale-95 duration-300">Kontak</a>
       </div>
 
     <!-- Book Now Button -->

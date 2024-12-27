@@ -7,15 +7,14 @@
 
     <h4 class="bg-white py-3 px-4 text-sm md:text-lg rounded-lg shadow-md md:w-1/2 mb-8 font-semibold">Haloo... Selamat Datang, <span class="font-semibold text-rose-600">{{ Auth::user()->full_name }}!</span></h4>
     
-    <div class="container bg-white py-8 px-4 md:px-6 rounded-lg items-center justify-center md:justify-start text-xs">
-
+    <div class="container mx-auto bg-white py-8 px-4 md:px-6 rounded-lg items-center justify-center md:justify-start text-xs">
 
         <!-- Menampilkan status kamar -->
         <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-2 lg:gap-6 pb-12 border-b">
             <div class="text-start justify-start items-start p-8 bg-gradient-to-l from-rose-800 to-rose-500 text-white hover:shadow-xl rounded-md duration-300">
                 <div class="flex space-x-2 lg:space-x-6 items-center mx-auto justify-center">
                     <i class="fa-solid fa-tags fa-4x"></i>
-                    <div class="lg:text-start z-10">
+                    <div class="lg:text-start">
                         <h4 class="text-2xl font-semibold">{{ $totalPaymentSuccess }}</h4>
                         <p>total reservasi bulan ini</p>                        
                     </div>
@@ -26,7 +25,7 @@
             <div class="text-start justify-start items-start p-8 bg-gradient-to-l from-green-600 to-green-400 text-white hover:shadow-xl rounded-md duration-300">
                 <div class="flex space-x-2 lg:space-x-6 items-center mx-auto justify-center">
                     <i class="fa-solid fa-tags fa-4x"></i>
-                    <div class="lg:text-start z-10">
+                    <div class="lg:text-start">
                         <h4 class="text-2xl font-semibold">{{ $totalConfirmed }}</h4>
                         <p>reservasi dikonfirmasi</p>                        
                     </div>
@@ -36,7 +35,7 @@
             <div class="text-start justify-start items-start p-8 bg-gradient-to-l from-yellow-800 to-yellow-500 text-white hover:shadow-xl rounded-md duration-300">
                 <div class="flex space-x-2 lg:space-x-6 items-center mx-auto justify-center">
                     <i class="fa-solid fa-tags fa-4x"></i>
-                    <div class="lg:text-start z-10">
+                    <div class="lg:text-start">
                         <h4 class="text-2xl font-semibold">{{ $totalPending }}</h4>
                         <p>reservasi pending</p>                        
                     </div>
@@ -45,7 +44,7 @@
             <div class="text-start justify-start items-start p-8 bg-gradient-to-l from-gray-800 to-gray-500 text-white hover:shadow-xl rounded-md duration-300">
                 <div class="flex space-x-2 lg:space-x-6 items-center mx-auto justify-center">
                     <i class="fa-solid fa-tags fa-4x"></i>
-                    <div class="lg:text-start z-10">
+                    <div class="lg:text-start">
                         <h4 class="text-2xl font-semibold">{{ $totalCancelled }}</h4>
                         <p>reservasi dibatalkan</p>                        
                     </div>

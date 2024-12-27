@@ -1,7 +1,7 @@
-<section class="max-w-5xl mx-auto h-[500px] grid grid-cols-1 lg:grid-cols-2 gap-4 items-center justify-center p-6">
-    <h1 class="text-4xl lg:text-5xl font-bold text-gray-800 text-left font-playfair">Contact Us</h1>
+<section id="contact" class="max-w-5xl mx-auto h-[500px] grid grid-cols-1 lg:grid-cols-2 gap-4 items-center justify-center p-6">
+    <h1 data-aos="fade-up" data-aos-duration="1500"  class="text-4xl lg:text-5xl font-bold text-gray-800 text-left font-playfair">Contact Us</h1>
 
-    <div class="lg:border-l-2 w-full max-w-md p-2">
+    <div data-aos="fade-right" data-aos-duration="1500"  class="lg:border-l-2 w-full max-w-md p-2">
         <h2 class="text-sm font-semibold text-gray-700 mb-2">ALamat</h2>
         <p class="text-gray-600 leading-relaxed">
             {{ $hotelSetting->address }}

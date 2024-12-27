@@ -90,7 +90,7 @@
                 </a>
 
                 <a href="/admin/reservations" class="">
-                    <li class="flex items-center space-x-2 text-rose-800 py-3 px-4 mt-1 {{ Request::is('admin.reservations') ? 'border-l-4 border-rose-700 text-rose-900 bg-gray-100' : 'hover:bg-slate-100 hover:text-red-800 ' }} group">
+                    <li class="flex items-center space-x-2 text-rose-800 py-3 px-4 mt-1 {{ Request::is('admin/reservations') ? 'border-l-4 border-rose-700 text-rose-900 bg-gray-100' : 'hover:bg-slate-100 hover:text-red-800 ' }} group">
                         <i class="fa-solid fa-tags"></i>
                         <p class="text-sm md:text-xs font-medium group-hover:translate-x-1 duration-500">Manajemen Reservasi</p>
                     </li>
@@ -206,7 +206,7 @@
                 </div>
 
                 <a href="/admin/ulasan">
-                    <li class="flex items-center space-x-2 text-rose-800 hover:bg-slate-100 py-3 px-4 hover:text-red-800 mt-1 group">
+                    <li class="flex items-center space-x-2 text-rose-800 py-3 px-4 mt-1 {{ Request::is('admin/ulasan') ? 'border-l-4 border-rose-700 text-rose-900 bg-gray-100' : 'hover:bg-slate-100 hover:text-red-800 ' }} group">
                         <i class="fa-regular fa-comment"></i>
                         <p class="text-sm md:text-xs font-medium group-hover:translate-x-1 duration-500">Manajemen Ulasan</p>
                     </li>

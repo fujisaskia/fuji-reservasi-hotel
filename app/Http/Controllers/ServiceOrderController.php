@@ -41,17 +41,12 @@ class ServiceOrderController extends Controller
     // Menampilkan layanan berdasarkan kategori
     public function showFilteredServices(Request $request)
     {
-        $category_id = $request->input('category_id');
-        
-        // Filter layanan berdasarkan kategori
-        $services = Service::when($category_id, function ($query, $category_id) {
-            return $query->where('service_category_id', $category_id);
+        $categoryId = $request->query('category');
+        $services = Service::when($categoryId, function ($query, $categoryId) {
+            return $query->where('service_category_id', $categoryId);
         })->get();
     
-        // Debugging: Log the services to see the output
-        // \Log::info($services);
-    
-        return response()->json(['services' => $services]);
+        return response()->json($services);
     }
                 
     //menambah service order

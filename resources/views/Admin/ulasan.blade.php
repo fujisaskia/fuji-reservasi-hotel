@@ -17,6 +17,24 @@
 <div class="max-w-5xl bg-white mx-auto px-8 py-8 rounded-md shadow-md text-xs">
 
     <h1 class="text-center text-2xl font-bold mb-6">Daftar Ulasan</h1>
+
+    
+    <!-- Filter dan Search -->
+    <div class="flex justify-center items-center mb-8 text-xs">
+        <form action="{{ route('ulasans.index') }}" method="GET" class="flex items-center space-x-2">
+            <input 
+                type="text" 
+                name="search" 
+                placeholder="Cari ulasan / pengguna" 
+                value="{{ request('search') }}" 
+                class="border border-gray-300 rounded p-2 md:w-64 focus:outline-none focus:ring focus:ring-yellow-200"
+            >
+            <button type="submit" class="bg-rose-700 hover:bg-rose-800 focus:scale-95 text-white px-4 py-2 rounded-full text-sm duration-300">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+        </form>
+    </div>
+
     
     <!-- Tabel Ulasan -->
     <div class="overflow-x-auto">
@@ -31,7 +49,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($ulasans as $index => $ulasan)
+                @forelse ($ulasans as $index => $ulasan)
                 <tr class="{{ $ulasan->is_visible ? 'hover:bg-gray-50' : 'bg-gray-200' }} border-b">
                     <td class="px-4 py-2">{{ $index + 1 }}</td>
                     <td class="px-4 py-2">{{ $ulasan->user->full_name }}</td>
@@ -50,14 +68,17 @@
                         </form>
                     </td>
                 </tr>
-                @endforeach
+                @empty
+                <tr>
+                    <td colspan="5" class="px-4 py-12 text-center text-gray-500">Tidak ada ulasan ditemukan</td>
+                </tr>
+                
+                @endforelse
             </tbody>
         </table>
+        <div class="mt-4">
+            {{ $ulasans->links() }}
+        </div>
     </div>
-
-    <!-- Pesan jika tidak ada ulasan -->
-    @if($ulasans->isEmpty())
-        <p class="mt-4 text-gray-500">Belum ada ulasan untuk ditampilkan.</p>
-    @endif
 </div>
 @endsection

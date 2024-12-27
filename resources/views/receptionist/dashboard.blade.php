@@ -7,7 +7,7 @@
 
     <h4 class="bg-white py-3 px-4 text-sm md:text-lg rounded-lg shadow-md md:w-1/2 mb-8 font-semibold">Haloo... Selamat Datang, <span class="font-semibold text-rose-600">{{ Auth::user()->full_name }}!</span></h4>
 
-    <div class="container bg-white py-8 px-4 md:px-6 rounded-lg items-center justify-center md:justify-start text-xs">
+    <div class="container mx-auto bg-white py-8 px-4 md:px-6 rounded-lg items-center justify-center md:justify-start text-xs">
         @include('components.room-status')
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">

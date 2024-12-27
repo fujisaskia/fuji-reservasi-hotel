@@ -12,11 +12,25 @@ class UlasanController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function index()
+    public function index(Request $request)
     {
-        $ulasans = Ulasan::with(['user'])->get();  // Mengambil semua ulasan dengan relasi user
+        // Mengambil query pencarian dari input
+        $search = $request->input('search');
+    
+        // Mengambil ulasan yang berelasi dengan user, dan melakukan pencarian pada kolom 'ulasan' dan 'name'
+        $ulasans = Ulasan::with(['user'])
+            ->when($search, function ($query, $search) {
+                return $query->where('comment', 'like', '%' . $search . '%')
+                             ->orWhereHas('user', function ($query) use ($search) {
+                                 $query->where('full_name', 'like', '%' . $search . '%');
+                             });
+            })
+            ->paginate(25);
+    
+        // Kembalikan data ke view
         return view('admin.ulasan', compact('ulasans'));
     }
+    
 
     /**
      * Menampilkan halaman form ulasan.

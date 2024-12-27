@@ -54,6 +54,7 @@ Route::middleware(['auth:admin'])->group(function () {
     
     // rute manajemen reservation/
     Route::get('/admin/reservations', [AdminController::class, 'adminReservations'])->name('admin.reservations');
+    // Route::get('/reservations', [AdminController::class, 'filter'])->name('reservations.filter');
     Route::match(['get', 'post'], '/admin/reservation/{id}/confirm', [AdminController::class, 'adminConfirmReservation'])->name('admin.reservation.confirm');
     Route::get('/reservations/filter', [AdminController::class, 'filter'])->name('reservations.filter');
     Route::get('/admin/reservasi/cetak', [AdminController::class, 'cetakLaporan'])->name('admin.reservasi.cetak');
@@ -130,7 +131,7 @@ Route::middleware(['auth:receptionist'])->group(function () {
     Route::get('/guest', [ReceptionistController::class, 'showCheckedInReservations'])->name('guest.checked_in');
     Route::get('/layanan-kamar/{reservation}', [ServiceOrderController::class, 'showForm'])->name('layanan.form');
     // Route untuk filter layanan berdasarkan kategori
-    Route::get('/layanan-kamar/category', [ServiceOrderController::class, 'showFilteredServices']);
+    Route::get('/services', [ServiceOrderController::class, 'showFilteredServices']);
 
     Route::post('/pesan-layanan', [ServiceOrderController::class, 'storeServiceOrder'])->name('pesan-layanan.store');
     Route::get('/detail-layanan/{reservation}', [ServiceOrderController::class, 'showServiceByReservation'])->name('detail-layanan');

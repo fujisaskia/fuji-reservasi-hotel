@@ -88,6 +88,42 @@
 
 
 <script>
+    // filter kategori layanan
+     document.getElementById('kategori').addEventListener('change', function () {
+        const categoryId = this.value;
+
+        // Fetch data berdasarkan service_category_id
+        fetch(`/services?category=${categoryId}`)
+            .then(response => response.json())
+            .then(data => {
+                updateTable(data);
+            })
+            .catch(error => console.error('Error:', error));
+    });
+
+    function updateTable(services) {
+        const tableBody = document.querySelector('table tbody');
+        tableBody.innerHTML = ''; // Kosongkan tabel
+
+        // Isi tabel dengan data baru
+        services.forEach(service => {
+            const row = `
+                <tr>
+                    <td class="border border-gray-300 p-2">${service.name}</td>
+                    <td class="border border-gray-300 p-2 text-right">IDR ${service.price.toLocaleString()}</td>
+                    <td class="border border-gray-300 p-2 text-center">
+                        <input type="number" min="1" value="1" class="w-20 border p-1.5 border-gray-300 rounded-full text-center focus:outline-none focus:ring focus:ring-yellow-100">
+                    </td>
+                    <td class="border border-gray-300 p-2 text-center mt-6">
+                        <button class="bg-blue-500 text-white px-4 py-1 rounded-md hover:bg-blue-600" data-service-id="${service.id}">Tambah</button>
+                    </td>
+                </tr>
+            `;
+            tableBody.insertAdjacentHTML('beforeend', row);
+        });
+    }
+
+    
     //menambahkan service ke ringkasan pemesanan
     document.addEventListener('DOMContentLoaded', () => {
         const ringkasanPesanan = document.querySelector('.ringkasan-pesanan');

@@ -46,10 +46,10 @@
 
     <form method="GET" action="{{ route('admin.reservasi.cetak') }}" class="flex text-xs justify-between mb-5">
         <div class="flex space-x-2 justify-center items-center">
-            <p class="font-semibold p-2">Filter :</p>
-            <div class="grid grid-cols-3 gap-4">
+            <p class="font-semibold p-2 hidden md:flex">Filter :</p>
+            <div class="grid grid-cols-3 gap-2 md:gap-4">
                 <select name="status" id="status-filter" class="border p-2 rounded-md">
-                    <option value="">Semua Status</option>
+                    <option value="">Status</option>
                     <option value="Pending">Pending</option>
                     <option value="Confirmed">Confirmed</option>
                     <option value="Checked-In">Checked-In</option>
@@ -58,14 +58,14 @@
                 </select>
             
                 <select name="bulan" id="bulan-filter" class="border p-2 rounded-md">
-                    <option value="">Semua Bulan</option>
+                    <option value="">Bulan</option>
                     @for ($i = 1; $i <= 12; $i++)
                         <option value="{{ $i }}">{{ \Carbon\Carbon::create()->month($i)->translatedFormat('F') }}</option>
                     @endfor
                 </select>
             
                 <select name="tahun" id="tahun-filter" class="border p-2 rounded-md">
-                    <option value="">Semua Tahun</option>
+                    <option value="">Tahun</option>
                     @for ($year = now()->year; $year >= 2020; $year--)
                         <option value="{{ $year }}">{{ $year }}</option>
                     @endfor
@@ -73,7 +73,7 @@
             </div>
         </div>
     
-        <button type="submit" class="py-2 px-6 text-white bg-yellow-500 hover:bg-yellow-600 rounded-l-xl">Cetak</button>
+        <button type="submit" class="py-2 px-6 ml-1 text-white bg-yellow-500 hover:bg-yellow-600 rounded-l-xl">Cetak</button>
     </form>
     
     <div class="overflow-x-auto">
@@ -91,7 +91,7 @@
                     <th class="p-3 lg:p-2 text-left text-sm lg:text-xs font-semibold text-gray-600">Aksi</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="reservation-body">
                 @foreach ($reservations as $index => $reservation)
                 <tr class="hover:bg-gray-100 border-b border-gray-300">
                     <td class="p-3 lg:p-2 text-sm lg:text-xs text-gray-600">{{ $index + 1 }}</td>
@@ -140,6 +140,82 @@
         </div>
     </div>
 </div>
+
+{{-- <script>
+    const filters = {
+        status: document.getElementById('status-filter'),
+        bulan: document.getElementById('bulan-filter'),
+        tahun: document.getElementById('tahun-filter'),
+    };
+
+    const tableBody = document.querySelector('#reservation-body');
+
+    function fetchReservations() {
+        const params = new URLSearchParams({
+            status: filters.status.value,
+            bulan: filters.bulan.value,
+            tahun: filters.tahun.value,
+        });
+
+        fetch(`/reservations?${params.toString()}`)
+            .then(response => response.json())
+            .then(data => updateTable(data.reservations.data))
+            .catch(error => console.error('Error:', error));
+    }
+
+    function updateTable(reservations) {
+        tableBody.innerHTML = ''; // Kosongkan tabel
+
+        if (reservations.length === 0) {
+            tableBody.innerHTML = `
+                <tr>
+                    <td colspan="9" class="text-center p-4 text-gray-500">Tidak ada data ditemukan.</td>
+                </tr>
+            `;
+            return;
+        }
+
+        reservations.forEach((reservation, index) => {
+            const row = `
+                <tr class="hover:bg-gray-100 border-b border-gray-300">
+                    <td class="p-3 text-sm text-gray-600">${index + 1}</td>
+                    <td class="p-3 text-sm text-gray-600">${reservation.user.full_name}</td>
+                    <td class="p-3 text-sm text-gray-600">${reservation.room_type.tipe_kamar}</td>
+                    <td class="p-3 text-sm text-gray-600">IDR ${reservation.total_price.toLocaleString()}</td>
+                    <td class="p-3 text-sm text-gray-500">${new Date(reservation.reservation_date).toLocaleDateString()}</td>
+                    <td class="p-3 text-sm text-gray-600">${new Date(reservation.check_in_date).toLocaleDateString()}</td>
+                    <td class="p-3 text-sm text-gray-600">${new Date(reservation.check_out_date).toLocaleDateString()}</td>
+                    <td class="p-2 text-[11px] text-white">
+                        <span class="p-1 w-full rounded-full ${getStatusClass(reservation.reservation_status)}">
+                            ${reservation.reservation_status}
+                        </span>
+                    </td>
+                    <td class="flex space-x-2 p-3 text-sm">
+                        <!-- Tambahkan tombol aksi di sini -->
+                    </td>
+                </tr>
+            `;
+            tableBody.insertAdjacentHTML('beforeend', row);
+        });
+    }
+
+    function getStatusClass(status) {
+        switch (status) {
+            case 'Pending': return 'bg-yellow-100 text-yellow-700';
+            case 'Confirmed': return 'bg-green-100 text-green-600';
+            case 'Checked-In': return 'bg-blue-100 text-blue-600';
+            case 'Checked-Out': return 'bg-rose-100 text-rose-600';
+            case 'Cancelled': return 'bg-red-100 text-red-700';
+            default: return '';
+        }
+    }
+
+    Object.values(filters).forEach(filter => {
+        filter.addEventListener('change', fetchReservations);
+    });
+
+    document.addEventListener('DOMContentLoaded', fetchReservations);
+</script> --}}
 
 @endsection
     

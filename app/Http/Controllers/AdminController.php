@@ -73,7 +73,7 @@ class AdminController extends Controller
     
         // Urutkan berdasarkan status "Checked-Out" di bawah
         $reservations = $query->orderByRaw("CASE WHEN reservation_status = 'Checked-Out' THEN 1 ELSE 0 END")
-            ->paginate(10);
+            ->paginate(25);
 
         return view('admin.reservasi', compact('reservations'));
     }
@@ -101,24 +101,37 @@ class AdminController extends Controller
     }
 
     //menerapkan filter untuk mencetak data reservasi
-    public function filter(Request $request)
-    {
-        $query = Reservation::with(['user', 'roomType']);
-    
-        if ($request->status) {
-            $query->where('reservation_status', $request->status);
-        }
-        if ($request->bulan) {
-            $query->whereMonth('created_at', $request->bulan);
-        }
-        if ($request->tahun) {
-            $query->whereYear('created_at', $request->tahun);
-        }
-    
-        $reservations = $query->get();
-    
-        return response()->json($reservations);
-    }
+    // public function filter(Request $request)
+    // {
+    //     // Ambil parameter filter dari request
+    //     $status = $request->input('status');
+    //     $bulan = $request->input('bulan');
+    //     $tahun = $request->input('tahun');
+
+    //     // Query data reservasi dengan filter
+    //     $query = Reservation::query();
+
+    //     if ($status) {
+    //         $query->where('reservation_status', $status);
+    //     }
+
+    //     if ($bulan) {
+    //         $query->whereMonth('reservation_date', $bulan);
+    //     }
+
+    //     if ($tahun) {
+    //         $query->whereYear('reservation_date', $tahun);
+    //     }
+
+    //     // Ambil data reservasi dengan pagination
+    //     $reservations = $query->with(['user', 'roomType'])->paginate(10);
+
+    //     // Kembalikan data dalam format JSON
+    //     return response()->json([
+    //         'reservations' => $reservations
+    //     ]);
+
+    // }
     
     //mencetak data reservasi sesuai filter
     public function cetakLaporan(Request $request)

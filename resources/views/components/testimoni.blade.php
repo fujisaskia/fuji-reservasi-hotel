@@ -1,13 +1,13 @@
 <!-- Testimonial Section -->
 <section id="testimonials" class="py-16 bg-gray-200 text-sm md:text-xs px-4">
     <div class="max-w-6xl mx-4 lg:mx-auto">
-        <div class="text-center space-y-4 mb-8">
-            <h2 class="text-3xl font-bold text-center text-gray-800 font-playfair">What Our Guests Say</h2>
+        <div data-aos="fade-up" data-aos-duration="1500"  class="text-center space-y-4 mb-8">
+            <h2 class="text-3xl font-bold text-center text-gray-800 font-playfair">Apa yang Orang katakan ?</h2>
             <div class="border-t-2 border-rose-500 mt-2 w-16 mx-auto"></div>
         </div>
 
         <!-- Wrapper for the testimonials and the buttons -->
-        <div class="relative">
+        <div data-aos="fade-up" data-aos-duration="1500"  class="relative">
             <!-- Testimonial Scroll Container -->
             <div class="overflow-hidden flex space-x-4 py-6" id="testimonial-container">
                 @foreach ($ulasans as $ulasan)           

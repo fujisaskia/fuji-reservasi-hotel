@@ -8,6 +8,8 @@
     @vite('resources/css/app.css')
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    {{-- Data Aos Animate --}}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
      <!-- Font Awesome CDN -->
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
      {{-- ALpine.JS --}}
@@ -33,7 +35,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
                 @foreach ($roomTypes as $type)             
                 <!-- Card 1 -->
-                <div class="relative bg-white shadow-lg text-xs rounded-lg overflow-hidden border border-gray-200 transform hover:shadow-2xl hover:shadow-yellow-100 transition duration-300">
+                <div data-aos="fade-up" data-aos-duration="1500"  class="relative bg-white shadow-lg text-xs rounded-lg overflow-hidden border border-gray-200 transform hover:shadow-2xl hover:shadow-yellow-100 transition duration-300">
                     <!-- Header dengan Garis Emas -->
                     <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-yellow-500 to-yellow-700"></div>
                     <!-- Gambar -->
@@ -58,7 +60,7 @@
                     </div>
                     <!-- Footer dengan Button Mewah -->
                     <div class="flex justify-end text-center p-4 bg-gray-100 text-sm md:text-xs">
-                        <a href="/login" class="bg-gradient-to-r w-1/3 from-rose-800 to-yellow-500 text-white font-semibold px-5 py-2 rounded-lg shadow-lg transform focus:scale-95 transition duration-300">
+                        <a href="/login" class="bg-gradient-to-r w-1/3 from-rose-800 to-yellow-500 text-white font-semibold px-5 py-2 rounded-lg shadow-lg transform focus:scale-95 hover:-translate-x-1 transition duration-300">
                             Book Now
                         </a>
                     </div>
@@ -71,6 +73,13 @@
 
         <x-footer></x-footer>
   </div>
+
+      {{-- Data Aos Animate --}}
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+      <script>
+          AOS.init();
+      </script>
+    
   
 </body>
 </html>
