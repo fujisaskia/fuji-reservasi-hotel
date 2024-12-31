@@ -22,7 +22,7 @@ class HotelController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5000',
             'photos.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5000', // Validasi per foto
             'photos' => 'array|max:3', // Validasi maksimal 3 foto
             'address' => 'nullable|string|max:255',
