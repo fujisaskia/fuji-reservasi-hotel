@@ -62,6 +62,7 @@ Route::middleware(['auth:admin'])->group(function () {
     
     // Rute untuk manajemen tipe kamar
     Route::get('/room-type/admin', [RoomTypeController::class, 'index'])->name('room-types.index');
+    Route::get('/room-type/{id}', [RoomTypeController::class, 'show'])->name('room-type.detail');
     Route::get('/add-type', [RoomTypeController::class, 'create'])->name('room-types.create');
     Route::post('/room-type/admin', [RoomTypeController::class, 'store'])->name('room-types.store');
     Route::get('/edit-type/{roomType}/edit', [RoomTypeController::class, 'edit'])->name('room-types.edit');
@@ -135,7 +136,7 @@ Route::middleware(['auth:receptionist'])->group(function () {
 
     Route::post('/pesan-layanan', [ServiceOrderController::class, 'storeServiceOrder'])->name('pesan-layanan.store');
     Route::get('/detail-layanan/{reservation}', [ServiceOrderController::class, 'showServiceByReservation'])->name('detail-layanan');
-    Route::post('/delete-service', [ServiceOrderController::class, 'deleteService']);
+    Route::post('/delete-service', [ServiceOrderController::class, 'deleteService'])->name('delete-service');
     Route::post('/print-services', [ServiceOrderController::class, 'printSelectedServices'])->name('print.services');
     Route::post('/service-orders', [ServiceOrderController::class, 'addServiceOrder'])->name('service-orders.add');
     Route::get('/service-order/{reservationId}', [ServiceOrderController::class, 'showReservationSummary'])->name('service-order');

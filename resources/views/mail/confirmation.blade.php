@@ -160,9 +160,9 @@
         <!-- Header Section -->
         <div class="header">
             <div>
-                <div>
+                {{-- <div>
                     <img src="{{ $hotelSetting->logo_path ? asset('storage/' . $hotelSetting->logo_path) : asset('assets/default-logo.png') }}" alt="{{ $hotelSetting->name ?? 'Default Logo' }}"> 
-                </div>                
+                </div>                 --}}
             </div>
             <div>
                 <p>Yth kepada <span>{{ $reservation->user->full_name }}</span></p>
