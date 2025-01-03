@@ -5,6 +5,19 @@
 
 @section('content')
 
+@if(session('sweetalert'))
+<script>
+    Swal.fire({
+        icon: '{{ session('sweetalert.type') }}',
+        title: '{{ session('sweetalert.message') }}',
+        customClass: {
+                title: 'swal-small-text' // Tambahkan kelas kustom
+        },
+    });
+</script>
+@endif
+
+
 <div class="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md w-full text-xs">
   <!-- Header -->
       <h1 class="text-lg text-center  font-semibold text-gray-700 mb-8">Input Layanan Kamar</h1>
@@ -223,13 +236,11 @@
                 icon: 'success',
                 title: data.message,
             }).then(() => {
-                // Redirect ke route 'guest.checked_in'
                 window.location.href = '/guest'; // Ganti URL sesuai dengan route Anda
             });
         })
         .catch(error => {
             console.error(error);
-            // Tampilkan SweetAlert untuk error
             Swal.fire({
                 icon: 'error',
                 title: 'Gagal!',

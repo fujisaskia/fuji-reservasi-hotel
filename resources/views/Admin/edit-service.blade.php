@@ -3,13 +3,22 @@
 @section('title', 'Edit Service')
 
 @section('content')
+
+@if (session('sweetalert'))
+    <script>
+        Swal.fire({
+            icon: '{{ session('sweetalert.type') }}', // 'success' atau 'error'
+            title: '{{ session('sweetalert.message') }}',
+            showConfirmButton: true,
+            customClass: {
+                title: 'swal-small-text' // Tambahkan kelas kustom
+            },
+        });
+    </script>
+@endif
+
     <div class="max-w-xl mx-auto py-12 px-6 text-xs font-poppins bg-white rounded-lg shadow-md">
         <h2 class="text-lg pb-2 border-b font-bold text-center mb-4">Edit Service</h2>
-
-        <!-- Menampilkan pesan sukses jika ada -->
-        @if (session('success'))
-            <div class="mb-4 text-green-600">{{ session('success') }}</div>
-        @endif
 
         <form action="{{ route('services.update', $service->id) }}" method="POST">
             @csrf

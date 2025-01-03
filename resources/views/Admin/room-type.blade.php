@@ -1,7 +1,7 @@
 <!-- resources/views/home.blade.php -->
 @extends('layouts/admin')
 
-@section('title', 'Room Management | Admin')
+@section('title', 'Room Type Management | Admin')
 
 @section('content')
 
@@ -23,7 +23,7 @@
     <div class="max-w-5xl  mx-auto py-12 px-6 text-xs font-poppins bg-white rounded-lg shadow-md">
         <!-- Header -->
         <h2 class="text-lg md:text-2xl font-bold text-center mb-4">Tipe Kamar Hotel</h2>
-        <div class="flex justify-center items-center mb-6 text-xs">
+        {{-- <div class="flex justify-center items-center mb-6 text-xs">
             <div class="w-full max-w-md">
                 <form class="flex items-center">
                     <input type="search" class="w-full p-3 lg:p-2 rounded-l-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-rose-500" placeholder="Cari kamar ...">
@@ -32,7 +32,7 @@
                     </button>
                 </form>
             </div>
-        </div>
+        </div> --}}
         <!-- Tambah Kamar Button -->
         <a href="{{ route('room-types.create') }}">
             <button class="flex space-x-2 text-white bg-green-600 hover:bg-green-700 focus:bg-green-600 px-4 py-3 lg:py-2 rounded-lg mb-3 ">
@@ -66,7 +66,7 @@
 
                         <td class="px-2 py-2 border-b text-center">
                             <div class="flex space-x-2 justify-center">
-                                <a href="" class="">
+                                <a href="{{ route('room-type.detail', $roomType->id) }}" class="">
                                     @include('components.button-read')
                                 </a>
                                 

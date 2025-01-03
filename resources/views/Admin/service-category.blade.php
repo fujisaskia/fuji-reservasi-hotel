@@ -4,19 +4,19 @@
 
 @section('content')
 
-    <!-- Menampilkan pesan sukses jika ada -->
-    @if(session('success'))
-        <div class="bg-green-100 text-green-800 p-4 rounded mb-4 text-xs">
-            {{ session('success') }}
-        </div>
+    @if (session('sweetalert'))
+    <script>
+        Swal.fire({
+            icon: '{{ session('sweetalert.type') }}', // 'success' atau 'error'
+            title: '{{ session('sweetalert.message') }}',
+            showConfirmButton: true,
+            customClass: {
+                title: 'swal-small-text' // Tambahkan kelas kustom
+            },
+        });
+    </script>
     @endif
 
-    <!-- Menampilkan pesan error jika ada -->
-    @if(session('error'))
-        <div class="bg-red-100 text-red-800 p-4 rounded mb-4 text-xs">
-            {{ session('error') }}
-        </div>
-    @endif
 
     <div class="max-w-5xl mx-auto py-12 px-6 text-xs font-poppins bg-white rounded-lg shadow-md">
         <!-- Header -->
@@ -55,12 +55,17 @@
                                     <a href="{{ route('service-categories.edit', $category->id) }}">
                                         @include('components.button-edit')
                                     </a>
-
-                                    <form action="{{ route('service-categories.destroy', $category->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus kategori ini?');">
+                                    
+                                    <form 
+                                        action="{{ route('service-categories.destroy', $category->id) }}" 
+                                        method="POST" 
+                                        class="delete-category-form" 
+                                        id="delete-category-{{ $category->id }}">
                                         @csrf
                                         @method('DELETE')
                                         @include('components.button-delete')
                                     </form>
+                                
                                 </div>
                             </td>
                         </tr>
@@ -71,4 +76,35 @@
         </div>
     </div>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Pilih semua form dengan kelas `delete-category-form`
+            const deleteForms = document.querySelectorAll('.delete-category-form');
+            
+            deleteForms.forEach(form => {
+                form.addEventListener('submit', function (event) {
+                    event.preventDefault(); // Cegah submit default
+    
+                    // Tampilkan SweetAlert konfirmasi
+                    Swal.fire({
+                        title: 'Apakah Anda yakin?',
+                        text: "Anda tidak dapat mengembalikan data yang dihapus!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Ya, hapus!',
+                        cancelButtonText: 'Batal',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Jika dikonfirmasi, submit formulir
+                            form.submit();
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+    
+    
 @endsection

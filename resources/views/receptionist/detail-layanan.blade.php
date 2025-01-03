@@ -5,6 +5,18 @@
 
 @section('content')
 
+@if(session('sweetalert'))
+<script>
+    Swal.fire({
+        icon: '{{ session('sweetalert.type') }}',
+        title: '{{ session('sweetalert.message') }}',
+        customClass: {
+                title: 'swal-small-text' // Tambahkan kelas kustom
+        },
+    });
+</script>
+@endif
+
 <div class="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md w-full text-xs">
     <!-- Header -->
     <h1 class="text-lg text-center font-semibold text-gray-700 mb-8">Daftar Layanan Kamar</h1>
@@ -51,9 +63,18 @@
                   <td class="border border-gray-300 p-2 text-center">{{ $order->quantity }}</td>
                   <td class="border border-gray-300 p-2 text-center">IDR {{ number_format($order->total_price, 0, ',', ',') }}</td>
                   <td class="flex justify-around items-center space-x-1 border border-gray-300 p-2 text-center">
-                    <button onclick="deleteService({{ $order->id }})" class="text-rose-700 hover:text-rose-800 hover:scale-105 focus:scale-95 duration-300">
-                      <i class="fa-solid fa-trash-can"></i>
-                    </button>
+                    <form 
+                      action="{{ route('delete-service') }}" 
+                      method="POST" 
+                      class="delete-service-form"
+                      id="delete-service-{{ $order->id }}">
+                      @csrf
+                      <input type="hidden" name="order_id" value="{{ $order->id }}">
+                      <button type="button" class="text-rose-700 hover:text-rose-800 hover:scale-105 focus:scale-95 duration-300 delete-button">
+                          <i class="fa-solid fa-trash-can"></i>
+                      </button>
+                    </form>
+                
                     <input type="checkbox" name="service_ids[]" value="{{ $order->id }}" class="">
                   </td>
                 </tr>
@@ -143,24 +164,55 @@
   }
 
 
-  //menghapus order service
-    function deleteService(orderId) {
-        if (confirm("Apakah Anda yakin ingin menghapus layanan ini?")) {
-            fetch(`/delete-service`, {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                body: JSON.stringify({ order_id: orderId })
-            })
-            .then(response => response.json())
-            .then(data => {
-                alert(data.message);
-                location.reload(); // Refresh halaman setelah penghapusan
+  document.addEventListener('DOMContentLoaded', function () {
+    const deleteButtons = document.querySelectorAll('.delete-button');
+
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', function () {
+            const form = button.closest('form'); // Dapatkan form terkait
+
+            Swal.fire({
+                title: 'Apakah Anda yakin?',
+                text: 'Pemesanan Layanan ini akan dihapus permanen',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit(); // Submit form jika dikonfirmasi
+                }
             });
-        }
-    }
+        });
+    });
+});
+
+
+  //menghapus order service
+    // function deleteService(orderId) {
+    //     if (confirm("Apakah Anda yakin ingin menghapus layanan ini?")) {
+    //         fetch(`/delete-service`, {
+    //             method: "POST",
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
+    //             },
+    //             body: JSON.stringify({ order_id: orderId })
+    //         })
+    //         .then(response => response.json())
+    //         .then(data => {
+    //           Swal.fire({
+    //             icon: 'success',
+    //               title: data.message,
+    //           }).then(() => {
+    //               // Redirect ke route 'guest.checked_in'
+    //               window.location.href = '/guest'; // Ganti URL sesuai dengan route Anda
+    //           });
+    //         });
+    //     }
+    // }
 
 </script>
   
