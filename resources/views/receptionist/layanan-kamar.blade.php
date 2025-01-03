@@ -203,19 +203,20 @@
         }
     });
 
-    //menyimpan pesanan dan mengirimnya ke database
+    // Menyimpan pesanan dan mengirimnya ke database
     document.querySelector('#simpanPesanan').addEventListener('click', () => {
         const ringkasanPesanan = document.querySelectorAll('.ringkasan-pesanan li:not(.total-row)');
         const reservationId = {{ $reservation->id }}; // Kirim ID reservasi
         const services = [];
 
         ringkasanPesanan.forEach(item => {
-            const name = item.dataset.item;
+            const serviceId = item.dataset.serviceId; // Ambil service_id dari atribut data
             const quantity = item.querySelector('.jumlah').innerText;
-            const price = item.querySelector('.harga').innerText.replace('IDR ', '').replace(/,/g, '');
-            const serviceId = item.dataset.serviceId; // Ambil service_id dari li
 
-            services.push({ name, quantity: parseInt(quantity), price: parseInt(price), service_id: serviceId });
+            services.push({ 
+                service_id: serviceId, 
+                quantity: parseInt(quantity) 
+            });
         });
 
         fetch('{{ route('pesan-layanan.store') }}', {
@@ -235,13 +236,11 @@
                 icon: 'success',
                 title: data.message,
             }).then(() => {
-                // Redirect ke route 'guest.checked_in'
                 window.location.href = '/guest'; // Ganti URL sesuai dengan route Anda
             });
         })
         .catch(error => {
             console.error(error);
-            // Tampilkan SweetAlert untuk error
             Swal.fire({
                 icon: 'error',
                 title: 'Gagal!',
@@ -249,6 +248,7 @@
             });
         });
     });
+
 </script>
 
 @endsection

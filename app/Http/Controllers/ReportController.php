@@ -75,13 +75,17 @@ class ReportController extends Controller
         $checkOutDate = Carbon::parse($reservation->check_out_date);
         $nights = $checkInDate->diffInDays($checkOutDate);
 
+        // Menghitung harga per malam untuk kamar
+        $totalRoom = $reservation->total_room; // Asumsi ada total_room
+        $roomPricePerNight = $reservation->payment->amount / ($nights * $totalRoom);
+
         // Total harga layanan
         $serviceOrderTotal = $reservation->serviceOrders->sum('total_price');
 
         // Grand total (kamar + layanan)
         $grandTotal = $reservation->payment->amount + $serviceOrderTotal;
 
-        return view('receptionist.detail-laporan', compact('reservation', 'nights', 'serviceOrderTotal', 'grandTotal'));
+        return view('receptionist.detail-laporan', compact('reservation', 'nights', 'serviceOrderTotal', 'grandTotal', 'roomPricePerNight'));
     }
     
 

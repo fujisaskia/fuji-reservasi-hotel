@@ -19,7 +19,7 @@
             @else
                 <img src="https://via.placeholder.com/400x250" alt="Room Image" class="rounded-lg w-1/2 h-60 object-cover">
             @endif
-            <img src="{{ asset ('assets/room.jpg') }}" alt="Room Image" class="rounded-lg w-1/2 h-60 object-cover">
+            <img src="{{ asset ('assets/kitchen.jpg') }}" alt="Room Image" class="rounded-lg w-1/2 h-60 object-cover">
         </div>
     </div>
 

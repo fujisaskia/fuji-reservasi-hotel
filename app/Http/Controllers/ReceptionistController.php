@@ -184,6 +184,10 @@ class ReceptionistController extends Controller
         $checkInDate = Carbon::parse($reservation->check_in_date);
         $checkOutDate = Carbon::parse($reservation->check_out_date);
         $nights = $checkInDate->diffInDays($checkOutDate);
+
+        // Menghitung harga per malam untuk kamar
+        $totalRoom = $reservation->total_room; // Asumsi ada total_room
+        $roomPricePerNight = $reservation->payment->amount / ($nights * $totalRoom);
     
         // Hitung total pembayaran reservasi kamar
         $roomPaymentTotal = $reservation->payment->amount;
@@ -207,7 +211,7 @@ class ReceptionistController extends Controller
         }
     
         // Kirim data ke view
-        return view('receptionist.out-room', compact('room', 'reservation', 'roomPaymentTotal', 'serviceOrderTotal', 'grandTotal', 'nights', 'deposit', 'remainingDeposit', 'additionalPaymentRequired'));
+        return view('receptionist.out-room', compact('room', 'reservation', 'roomPaymentTotal', 'serviceOrderTotal', 'grandTotal', 'nights', 'deposit', 'remainingDeposit', 'additionalPaymentRequired', 'roomPricePerNight'));
     }
     
     

@@ -21,8 +21,8 @@
                     </div>
 
                     <!-- Detail Kamar -->
-                    <div class="col-span-1 bg-rose-100 p-4 rounded-md">
-                        <h3 class="text-base font-bold text-rose-600 mb-2">{{ $room->roomType->tipe_kamar }}</h3>
+                    <div class="col-span-1 bg-yellow-50 p-4 rounded-md border border-yellow-300">
+                        <h3 class="text-base font-bold text-rose-900 mb-2">{{ $room->roomType->tipe_kamar }}</h3>
                         <div class="text-[11px] leading-relaxed">
                             <div class="flex justify-between">
                                 <p class="">Harga / Malam :</p>
@@ -64,15 +64,19 @@
                     <!-- Identitas -->
                     <div class="space-y-2">
                         <div class="flex space-x-2">
-                            <input type="text" id="identification_type" name="identification_type" class="w-1/2 block p-2 border border-gray-300 rounded-lg" placeholder="Jenis Identitas" readonly>
-                            <input type="text" id="identification_number" name="identification_number" class="w-1/2 block p-2 border border-gray-300 rounded-lg" placeholder="Nomor Identitas" readonly>
+                            <input type="text" id="identification_type" name="identification_type" class="w-1/2 block p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-300" placeholder="Jenis Identitas" readonly>
+                            <input type="text" id="identification_number" name="identification_number" class="w-1/2 block p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-300" placeholder="Nomor Identitas" readonly>
                         </div>
                     </div>
                     <!-- Deposit -->
                     <div class="space-y-2">
                         <div class="flex space-x-2 items-center">
                             <label for="deposit" class="block text-sm font-semibold text-gray-700">DEPOSIT</label>
-                            <input type="number" id="deposit" name="deposit" class="w-full block px-2 py-3 border border-gray-300 rounded-lg" placeholder="nomimal deposit">
+                            <input type="number" id="deposit" name="deposit" class="w-full block px-2 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-300" placeholder="nominal deposit">
+                        </div>
+                        <div class="flex items-center space-x-2 text-[10px] p-2 bg-rose-100 border-l-4 border-rose-800">
+                            <i class="fa-solid fa-circle-exclamation text-sm text-rose-800"></i>
+                            <span>Masukkan Deposit di kamar akhir</span>
                         </div>
                     </div>
                 </div>

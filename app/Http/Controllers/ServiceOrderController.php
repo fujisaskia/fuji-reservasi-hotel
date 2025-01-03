@@ -42,39 +42,51 @@ class ServiceOrderController extends Controller
     public function showFilteredServices(Request $request)
     {
         $categoryId = $request->query('category');
+
+        // Ambil layanan dan format harga
         $services = Service::when($categoryId, function ($query, $categoryId) {
             return $query->where('service_category_id', $categoryId);
-        })->get();
-    
+        })->get()->map(function ($service) {
+            return [
+                'id' => $service->id,
+                'name' => $service->name,
+                'price' => 'IDR ' . number_format($service->price, 0, ',', '.'), // Format harga
+            ];
+        });
+
         return response()->json($services);
     }
-                
+
+                    
     //menambah service order
     public function storeServiceOrder(Request $request)
     {
         $validatedData = $request->validate([
             'services' => 'required|array',
-            'services.*.name' => 'required|string',
             'services.*.quantity' => 'required|integer|min:1',
-            'services.*.price' => 'required|integer|min:0',
             'services.*.service_id' => 'required|integer|exists:services,id', // Pastikan service_id valid
         ]);
-
+    
         foreach ($validatedData['services'] as $service) {
+            // Ambil harga dari tabel `services` berdasarkan service_id
+            $serviceModel = \App\Models\Service::findOrFail($service['service_id']);
+            $price = $serviceModel->price;
+    
             // Hitung total_price
-            $totalPrice = $service['price'] * $service['quantity'];
-
+            $totalPrice = $price * $service['quantity'];
+    
             \App\Models\ServiceOrder::create([
                 'reservation_id' => $request->reservation_id,
-                'service_id' => $service['service_id'], // Menyertakan service_id
+                'service_id' => $service['service_id'], 
                 'quantity' => $service['quantity'],
-                'price' => $service['price'],
-                'total_price' => $totalPrice, // Tambahkan total_price
+                'price' => $price, // Harga langsung dari tabel `services`
+                'total_price' => $totalPrice, // Total harga
             ]);
         }
-
+    
         return response()->json(['message' => 'Pesanan layanan berhasil disimpan!']);
     }
+    
 
 
     /**

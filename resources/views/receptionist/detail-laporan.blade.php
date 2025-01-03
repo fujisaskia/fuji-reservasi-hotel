@@ -55,7 +55,7 @@
                 <!-- Kamar -->
                 <tr>
                     <td class="px-3 py-2">{{ $reservation->roomType->tipe_kamar }}</td>
-                    <td class="px-3 py-2">IDR {{ number_format($reservation->roomType->harga, '0', ',', ',') }}</td>
+                    <td class="px-3 py-2">IDR {{ number_format($roomPricePerNight, '0', ',', ',') }}</td>
                     <td class="px-3 py-2">
                         {{ $reservation->total_room }} <span class="text-[11px]">Kamar</span> 
                         x 
