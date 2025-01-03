@@ -28,9 +28,6 @@
             cursor: not-allowed;
             border-color: red; /* Warna border saat hover pada elemen disabled */
         }
-        .swal-small-text {
-            font-size: 14px; /* Atur ukuran teks sesuai kebutuhan */
-        }
     </style>
 
 </head>

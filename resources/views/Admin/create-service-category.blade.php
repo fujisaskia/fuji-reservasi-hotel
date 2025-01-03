@@ -3,24 +3,16 @@
 @section('title', 'Tambah Kategori Layanan | Admin')
 
 @section('content')
-
-@if (session('sweetalert'))
-    <script>
-        Swal.fire({
-            icon: '{{ session('sweetalert.type') }}', // 'success' atau 'error'
-            title: '{{ session('sweetalert.message') }}',
-            showConfirmButton: true,
-            customClass: {
-                title: 'swal-small-text' // Tambahkan kelas kustom
-            },
-        });
-    </script>
-@endif
-
-
     <div class="max-w-xl mx-auto py-12 px-6 bg-white rounded-lg shadow-md text-xs">
         <h2 class="text-lg font-bold text-center pb-2 border-b mb-6">Tambah Kategori Layanan</h2>
-        
+
+        <!-- Menampilkan pesan sukses jika ada -->
+        @if (session('success'))
+            <div class="bg-green-100 text-green-800 p-4 rounded mb-4">
+                {{ session('success') }}
+            </div>
+        @endif
+
         <form action="{{ route('service-categories.store') }}" method="POST">
             @csrf
 

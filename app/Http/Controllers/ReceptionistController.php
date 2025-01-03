@@ -284,25 +284,11 @@ class ReceptionistController extends Controller
     }
     
     
-    public function showRoomsData(Request $request)
+    public function showRoomsData()
     {
-        // Ambil parameter pencarian dan filter
-        $search = $request->input('search');
-        $status = $request->input('status');
-    
-        // Query data kamar dengan filter dan pencarian
-        $rooms = Room::with('roomType')
-            ->when($search, function ($query, $search) {
-                return $query->where('room_number', 'like', '%' . $search . '%');
-            })
-            ->when($status, function ($query, $status) {
-                return $query->where('room_status', $status);
-            })
-            ->paginate(10);
-    
-        return view('receptionist.rooms', compact('rooms', 'search', 'status'));
+        $rooms = Room::with('roomType')->get(); // Load relasi tipe kamar
+        return view('receptionist.rooms', compact('rooms'));
     }
-    
 
     public function editRoomStatus($id)
     {
@@ -320,10 +306,7 @@ class ReceptionistController extends Controller
         $room->room_status = $request->input('room_status');
         $room->save();
 
-        return redirect()->route('receptionist.rooms.index', $room->id)->with('sweetalert', [
-            'type' => 'success',
-            'message' => 'Status kamar berhasil diperbaharui.',
-        ]);
+        return redirect()->route('receptionist.rooms.index', $room->id)->with('success', 'Status kamar berhasil diperbarui');
     }
 
     public function printInvoice($id)

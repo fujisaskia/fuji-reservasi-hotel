@@ -46,10 +46,7 @@ class ServiceController extends Controller
         ]);
 
         // Redirect setelah berhasil menyimpan data
-        return redirect()->route('services.index')->with('sweetalert', [
-            'type' => 'success',
-            'message' => 'Layanan berhasil ditambahkan!',
-        ]);
+        return redirect()->route('services.index')->with('success', 'Layanan berhasil ditambahkan!');
     }
 
     // / Menampilkan form edit untuk layanan
@@ -84,10 +81,7 @@ class ServiceController extends Controller
         ]);
 
         // Redirect ke halaman yang diinginkan dengan pesan sukses
-        return redirect()->route('services.index')->with('sweetalert', [
-            'type' => 'success',
-            'message' => 'Layanan berhasil diperbaharui!',
-        ]);
+        return redirect()->route('services.index')->with('success', 'Service updated successfully!');
     }
 
     public function destroy($id)
@@ -99,10 +93,7 @@ class ServiceController extends Controller
         $service->delete();
 
         // Redirect ke halaman daftar layanan dengan pesan sukses
-        return redirect()->route('services.index')->with('sweetalert', [
-            'type' => 'success',
-            'message' => 'Layanan berhasil dihapus!',
-        ]);
+        return redirect()->route('services.index')->with('success', 'Layanan berhasil dihapus!');
     }   
 
 }

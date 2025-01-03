@@ -197,7 +197,7 @@
     </div>
 
     {{-- Button Booking --}}
-    <button type="submit" class="w-full bg-yellow-500 hover:bg-yellow-400 text-white p-3 mt-6 rounded-md font-semibold focus:scale-95 duration-300" {{ $roomType->available_rooms_count == 0 ? 'disabled' : '' }}>Booking</button>
+    <button type="submit" class="w-full bg-pink-600 hover:bg-pink-700 text-white p-3 mt-6 rounded-md font-semibold" {{ $roomType->available_rooms_count == 0 ? 'disabled' : '' }}>Booking</button>
 </form>
 
 
