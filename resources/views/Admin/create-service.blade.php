@@ -17,7 +17,7 @@
     </script>
 @endif
 
-    <div class="max-w-xl mx-auto py-12 px-6 text-xs font-poppins bg-white rounded-lg shadow-md">
+    <div class="max-w-xl mx-auto py-12 px-6 text-sm md:text-xs font-poppins bg-white rounded-lg shadow-md">
         <h2 class="text-lg font-bold text-center pb-2 border-b mb-4">Tambah Layanan Baru</h2>
 
         <form action="{{ route('services.store') }}" method="POST">
@@ -54,7 +54,7 @@
                 </div>
             </div>
 
-            <div class="flex justify-end">
+            <div class="flex justify-end pt-6">
                 <button type="submit" class="bg-green-500 text-white py-3 px-6 rounded-lg hover:bg-green-600 focus:outline-none">
                     Tambah Layanan
                 </button>

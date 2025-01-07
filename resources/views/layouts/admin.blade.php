@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     @vite('resources/css/app.css')
     <title>@yield('title', 'Default Title')</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -34,7 +36,7 @@
 
     <div class="min-h-screen py-24 mx-4"> <!-- Tambahkan min-h-screen untuk membuat konten minimal setinggi layar -->
         <!-- Main Content -->
-        <main class="flex-1 md:ml-60 mb-8">
+        <main class="flex-1 lg:ml-60 mb-8">
             @yield('content')
         </main>
     </div>

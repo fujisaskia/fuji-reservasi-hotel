@@ -100,6 +100,27 @@ class AdminController extends Controller
         }
     }
 
+       //cancelled reservation by Admin
+    public function cancelReservationByAdmin(Request $request, $id)
+    {
+        $reservation = Reservation::findOrFail($id);
+
+        if ($reservation->reservation_status === 'Confirmed') {
+            $reservation->reservation_status = 'Cancelled';
+            $reservation->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Reservasi berhasil dibatalkan.',
+            ], 200);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Reservasi tidak dapat dibatalkan.',
+        ], 400);
+    }
+
     //menerapkan filter untuk mencetak data reservasi
     // public function filter(Request $request)
     // {

@@ -1,8 +1,8 @@
 @extends('layouts.admin')
 
 @section('content')
-<div class="max-w-4xl mx-auto p-2 text-xs">
-    <h1 class="text-2xl font-bold mb-4">Pengaturan Hotel</h1>
+<div class="max-w-4xl mx-auto p-2 text-sm md:text-xs">
+    <h1 class="text-2xl font-bold mb-4 text-center">Pengaturan Hotel</h1>
 
     @if(session('success'))
         <div class="p-4 mb-4 text-green-800 bg-green-200 rounded">
@@ -10,7 +10,7 @@
         </div>
     @endif
 
-    <form action="{{ route('hotel-settings.update') }}" method="POST" enctype="multipart/form-data" class="bg-white border shadow-lg p-4 text-xs">
+    <form action="{{ route('hotel-settings.update') }}" method="POST" enctype="multipart/form-data" class="bg-white border shadow-lg p-4">
         @csrf
 
         <!-- Nama Hotel -->

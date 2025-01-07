@@ -37,7 +37,7 @@
 
     <div class="min-h-screen py-24 mx-4"> <!-- Tambahkan min-h-screen untuk membuat konten minimal setinggi layar -->
         <!-- Main Content -->
-        <main class="flex-1 md:ml-52 mb-8">
+        <main class="flex-1 lg:ml-52 mb-8">
             @yield('content')
         </main>
     </div>

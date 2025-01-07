@@ -14,25 +14,27 @@
         });
     </script>
 @endif
-<div class="max-w-5xl bg-white mx-auto px-8 py-8 rounded-md shadow-md text-xs">
+<div class="max-w-5xl bg-white mx-auto px-8 py-8 rounded-md shadow-md text-sm md:text-xs">
 
     <h1 class="text-center text-2xl font-bold mb-6">Daftar Ulasan</h1>
 
     
     <!-- Filter dan Search -->
-    <div class="flex justify-center items-center mb-8 text-xs">
-        <form action="{{ route('ulasans.index') }}" method="GET" class="flex items-center space-x-2">
-            <input 
-                type="text" 
-                name="search" 
-                placeholder="Cari ulasan / pengguna" 
-                value="{{ request('search') }}" 
-                class="border border-gray-300 rounded p-2 md:w-64 focus:outline-none focus:ring focus:ring-yellow-200"
-            >
-            <button type="submit" class="bg-rose-700 hover:bg-rose-800 focus:scale-95 text-white px-4 py-2 rounded-full text-sm duration-300">
-                <i class="fa-solid fa-magnifying-glass"></i>
-            </button>
-        </form>
+    <div class="flex justify-center items-center mb-8 text-sm md:text-xs">
+        <div class="w-full max-w-md">
+            <form action="{{ route('ulasans.index') }}" method="GET" class="flex items-center space-x-2">
+                <input 
+                    type="text" 
+                    name="search" 
+                    placeholder="Cari ulasan / pengguna" 
+                    value="{{ request('search') }}" 
+                    class="border border-gray-300 rounded p-3 md:p-2 w-full focus:outline-none focus:ring focus:ring-yellow-200"
+                >
+                <button type="submit" class="bg-rose-700 hover:bg-rose-800 focus:scale-95 text-white px-4 py-2 rounded-full text-sm duration-300">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </form>
+        </div>
     </div>
 
     

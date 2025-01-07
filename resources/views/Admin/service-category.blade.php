@@ -18,7 +18,7 @@
     @endif
 
 
-    <div class="max-w-5xl mx-auto py-12 px-6 text-xs font-poppins bg-white rounded-lg shadow-md">
+    <div class="max-w-5xl mx-auto py-12 px-6 text-sm md:text-xs font-poppins bg-white rounded-lg shadow-md">
         <!-- Header -->
         <h2 class="text-lg md:text-2xl font-bold text-center mb-4">Kategori Layanan</h2>
 
@@ -26,7 +26,7 @@
         <a href="{{ route('service-categories.create') }}">
             <button class="flex space-x-2 text-white bg-green-600 hover:bg-green-700 focus:bg-green-600 px-4 py-3 lg:py-2 rounded-lg mb-3">
                 <i class="fa-solid fa-plus"></i>
-                <p>Tambah Kategory</p>
+                <p>Tambah Kategori</p>
             </button>
         </a>
 

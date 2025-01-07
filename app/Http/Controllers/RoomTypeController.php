@@ -16,6 +16,22 @@ class RoomTypeController extends Controller
         return view('admin.room-type', compact('roomTypes')); // Mengembalikan tampilan daftar tipe kamar
     }
 
+    public function show($id)
+    {
+        // Ambil data tipe kamar berdasarkan ID
+        $roomType = RoomType::with('rooms')->findOrFail($id);
+    
+        // Hitung jumlah kamar yang memiliki tipe kamar tersebut
+        $jumlahKamar = $roomType->rooms->count();
+    
+        // Jika $roomType->fasilitas adalah string, ubah menjadi array
+        $fasilitasArray = $roomType->fasilitas ? explode(',', $roomType->fasilitas) : [];
+    
+        // Return view dengan data tipe kamar
+        return view('admin.type-details', compact('roomType', 'fasilitasArray', 'jumlahKamar'));
+    }
+    
+
     public function roomsLandingPage()
     {
         $roomTypes = RoomType::all();

@@ -11,13 +11,13 @@
         icon: '{{ session('sweetalert.type') }}',
         title: '{{ session('sweetalert.message') }}',
         customClass: {
-                title: 'swal-small-text' // Tambahkan kelas kustom
+                title: 'text-base' // Tambahkan kelas kustom
         },
     });
 </script>
 @endif
 
-<div class="max-w-5xl mx-auto bg-white py-8 px-6 rounded-lg">
+<div class="container lg:max-w-5xl mx-auto bg-white py-8 px-6 rounded-lg">
     <h2 class="text-2xl font-bold text-center mb-4">Kamar Hotel</h2>
     <div class="flex space-x-2 justify-center items-center mb-6 text-xs">
         <div class="">

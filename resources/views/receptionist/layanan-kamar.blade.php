@@ -11,7 +11,7 @@
         icon: '{{ session('sweetalert.type') }}',
         title: '{{ session('sweetalert.message') }}',
         customClass: {
-                title: 'swal-small-text' // Tambahkan kelas kustom
+                title: 'text-base' // Tambahkan kelas kustom
         },
     });
 </script>

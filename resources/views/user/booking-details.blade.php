@@ -5,7 +5,7 @@
 
 
 
-<div class="max-w-6xl mx-auto lg:text-xs p-3 md:p-12 lg:p-0">
+<div class="max-w-6xl mx-auto text-sm md:text-xs p-3 md:p-12 lg:p-0">
     <div class="flex gap-4">
         
         <x-menu-profile></x-menu-profile>
@@ -44,8 +44,8 @@
                     {{-- Hotel Information --}}
                     <div class="order-1 md:order-2">
                         <p class="text-gray-900 font-bold">{{ $hotelSetting->name }}</p>
-                        <p class="text-[11px] text-gray-600">{{ $hotelSetting->address }}</p>
-                        <p class="w-1/3 text-[11px] py-1 px-4 font-semibold mt-2 rounded-r-full bg-yellow-400 text-yellow-900">{{ $reservation->reservation_status }}</p>
+                        <p class="text-xs md:text-[11px] text-gray-600">{{ $hotelSetting->address }}</p>
+                        <p class="w-1/3 text-sm md:text-xs py-1 px-4 font-semibold mt-2 rounded-r-full  border border-yellow-400 bg-yellow-200 text-yellow-900">{{ $reservation->reservation_status }}</p>
                     </div>
                 </div>
             </div>
@@ -53,22 +53,22 @@
             <!-- Reservation Details -->
             <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 items-start gap-4 my-6">
                 <div class="text-left space-y-2">
-                    <p class="text-[11px] text-gray-600">Nomor Invoice</p>
+                    <p class="text-xs text-gray-700">Nomor Invoice</p>
                     <span class="font-semibold text-black">#{{ $reservation->invoice->invoice_number }}</span>
                 </div>
                 <div class="text-left space-y-2">
-                    <p class="text-[11px] text-gray-600">Tgl. Bayar</p>
+                    <p class="text-xs text-gray-700">Tgl. Bayar</p>
                     <span class="font-semibold text-black">
                         {{ \Carbon\Carbon::parse($reservation->payment->payment_date)->format('M d, Y') }}
                     </span>
                 </div>
                 <div class="text-left space-y-2">
-                    <p class="text-[11px] text-gray-600">Total</p>
+                    <p class="text-xs text-gray-700">Total</p>
                     <span class="font-semibold text-black">IDR {{ number_format($reservation->payment->amount, 0, ',', ',') }}</span>
                 </div>
                 <div class="text-left space-y-2">
-                    <p class="text-[11px] text-gray-600">Status</p>
-                    <span class="font-semibold
+                    <p class="text-xs text-gray-700">Pembayaran</p>
+                    <span class="font-semibold italic
                         {{ $reservation->payment->payment_status === 'success' ? 'text-green-700' : '' }}
                         {{ $reservation->payment->payment_status === 'pending' ? 'text-yellow-600' : '' }}
                         {{ $reservation->payment->payment_status === 'failed' ? 'text-red-600' : '' }}">
@@ -93,7 +93,7 @@
                         <tr>
                             <td class="border border-gray-300 px-4 py-2">
                                 <p class="uppercase">{{ $reservation->roomType->tipe_kamar }}</p>
-                                <p class="text-[10px] text-gray-600">
+                                <p class="text-[10px] text-gray-700">
                                     {{ \Carbon\Carbon::parse($reservation->check_in_date)->format('M d, Y') }} 
                                     - 
                                     {{ \Carbon\Carbon::parse($reservation->check_out_date)->format('M d, Y') }}      
@@ -106,7 +106,7 @@
                     </tbody>
                     <tfoot>
                         <tr>
-                            <td colspan="3" class="text-right font-semibold border border-gray-300 px-4 py-2">Total Price</td>
+                            <td colspan="3" class="text-right font-semibold border border-gray-300 px-4 py-2">Total Harga</td>
                             <td class="text-base border border-gray-300 px-4 py-2 font-bold">IDR {{ number_format($reservation->total_price, 0, ',', ',') }}</td>
                         </tr>
                     </tfoot>

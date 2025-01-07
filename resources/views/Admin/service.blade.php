@@ -18,7 +18,7 @@
     @endif
 
 
-    <div class="max-w-5xl mx-auto py-12 px-6 text-xs font-poppins bg-white rounded-lg shadow-md">
+    <div class="max-w-5xl mx-auto py-12 px-6 text-sm md:text-xs font-poppins bg-white rounded-lg shadow-md">
         <!-- Header -->
         <h2 class="text-lg md:text-2xl font-bold text-center mb-4">Layanan</h2>
 

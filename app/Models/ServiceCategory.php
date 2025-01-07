@@ -22,5 +22,11 @@ class ServiceCategory extends Model
 
     // Menambahkan timestamp jika dibutuhkan, jika tidak cukup menghapus properti timestamps
     public $timestamps = true;
+
+    public function services()
+    {
+        return $this->hasMany(Service::class);
+    }
+
 }
 

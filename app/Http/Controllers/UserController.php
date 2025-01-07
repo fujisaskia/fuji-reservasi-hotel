@@ -38,17 +38,19 @@ class UserController extends Controller
     {
         // Mendapatkan user yang sedang login
         $user = Auth::user();
-
-        // Mendapatkan data reservasi berdasarkan user yang login
+    
+        // Mendapatkan data reservasi berdasarkan user yang login, diurutkan dari yang terbaru
         $reservations = Reservation::with(['payment', 'invoice']) // Memuat relasi payment dan invoice
             ->where('user_id', $user->id) // Filter berdasarkan user yang login
+            ->orderBy('created_at', 'desc') // Mengurutkan berdasarkan booking terbaru
             ->get();
-
+    
         // Mengirimkan data ke view
         return view('user.my-booking', [
             'reservations' => $reservations,
         ]);
-    }    
+    }
+      
     
 
     public function showBookingDetails($id)

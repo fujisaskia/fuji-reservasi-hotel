@@ -5,7 +5,7 @@
 
 @section('content')
 
-    <h4 class="bg-white py-3 px-4 text-sm md:text-lg rounded-lg shadow-md md:w-1/2 mb-8 font-semibold">Haloo... Selamat Datang, <span class="font-semibold text-rose-600">{{ Auth::user()->full_name }}!</span></h4>
+    <h4 class="bg-white  py-3 px-4 text-sm md:text-lg rounded-lg shadow-md md:w-1/2 mb-8 font-semibold">Haloo... Selamat Datang, <span class="font-semibold text-rose-600">{{ Auth::user()->full_name }}!</span></h4>
 
     <div class="container mx-auto bg-white py-8 px-4 md:px-6 rounded-lg items-center justify-center md:justify-start text-xs">
         @include('components.room-status')

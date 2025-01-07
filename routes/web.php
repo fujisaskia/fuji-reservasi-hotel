@@ -58,10 +58,11 @@ Route::middleware(['auth:admin'])->group(function () {
     Route::match(['get', 'post'], '/admin/reservation/{id}/confirm', [AdminController::class, 'adminConfirmReservation'])->name('admin.reservation.confirm');
     Route::get('/reservations/filter', [AdminController::class, 'filter'])->name('reservations.filter');
     Route::get('/admin/reservasi/cetak', [AdminController::class, 'cetakLaporan'])->name('admin.reservasi.cetak');
-    
+    Route::patch('/reservations/{id}/cancel-by-admin', [AdminController::class, 'cancelReservationByAdmin'])->name('reservation.cancel-by-admin');
     
     // Rute untuk manajemen tipe kamar
     Route::get('/room-type/admin', [RoomTypeController::class, 'index'])->name('room-types.index');
+    Route::get('/room-type/{id}', [RoomTypeController::class, 'show'])->name('room-type.detail');
     Route::get('/add-type', [RoomTypeController::class, 'create'])->name('room-types.create');
     Route::post('/room-type/admin', [RoomTypeController::class, 'store'])->name('room-types.store');
     Route::get('/edit-type/{roomType}/edit', [RoomTypeController::class, 'edit'])->name('room-types.edit');
@@ -120,6 +121,7 @@ Route::middleware(['auth:receptionist'])->group(function () {
     Route::get('/reservasi', [ReceptionistController::class, 'index'])->name('reservasi.index');
     Route::match(['get', 'post'], '/reservation/{id}/confirm', [ReceptionistController::class, 'confirmReservation'])
         ->name('reservation.confirm');
+    Route::patch('/reservations/{id}/cancel', [ReceptionistController::class, 'cancelReservationByReceptionist'])->name('reservations.cancel-by-receptionist');
 
     // menampilkan data kamar "tersedia" di fitur check-in
     Route::get('/check-in/receptionist', [ReceptionistController::class, 'showAvailableRooms']);
@@ -135,7 +137,7 @@ Route::middleware(['auth:receptionist'])->group(function () {
 
     Route::post('/pesan-layanan', [ServiceOrderController::class, 'storeServiceOrder'])->name('pesan-layanan.store');
     Route::get('/detail-layanan/{reservation}', [ServiceOrderController::class, 'showServiceByReservation'])->name('detail-layanan');
-    Route::post('/delete-service', [ServiceOrderController::class, 'deleteService']);
+    Route::post('/delete-service', [ServiceOrderController::class, 'deleteService'])->name('delete-service');
     Route::post('/print-services', [ServiceOrderController::class, 'printSelectedServices'])->name('print.services');
     Route::post('/service-orders', [ServiceOrderController::class, 'addServiceOrder'])->name('service-orders.add');
     Route::get('/service-order/{reservationId}', [ServiceOrderController::class, 'showReservationSummary'])->name('service-order');

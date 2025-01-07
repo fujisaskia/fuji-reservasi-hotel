@@ -84,7 +84,7 @@ class ServiceOrderController extends Controller
             ]);
         }
     
-        return response()->json(['message' => 'Pesanan layanan berhasil disimpan!']);
+        return response()->json(['message' => '<span class="text-base">Pesanan layanan berhasil disimpan!</span>']);
     }
     
 
@@ -124,9 +124,25 @@ class ServiceOrderController extends Controller
     public function deleteService(Request $request)
     {
         $orderId = $request->input('order_id');
-        ServiceOrder::where('id', $orderId)->delete();
-        return response()->json(['message' => 'Layanan berhasil dihapus!']);
+    
+        try {
+            // Hapus data berdasarkan order_id
+            ServiceOrder::where('id', $orderId)->delete();
+    
+            // Redirect dengan pesan SweetAlert
+            return redirect()->back()->with('sweetalert', [
+                'type' => 'success',
+                'message' => 'Layanan berhasil dihapus!',
+            ]);
+        } catch (\Exception $e) {
+            // Redirect dengan pesan error jika terjadi kesalahan
+            return redirect()->back()->with('sweetalert', [
+                'type' => 'error',
+                'message' => 'Terjadi kesalahan saat menghapus layanan!',
+            ]);
+        }
     }
+    
 
     /**
      * mencetak invoice layanan sebagai bukti

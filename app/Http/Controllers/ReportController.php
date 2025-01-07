@@ -14,7 +14,12 @@ class ReportController extends Controller
     public function showReports(Request $request)
     {
         $query = Reservation::where('reservation_status', 'Checked-Out');
-
+    
+        // Filter berdasarkan tahun
+        if ($request->has('year') && $request->year) {
+            $query->whereYear('check_out_date', $request->year);
+        }
+    
         // Filter berdasarkan bulan
         if ($request->has('month') && $request->month) {
             $query->whereMonth('check_out_date', $request->month);
@@ -22,17 +27,19 @@ class ReportController extends Controller
     
         // Pencarian berdasarkan nama atau invoice
         if ($request->has('search') && $request->search) {
-            $query->whereHas('user', function ($q) use ($request) {
-                $q->where('full_name', 'like', '%' . $request->search . '%');
-            })->orWhereHas('invoice', function ($q) use ($request) {
-                $q->where('invoice_number', 'like', '%' . $request->search . '%');
+            $query->where(function ($q) use ($request) {
+                $q->whereHas('user', function ($userQuery) use ($request) {
+                    $userQuery->where('full_name', 'like', '%' . $request->search . '%');
+                })
+                ->orWhere('invoice_number', 'like', '%' . $request->search . '%');
             });
         }
     
-        $reservations = $query->get();
-
+        $reservations = $query->paginate(10);
+    
         return view('receptionist.laporan', compact('reservations'));
     }
+    
 
     public function cetakLaporan(Request $request)
     {

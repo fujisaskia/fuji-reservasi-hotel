@@ -190,6 +190,27 @@ class ReservationController extends Controller
 
         return redirect()->back()->with('success', 'Reservasi berhasil dibatalkan.');
     }
+
+    //cancelled reservation by receptionist
+    // public function cancelReservationByHotel(Request $request, $id)
+    // {
+    //     $reservation = Reservation::findOrFail($id);
+
+    //     if ($reservation->reservation_status === 'Confirmed') {
+    //         $reservation->reservation_status = 'Cancelled';
+    //         $reservation->save();
+
+    //         return response()->json([
+    //             'success' => true,
+    //             'message' => 'Reservasi berhasil dibatalkan.',
+    //         ]);
+    //     }
+
+    //     return response()->json([
+    //         'success' => false,
+    //         'message' => 'Reservasi tidak dapat dibatalkan.',
+    //     ], 400);
+    // }
     
 }
 

@@ -17,7 +17,7 @@
 </script>
 @endif
 
-<div class="max-w-4xl mx-auto mt-10 bg-white p-6 rounded-lg shadow-md text-sm lg:text-xs">
+<div class="max-w-4xl mx-auto mt-10 bg-white p-6 rounded-lg shadow-md text-sm md:text-xs">
     <h2 class="text-xl font-semibold space-y-2 pb-4 border-b border-gray-300">Edit Tipe Kamar</h2>
     <form action="{{ route('room-types.update', $roomType) }}" method="POST" enctype="multipart/form-data" class="my-4">
         @csrf

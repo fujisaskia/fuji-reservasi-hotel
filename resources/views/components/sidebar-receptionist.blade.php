@@ -1,6 +1,6 @@
     <!-- Navbar -->
     <header class="nav fixed top-0 left-0 right-0 bg-white shadow-sm p-3">
-        <div class="flex justify-between items-center md:ml-56">
+        <div class="flex justify-between items-center lg:ml-56">
             <div class="flex items-center space-x-4">
                 <button class="flex lg:hidden rounded-lg p-1 text-slate-900 ml-3 lg:ml-0 active:bg-white focus:outline-none focus:ring focus:ring-rose-300" id="menu-button">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -45,13 +45,13 @@
                                 <div class="flex justify-end space-x-4">
                                     <button 
                                         @click="showModal = false" 
-                                        class="bg-gray-300 px-4 py-2 rounded"
+                                        class="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded focus:scale-95 duration-300"
                                     >
                                         Batal
                                     </button>
                                     <form action="{{ route('logout.receptionist') }}" method="GET">
                                         @csrf
-                                        <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded">
+                                        <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded focus:scale-95 duration-300">
                                             Keluar
                                         </button>
                                     </form>
@@ -69,8 +69,8 @@
     <!-- Sidebar and Content Wrapper -->
     <div class="flex"> <!-- Added padding top to account for the navbar height -->
         <!-- Sidebar -->
-        <aside id="sidebar" class="fixed w-60 lg:w-52 h-screen bg-white py-4 lg:py-4 px-4 shadow-lg z-10 transform -translate-x-full transition-transform duration-300 md:translate-x-0 md:block">
-            <button id="close-button" class="block md:hidden mt-2 ml-auto border-2 border-blue-200 rounded-lg p-1 active:bg-white focus:outline-none focus:ring focus:ring-blue-300">
+        <aside id="sidebar" class="fixed w-60 lg:w-52 h-screen bg-white py-4 lg:py-4 px-4 shadow-lg z-10 transform -translate-x-full transition-transform duration-300 lg:translate-x-0 lg:block">
+            <button id="close-button" class="block lg:hidden mt-2 ml-auto border-2 border-blue-200 rounded-lg p-1 active:bg-white focus:outline-none focus:ring focus:ring-blue-300">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
                 </svg>

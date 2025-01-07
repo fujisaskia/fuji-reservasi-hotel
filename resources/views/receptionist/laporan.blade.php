@@ -3,32 +3,61 @@
 @section('title', 'Laporan')
 
 @section('content')
-<div class="container bg-white rounded shadow-md mx-auto p-6 text-xs">
+<div class="container mx-auto bg-white py-8 px-4 rounded-lg shadow-md border border-gray-300 text-sm md:text-xs">
     <h1 class="text-2xl font-bold mb-4 text-center">Laporan</h1>
 
     <!-- Filter dan Search -->
     <div class="flex justify-center items-center mb-4">
-        <form action="{{ route('receptionist.reports') }}" method="GET" class="">
-            <div class="flex items-center space-x-2">
-                <select name="month" class="border border-gray-300 rounded p-2 focus:outline-none focus:ring focus:ring-yellow-200">
-                    <option value="">Pilih Bulan</option>
-                    @foreach(range(1, 12) as $month)
-                    <option value="{{ $month }}" {{ request('month') == $month ? 'selected' : '' }}>
-                        {{ \Carbon\Carbon::create()->month($month)->format('F') }}
-                    </option>
-                    @endforeach
-                </select>
+        <form action="{{ route('receptionist.reports') }}" method="GET" class="w-full md:w-auto">
+            <div class="flex flex-col md:flex-row md:items-center space-y-3 md:space-y-0 md:space-x-3">
+    {{-- Filter waktu --}}
+    <div class="flex space-x-3 w-full md:w-auto md:order-1 order-2 mt-2 md:mt-0">
+        <select 
+            name="year" 
+            class="border border-gray-300 rounded p-2 w-full md:w-auto focus:outline-none focus:ring focus:ring-yellow-200"
+        >
+            <option value="">Tahun</option>
+            @foreach(range(2023, 2025) as $year)
+                <option value="{{ $year }}" {{ request('year') == $year ? 'selected' : '' }}>
+                    {{ $year }}
+                </option>
+            @endforeach
+        </select>
+        <select 
+            name="month" 
+            class="border border-gray-300 rounded p-2 w-full md:w-auto focus:outline-none focus:ring focus:ring-yellow-200"
+        >
+            <option value="">Bulan</option>
+            @foreach(range(1, 12) as $month)
+                <option value="{{ $month }}" {{ request('month') == $month ? 'selected' : '' }}>
+                    {{ \Carbon\Carbon::create()->month($month)->format('F') }}
+                </option>
+            @endforeach
+        </select>
+    </div>
+
+
+            {{-- Search bar --}}
+            <div class="flex items-center w-full md:order-2 order-1 space-x-2 ">
                 <input 
-                    type="text" 
+                    type="search" 
                     name="search" 
                     placeholder="Cari nama / invoice" 
                     value="{{ request('search') }}" 
-                    class="border border-gray-300 rounded p-2 md:w-64 focus:outline-none focus:ring focus:ring-yellow-200"
+                    class="border border-gray-300 rounded p-3 md:p-2 w-full focus:outline-none focus:ring focus:ring-yellow-200"
                 >
-                <button type="submit" class="bg-rose-700 hover:bg-rose-800 focus:scale-95 text-white px-4 py-2 rounded-full text-sm duration-300"><i class="fa-solid fa-magnifying-glass"></i></button>
+                <button 
+                    type="submit" 
+                    class="bg-rose-700 hover:bg-rose-800 focus:scale-95 text-white px-4 py-2 rounded-full text-sm duration-300"
+                >
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
             </div>
-        </form>
-    </div>
+        </div>
+    </form>
+</div>
+
+
     {{-- button untuk cetak --}}
     <div class="flex justify-end mb-5">
         <a href="{{ route('reports.cetak', request()->all()) }}" 
@@ -78,6 +107,9 @@
                 @endforelse
             </tbody>
         </table>
+    </div>
+    <div class="mt-4">
+        {{ $reservations->links() }}
     </div>
 </div>
 

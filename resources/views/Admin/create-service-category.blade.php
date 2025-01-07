@@ -18,7 +18,7 @@
 @endif
 
 
-    <div class="max-w-xl mx-auto py-12 px-6 bg-white rounded-lg shadow-md text-xs">
+    <div class="max-w-xl mx-auto py-12 px-6 bg-white rounded-lg shadow-md text-sm md:text-xs">
         <h2 class="text-lg font-bold text-center pb-2 border-b mb-6">Tambah Kategori Layanan</h2>
         
         <form action="{{ route('service-categories.store') }}" method="POST">
@@ -28,7 +28,7 @@
                 <label for="name" class="block font-medium text-gray-700">Nama Kategori</label>
                 <input type="text" name="name" id="name" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-yellow-100 @error('name') border-red-500 @enderror" value="{{ old('name') }}" required>
                 @error('name')
-                    <div class="text-red-500 text-xs mt-1">{{ $message }}</div>
+                    <div class="text-red-500 text-sm md:text-xs mt-1">{{ $message }}</div>
                 @enderror
             </div>
 
@@ -36,7 +36,7 @@
                 <label for="description" class="block font-medium text-gray-700">Deskripsi</label>
                 <textarea name="description" id="description" rows="4" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-yellow-100 @error('description') border-red-500 @enderror" required>{{ old('description') }}</textarea>
                 @error('description')
-                    <div class="text-red-500 text-xs mt-1">{{ $message }}</div>
+                    <div class="text-red-500 text-sm md:text-xs mt-1">{{ $message }}</div>
                 @enderror
             </div>
 

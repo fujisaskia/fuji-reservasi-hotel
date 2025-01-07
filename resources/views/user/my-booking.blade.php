@@ -10,7 +10,11 @@
         {{-- booking card --}}
         <div class="flex-1 space-y-3">
             @foreach($reservations as $reservation)
-            <div class="flex flex-col bg-white w-full border rounded-lg shadow-md p-4 mx-auto mb-4">
+            <div class="flex flex-col w-full border rounded-lg shadow-md p-4 mx-auto mb-4
+            @if($reservation->reservation_status === 'Checked-Out') bg-slate-200 
+            @else bg-white 
+            @endif
+            ">
                 <div class="pb-4 border-b">
                   <h2 class="font-bold text-sm">{{ $hotelSetting->name }}</h2>
                   <p class="text-[11px] text-gray-600">{{ $hotelSetting->address }}</p>
@@ -64,7 +68,7 @@
                         </p>
                     </div>
                 </div>
-                <a href="/my-booking/details/{{ $reservation->id }}" class="flex md:hidden text-sm bg-gray-800 text-white p-3 rounded-md w-full justify-center text-center items-center">
+                <a href="/my-booking/details/{{ $reservation->id }}" class="flex md:hidden text-sm bg-gray-800 text-white p-3 rounded-md w-full justify-center text-center items-center focus:scale-95 duration-300">
                     <span>Detail</span>
                 </a>
             </div>

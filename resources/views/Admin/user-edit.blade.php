@@ -18,11 +18,11 @@
 @endif
 
 {{-- Form Edit User --}}
-<div class="max-w-md mx-auto p-6 bg-white shadow-md rounded-md">
+<div class="max-w-md mx-auto p-6 bg-white shadow-md rounded-md text-sm md:text-xs">
     <h2 class="text-lg pb-3 border-b font-semibold text-gray-800 mb-4 text-center">Edit User</h2>
     
     <!-- Form Edit User -->
-    <form action="{{ route('users.update', $user->id) }}" method="POST" class="text-xs">
+    <form action="{{ route('users.update', $user->id) }}" method="POST" class="">
         @csrf
         @method('PUT') <!-- Menggunakan PUT untuk update -->
 

@@ -6,7 +6,7 @@
 @section('content')
 
 
-<div class="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md w-full text-xs">
+<div class="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md w-full text-sm md:text-xs">
     <!-- Header -->
     <h1 class="text-lg text-center font-semibold text-gray-700 mb-8">Daftar Layanan Kamar</h1>
     

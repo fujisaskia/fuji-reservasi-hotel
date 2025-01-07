@@ -18,9 +18,9 @@
     </script>
 @endif
 
-<div class="max-w-lg mx-auto p-8 bg-white text-xs rounded-lg shadow-lg">
+<div class="max-w-lg mx-auto p-8 bg-white text-sm md:text-xs rounded-lg shadow-lg">
     <!-- Header -->
-    <h1 class="text-lg md:text-xl font-semibold mb-6">Tambah Kamar Baru</h1>
+    <h1 class="text-lg md:text-xl font-semibold mb-6 pb-2 border-b text-center">Tambah Kamar Baru</h1>
     
     <!-- resources/views/rooms/create.blade.php -->
     <form action="{{ route('rooms.store') }}" method="POST">

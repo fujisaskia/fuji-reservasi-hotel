@@ -3,7 +3,7 @@
 
 @section('content')
 
-<div class="max-w-5xl border bg-white rounded-t-3xl mx-auto p-6 text-xs">
+<div class="max-w-5xl border bg-white rounded-t-3xl mx-auto p-6 text-xs shadow-md">
     
     <!-- Image Gallery -->
     <div class="flex flex-col md:flex-row gap-4">

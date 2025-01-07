@@ -52,138 +52,97 @@
             </div>
         </div>
 
+        @php
+            $currentYear = date('Y');
+            $years = range($currentYear, $currentYear - 4); // Tahun saat ini hingga 5 tahun terakhir
+        @endphp
+        
         <div class="max-w-4xl mx-auto py-12 px-6 text-xs font-poppins bg-white rounded-lg shadow-md">
-            <h2 class="text-lg md:text-2xl font-bold text-center mb-4">Grafik Pendapatan Hotel Bulanan</h2>
+            <div class="flex justify-center items-center space-x-4 mb-2">
+                <h2 class="text-lg md:text-2xl font-bold text-center">Grafik Pendapatan Hotel Bulanan</h2>
+                <select id="yearFilter" class="p-1.5 border rounded-r-md focus:outline-none focus:ring focus:ring-yellow-200" onchange="updateChart()">
+                    @foreach ($years as $year)
+                        <option value="{{ $year }}" {{ $year == $currentYear ? 'selected' : '' }}>{{ $year }}</option>
+                    @endforeach
+                </select>
+            </div>            
             <canvas id="revenueChart" width="400" height="200"></canvas>
         </div>
-
-        {{-- <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
-            <!-- Tabel Customer Check In -->
-            <div class=" bg-white p-4 shadow-md rounded-md">
-                <h3 class="text-lg font-semibold mb-4">Customer Check In</h3>
-                <div class="overflow-x-auto">
-                    <table class="min-w-full border border-gray-300">
-                        <thead>
-                            <tr class="border-b font-semibold">
-                                <th class="p-3 text-left text-gray-600">Customer Name</th>
-                                <th class="p-3 text-left text-gray-600"># Rooms</th>
-                                <th class="p-3 text-left text-gray-600">Date / Time Check-In</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="border-b font-medium hover:bg-slate-100">
-                                <td class="p-3 text-left text-gray-600">John Doe</td>
-                                <td class="p-3 text-left text-gray-600">15</td>
-                                <td class="p-3 text-left text-gray-600">30-10-2024</td>
-                            </tr>
-                            <tr class="border-b">
-                                <td colspan="3" class="px-4 py-4 text-center text-gray-500">No data available in table</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                    <div class="flex justify-between mt-4">
-                        <button class="flex items-center space-x-1 p-3 bg-gray-200 hover:bg-gray-300 text-gray-600 rounded duration-300 group">
-                            <i class="fa-solid fa-angles-left group-hover:-translate-x-1 duration-500"></i>
-                            <span>Previous</span>
-                        </button>
-                        <button class="flex items-center space-x-1 p-3 bg-gray-200 hover:bg-gray-300 text-gray-600 rounded duration-300 group">
-                            <span>Next</span>
-                            <i class="fa-solid fa-angles-right group-hover:translate-x-1 duration-500"></i>
-                        </button>
-                    </div>
-            </div>
-        
-            <!-- Tabel Customer Check Out -->
-            <div class=" bg-white p-4 shadow-md rounded-md">
-                <h3 class="text-lg font-semibold mb-4">Customer Check Out Today</h3>
-                <div class="overflow-x-auto">
-                    <table class="min-w-full border border-gray-300">
-                        <thead>
-                            <tr class="border-b font-semibold">
-                                <th class="p-3 text-left text-gray-600">Customer Name</th>
-                                <th class="p-3 text-left text-gray-600"># Rooms</th>
-                                <th class="p-3 text-left text-gray-600">Date / Time Check-Out</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="border-b font-medium hover:bg-slate-100">
-                                <td class="p-3 text-left text-gray-600">John Doe</td>
-                                <td class="p-3 text-left text-gray-600">15</td>
-                                <td class="p-3 text-left text-gray-600">31-10-2024</td>
-                            </tr>
-                            <tr class="border-b">
-                                <td colspan="3" class="px-4 py-4 text-center text-gray-500">No Data Customer Checkout Found</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <div class="flex justify-between mt-4">
-                        <button class="flex items-center space-x-1 p-3 bg-gray-200 hover:bg-gray-300 text-gray-600 rounded duration-300 group">
-                            <i class="fa-solid fa-angles-left group-hover:-translate-x-1 duration-500"></i>
-                            <span>Previous</span>
-                        </button>
-                        <button class="flex items-center space-x-1 p-3 bg-gray-200 hover:bg-gray-300 text-gray-600 rounded duration-300 group">
-                            <span>Next</span>
-                            <i class="fa-solid fa-angles-right group-hover:translate-x-1 duration-500"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div> --}}
         
 
     </div>
 
-    <script>
-// Ambil data dari API Laravel
-fetch('/monthly-revenue')
-  .then(response => response.json())
-  .then(data => {
-    const ctx2 = document.getElementById('revenueChart').getContext('2d');
-    const revenueChart = new Chart(ctx2, {
-      type: 'bar', // Jenis grafik
-      data: {
-        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'], // Bulan-bulan
-        datasets: [
-          {
-            label: 'Pendapatan dari Kamar',
-            data: data.roomRevenue, // Data pendapatan kamar dari API
-            backgroundColor: 'rgba(75, 192, 192, 0.5)',
-            borderColor: 'rgb(75, 192, 192)',
-            borderWidth: 1,
-          },
-          {
-            label: 'Pendapatan dari Layanan Kamar',
-            data: data.serviceRevenue, // Data pendapatan layanan dari API
-            backgroundColor: 'rgba(255, 159, 64, 0.5)',
-            borderColor: 'rgb(255, 159, 64)',
-            borderWidth: 1,
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        scales: {
-          y: {
-            beginAtZero: true,
-            title: {
-              display: true,
-              text: 'Pendapatan (Rp)',
-            },
-          },
-          x: {
-            title: {
-              display: true,
-              text: 'Bulan',
-            },
-          },
-        },
-      },
-    });
-  })
-  .catch(error => console.error('Error fetching revenue data:', error));
+<script>
+    let revenueChart; // Global variable for the chart instance
 
-    </script>
+    function updateChart() {
+        const selectedYear = document.getElementById('yearFilter').value;
+
+        // Fetch data berdasarkan tahun yang dipilih
+        fetch(`/monthly-revenue?year=${selectedYear}`)
+            .then(response => response.json())
+            .then(data => {
+                // Update chart data
+                revenueChart.data.datasets[0].data = data.roomRevenue;
+                revenueChart.data.datasets[1].data = data.serviceRevenue;
+                revenueChart.update(); // Refresh the chart
+            })
+            .catch(error => console.error('Error fetching revenue data:', error));
+    }
+
+    // Initialize the chart
+    function initChart() {
+        const ctx2 = document.getElementById('revenueChart').getContext('2d');
+        revenueChart = new Chart(ctx2, {
+            type: 'bar',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                datasets: [
+                    {
+                        label: 'Pendapatan dari Kamar',
+                        data: [], // Awalnya kosong
+                        backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                        borderColor: 'rgb(75, 192, 192)',
+                        borderWidth: 1,
+                    },
+                    {
+                        label: 'Pendapatan dari Layanan Kamar',
+                        data: [], // Awalnya kosong
+                        backgroundColor: 'rgba(255, 159, 64, 0.5)',
+                        borderColor: 'rgb(255, 159, 64)',
+                        borderWidth: 1,
+                    },
+                ],
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Pendapatan (Rp)',
+                        },
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Bulan',
+                        },
+                    },
+                },
+            },
+        });
+
+        // Fetch initial data for the current year
+        updateChart();
+    }
+
+    // Call initChart on page load
+    document.addEventListener('DOMContentLoaded', initChart);
+
+
+</script>
     
 
 

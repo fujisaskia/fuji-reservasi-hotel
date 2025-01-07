@@ -5,7 +5,7 @@
 
 @section('content')
 
-    <div class="container p-6 bg-white shadow-lg rounded-lg text-xs">
+    <div class="container lg:max-w-5xl mx-auto bg-white py-8 px-4 rounded-lg shadow-md border border-gray-300 text-sm md:text-xs">
         <h2 class="text-lg font-semibold mb-6">KAMAR NOMOR : {{ $room->room_number }}</h2>
         <form action="{{ route('checkin.process', $room->id) }}" method="POST">
             @csrf

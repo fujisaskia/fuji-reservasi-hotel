@@ -10,10 +10,10 @@
             <div class="bg-white lg:flex-row items-center justify-between p-4 space-y-2 rounded-xl sticky top-4 border-b lg:border border-gray-200 shadow-md">
                 <!-- Filter Options -->
                 <div class="space-y-2 border-t md:border-none text-xs">
-                    <label for="countries" class="">Try these filters   :</label>
+                    <label for="countries" class="">Gunakan Filter :</label>
                     {{-- kategori tipe kamar yang diambil dari tb room_types --}}
                     <select id="roomTypeFilter" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-300 focus:border-yellow-300 block w-2/3 lg:w-1/3 p-2">
-                        <option value="">All Types</option>
+                        <option value="">Semua Tipe</option>
                         @foreach($roomTypes as $type)
                             <option value="{{ $type->id }}">{{ $type->tipe_kamar }}</option>
                         @endforeach

@@ -19,16 +19,14 @@
     </script>
 @endif
 
-<div class="container mx-auto py-12 px-6 text-xs font-poppins bg-white rounded-lg shadow-md">
+<div class="container mx-auto py-12 px-6 text-sm md:text-xs font-poppins bg-white rounded-lg shadow-md">
         <!-- Header -->
-        <h2 class="text-lg md:text-2xl font-bold text-center mb-4">Manajement Kamar Hotel</h2>
-        <div class="flex justify-center items-center mb-6 text-xs">
+        <h2 class="text-lg md:text-2xl font-bold text-center mb-4">Manajemen Kamar Hotel</h2>
+        <div class="flex justify-center items-center mb-6 text-sm md:text-xs">
             <div class="w-full max-w-md">
                 <form class="flex items-center">
                     <input type="search" class="w-full p-3 lg:p-2 rounded-l-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-rose-500" placeholder="Cari kamar ...">
-                    <button class="bg-rose-500 text-white py-4 lg:py-3 px-4 rounded-r-lg hover:bg-rose-600 focus:outline-none focus:ring-2 focus:ring-rose-500">
-                        <i class="fa-solid fa-magnifying-glass"></i>
-                    </button>
+                    <button type="submit" class="bg-rose-700 hover:bg-rose-800 focus:scale-95 text-white px-4 py-3 md:py-2 rounded-full text-sm duration-300"><i class="fa-solid fa-magnifying-glass"></i></button>
                 </form>
             </div>
         </div>
@@ -61,20 +59,27 @@
                         <td class="px-2 py-2 border-b text-center">{{ $room->room_number }}</td>
                         <td class="px-4 py-2 border-b">{{ $room->roomType->tipe_kamar ?? 'N/A' }}</td>
                         <td class="px-4 py-2 border-b text-center">
-                            <span class="py-1 px-3 {{ $room->room_status == 'tersedia' ? 'bg-green-600' : 'bg-red-600' }} text-white rounded-3xl">
-                                {{ ucfirst($room->room_status) }}
+                            <span class="py-1 px-3 text-xs text-white rounded-3xl
+                                @if ($room->room_status === 'perawatan') 
+                                bg-yellow-100 text-yellow-700 
+                            @elseif ($room->room_status === 'tersedia') 
+                                bg-green-100 text-green-600 
+                            @elseif ($room->room_status === 'terisi') 
+                                bg-blue-100 text-rose-600 
+                            @endif">
+                            {{ $room->room_status }}
                             </span>
                         </td>
                         <td class="px-2 py-2 border-b text-center">
                             <div class="flex space-x-2 justify-center">
-                                <a href="{{ route('rooms.edit', $room->id) }}" class="lg:flex space-x-2 items-center justify-center bg-orange-500 hover:bg-orange-600 text-white py-1 px-2 rounded-md shadow-lg hover:shadow-none">
+                                <a href="{{ route('rooms.edit', $room->id) }}" class="flex space-x-2 items-center justify-center text-center bg-orange-500 hover:bg-orange-600 text-white py-1 px-2 rounded-md shadow-lg hover:shadow-none">
                                     <i class="fa-solid fa-pen-nib"></i>
                                 </a>
                                 <!-- Tombol Hapus -->
                                 <form action="{{ route('rooms.destroy', $room->id) }}" method="POST" class="delete-room-form">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="lg:flex space-x-2 items-center justify-center bg-red-500 hover:bg-red-600 text-white p-2 rounded-md shadow-lg hover:shadow-none">
+                                    <button type="submit" class="flex space-x-2 items-center justify-center bg-red-500 hover:bg-red-600 text-white p-2 rounded-md shadow-lg hover:shadow-none">
                                         <i class="fa-solid fa-trash-can"></i>
                                     </button>
                                 </form>

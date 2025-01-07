@@ -16,8 +16,8 @@
 </script>
 @endif
 
-<div class="max-w-lg mx-auto p-8 bg-white text-xs rounded-lg shadow-lg">
-    <h2 class="text-xl font-semibold mb-4">Edit Data Kamar</h2>
+<div class="max-w-lg mx-auto p-8 bg-white text-sm md:text-xs rounded-lg shadow-lg">
+    <h2 class="text-xl font-semibold mb-6 pb-2 border-b text-center">Edit Data Kamar</h2>
 
     @if ($errors->any())
         <div class="bg-red-100 text-red-700 p-4 mb-4 rounded">

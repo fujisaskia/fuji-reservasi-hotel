@@ -1,6 +1,6 @@
 <!-- Filter berdasarkan tipe kamar -->
 <div class="flex space-x-4 items-center mb-5">
- <p>Pilih Tipe Kamar</p>
+ <p class="text-[11px] md:text-xs">Pilih Tipe Kamar</p>
  <select id="roomTypeFilter" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-r-xl focus:outline-none focus:ring-2 focus:ring-yellow-300 focus:border-yellow-300 block w-2/3 lg:w-1/4 p-2">
      <option value="">All Types</option>
      @foreach ($roomTypes as $type)
@@ -45,7 +45,7 @@
         <div class="flex space-x-2 lg:space-x-6 items-center mx-auto justify-center">
             <i class="fa-solid fa-bed fa-4x"></i>
             <div class="lg:text-start">
-                <h4 class="text-2xl font-semibold">{{ $countOccupied }}</h4>
+                <h4 class="text-2xl font-semibold">{{ $totalGuests }}</h4>
                 <p class="">Tamu Menginap</p>                        
             </div>
         </div>  

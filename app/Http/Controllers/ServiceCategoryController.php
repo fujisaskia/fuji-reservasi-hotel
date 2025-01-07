@@ -39,7 +39,10 @@ class ServiceCategoryController extends Controller
         ]);
 
         // Mengarahkan ke halaman daftar kategori dengan pesan sukses
-        return redirect()->route('service_categories.index')->with('success', 'Category created successfully!');
+        return redirect()->route('service_categories.index')->with('sweetalert', [
+            'type' => 'success',
+            'message' => 'Kategori berhasil ditambahkan.',
+        ]);
     }
 
     // Menampilkan form untuk mengedit kategori layanan
@@ -70,24 +73,41 @@ class ServiceCategoryController extends Controller
         ]);
 
         // Mengarahkan kembali ke halaman daftar kategori dengan pesan sukses
-        return redirect()->route('service_categories.index')->with('success', 'Category updated successfully!');
+        return redirect()->route('service_categories.index')->with('sweetalert', [
+            'type' => 'success',
+            'message' => 'Kategori berhasil diperbaharui.',
+        ]);
     }
 
-    // Menghapus kategori layanan
     public function destroy($id)
     {
         // Cari kategori berdasarkan ID
         $category = ServiceCategory::findOrFail($id);
     
+        // Cek apakah ada layanan yang menggunakan kategori ini
+        if ($category->services()->exists()) {
+            // Redirect dengan pesan error jika ada layanan terkait
+            return redirect()->route('service_categories.index')->with('sweetalert', [
+                'type' => 'error',
+                'message' => 'Anda memiliki layanan dengan kategori ini.',
+            ]);
+        }
+    
         try {
             // Hapus kategori
             $category->delete();
     
-            // Pesan sukses
-            return redirect()->route('service_categories.index')->with('success', 'Kategori berhasil dihapus!');
+            // Redirect dengan pesan sukses
+            return redirect()->route('service_categories.index')->with('sweetalert', [
+                'type' => 'success',
+                'message' => 'Kategori berhasil dihapus.',
+            ]);
         } catch (\Exception $e) {
-            // Pesan gagal
-            return redirect()->route('service_categories.index')->with('error', 'Terjadi kesalahan saat menghapus kategori!');
+            // Redirect dengan pesan error jika terjadi kesalahan
+            return redirect()->route('service_categories.index')->with('sweetalert', [
+                'type' => 'error',
+                'message' => 'Maaf! Terjadi kesalahan saat menghapus kategori.',
+            ]);
         }
     }
     

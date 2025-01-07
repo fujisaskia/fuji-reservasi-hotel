@@ -20,10 +20,10 @@
 
 
 
-    <div class="max-w-5xl  mx-auto py-12 px-6 text-xs font-poppins bg-white rounded-lg shadow-md">
+    <div class="max-w-5xl  mx-auto py-12 px-6 text-sm md:text-xs font-poppins bg-white rounded-lg shadow-md">
         <!-- Header -->
         <h2 class="text-lg md:text-2xl font-bold text-center mb-4">Tipe Kamar Hotel</h2>
-        {{-- <div class="flex justify-center items-center mb-6 text-xs">
+        {{-- <div class="flex justify-center items-center mb-6 text-sm md:text-xs">
             <div class="w-full max-w-md">
                 <form class="flex items-center">
                     <input type="search" class="w-full p-3 lg:p-2 rounded-l-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-rose-500" placeholder="Cari kamar ...">

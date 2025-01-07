@@ -15,7 +15,7 @@
     </script>
 @endif
 
-<div class="bg-white shadow-md rounded-lg p-6 max-w-3xl w-full mx-auto text-xs">
+<div class="bg-white shadow-md rounded-lg p-6 max-w-3xl w-full mx-auto text-sm md:text-xs">
     <h1 class="text-2xl font-bold mb-6 text-center text-gray-700 pb-2 border-b border-gray-300">Profile</h1>
     <form action="{{ route('profile.update', $user->id) }}" method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-6">
         @csrf <!-- Tambahkan CSRF token untuk keamanan -->
@@ -38,7 +38,7 @@
         <!-- No. HP -->
         <div>
             <label class="block text-gray-600 font-medium mb-1">No. HP</label>
-            <input type="text" name="phone_number" value="{{ old('phone_number', $user->phone_number) }}" 
+            <input type="text" name="phone_number" value="{{ old('phone_number', $user->phone_number ?? 'tidak diketahui') }}" 
                    class="bg-gray-50 border border-gray-300 rounded-md p-3 w-full focus:outline-none focus:ring focus:ring-yellow-100">
         </div>
         

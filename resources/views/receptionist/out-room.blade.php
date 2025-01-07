@@ -11,7 +11,7 @@
     </a> --}}
 
     
-    <div class="max-w-5xl mx-auto p-6 bg-white shadow-lg rounded-lg text-xs">
+    <div class="container lg:max-w-5xl mx-auto bg-white py-8 px-4 rounded-lg shadow-md border border-gray-300 text-sm md:text-xs">
         <h2 class="uppercase text-lg font-semibold mb-4">KAMAR NOMOR : {{ $room->room_number }}</h2>
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-5">
             {{-- grid 1 --}}
