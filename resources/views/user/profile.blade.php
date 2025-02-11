@@ -3,7 +3,7 @@
 
 @section('content')
 
-<div class="max-w-6xl mx-auto text-sm lg:text-xs p-6 md:p-12 lg:p-0">
+<div class="max-w-6xl mx-auto text-sm lg:text-xs p-6 md:p-12 lg:p-0 h-screen">
     
     @if(session('success'))
     <script>

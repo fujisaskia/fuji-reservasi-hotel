@@ -57,62 +57,6 @@
   </div>
 </div>
 
-<div x-data="{ open: false }" class="lg:hidden">
-  <!-- Button Fixed di Bawah -->
-  {{-- <div class="fixed bottom-0 left-0 w-full z-30">
-    <button @click="open = true" class="flex bg-rose-700 text-white font-bold py-4 rounded-t-md shadow-lg hover:bg-rose-800 transition duration-300 w-full justify-center text-center">
-      Booking Now
-    </button>
-  </div> --}}
-
-  <!-- Modal -->
-  <div x-show="open" x-transition:enter="transition ease-out duration-300"
-       x-transition:enter-start="opacity-0 translate-y-full"
-       x-transition:enter-end="opacity-100 translate-y-0"
-       x-transition:leave="transition ease-in duration-300"
-       x-transition:leave-start="opacity-100 translate-y-0"
-       x-transition:leave-end="opacity-0 translate-y-full"
-       class="fixed bottom-0 left-0 right-0 bg-white text-sm border border-gray-400 py-12 px-6 rounded-t-3xl shadow-lg z-30">
-    
-    <h2 class="text-lg font-semibold pb-4 border-b border-gray-300 text-center">Book Your Stay</h2>
-
-    <div class="space-y-4 mt-5">
-      <!-- Check-in field -->
-      <div>
-        <label for="checkin" class="block font-medium text-gray-700 uppercase">Check-in</label>
-        <input type="date" id="checkin" class="w-full border border-gray-300 px-2 py-3 rounded-md focus:outline-none focus:ring focus:ring-yellow-500">
-      </div>
-
-      <!-- Check-out field -->
-      <div>
-        <label for="checkout" class="block font-medium text-gray-700 uppercase">Check-out</label>
-        <input type="date" id="checkout" class="w-full border border-gray-300 px-2 py-3 rounded-md focus:outline-none focus:ring focus:ring-yellow-500">
-      </div>
-
-      <!-- Promo code field -->
-      {{-- <div>
-        <label for="promo" class="block font-medium text-gray-700 uppercase">Promo Code</label>
-        <input type="text" id="promo" class="w-full border border-gray-300 px-2 py-3 rounded-md focus:outline-none focus:ring focus:ring-yellow-500" placeholder="Enter code">
-      </div> --}}
-    </div>
-
-    <!-- Tombol Check Availability -->
-    <div class="mt-6 block">
-      <a href="/offers">
-        <button class="w-full bg-yellow-500 text-white py-3 rounded-md hover:bg-white hover:text-yellow-700 focus:outline-none focus:ring focus:ring-yellow-600">Check Availability</button>
-      </a>
-    </div>
-
-    <!-- Tombol Close -->
-    <button @click="open = false" class="space-x-2 mt-4 text-gray-500 text-sm hover:text-gray-700 block mx-auto">
-      <i class="fa-solid fa-xmark"></i>
-      <span>Close</span>
-    </button>
-  </div>
-</div>
-
-
-
 
 <script>
   document.getElementById('sidebar-toggle').addEventListener('click', function() {

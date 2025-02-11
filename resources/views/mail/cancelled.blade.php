@@ -130,6 +130,16 @@
             font-weight: bold;
         }
 
+        .payment {
+            font-weight: bold;
+            margin-top: 16px;
+        }
+        .payment span {
+            font-weight: bold;
+            margin-top: 16px;
+            color: green; /* Tambahkan warna hijau */
+        }
+
         .policies {
             font-weight: bold;
             margin-top: 16px;
@@ -231,6 +241,10 @@
                     </tr>
                 </tfoot>
             </table>
+        </div>
+
+        <div class="payment">
+            <p>Status Pembayaran: <span>{{ $reservation->payment->payment_status }}</span></p>
         </div>
 
         <!-- Policies -->

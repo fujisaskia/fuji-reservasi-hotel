@@ -194,17 +194,38 @@
                         .then(response => response.json().then(data => ({ status: response.status, data }))) // Tangkap status HTTP
                         .then(({ status, data }) => {
                             if (status === 200) {
-                                alert(data.message || 'Pembayaran berhasil!');
-                                window.location.href = '/my-booking'; // Redirect ke halaman my-booking
+                                Swal.fire({
+                                    title: 'Terimakasih!',
+                                    text: 'Reservasi Anda Sukses di Bayar !',
+                                    imageUrl: '/assets/card-payment.png',
+                                    imageWidth: 200,
+                                    imageHeight: 200,
+                                    imageAlt: 'Pembayaran',
+                                    confirmButtonText: 'OK',
+                                    confirmButtonColor: '#3085d6',
+                                    background: '#f8f9fa',
+                                    customClass: {
+                                        title: 'text-2xl', // Gunakan kelas Tailwind untuk ukuran teks
+                                        text: 'text-base', // Gunakan kelas Tailwind untuk ukuran teks
+                                    },
+                                }).then(() => {
+                                    window.location.href = '/my-booking'; // Redirect ke halaman my-booking
+                                });
                             } else {
                                 throw new Error(data.message || 'Gagal memperbarui status pembayaran.');
                             }
                         })
                         .catch(error => {
                             console.error('Kesalahan:', error.message);
-                            alert('Terjadi kesalahan: ' + error.message);
+                            Swal.fire({
+                                title: 'Error',
+                                text: 'Terjadi kesalahan: ' + error.message,
+                                icon: 'error',
+                                confirmButtonText: 'OK'
+                            });
                         });
                     },
+
 
                     onPending: function(result) {
                         alert('Menunggu Pembayaran...');

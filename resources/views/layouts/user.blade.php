@@ -60,10 +60,10 @@
 
 
 </head>
-<body class="h-full font-poppins bg-slate-50">
+<body class="h-full font-poppins bg-slate-100">
     <div class="min-h-full">
         <!-- Navbar -->
-        <nav class="bg-white shadow-lg p-4 text-xs font-semibold lg:relative top-0 z-10">
+        <nav class="bg-white shadow-lg p-4 text-xs font-semibold sticky top-0 z-10">
             <div class="max-w-6xl mx-auto flex justify-between items-center">
                 <!-- Left: Logo or Title -->
                 <a href="{{ url('/') }}" class="flex space-x-2 items-center text-lg tracking-wide md:text-xl font-bold text-gray-800">
@@ -74,7 +74,7 @@
     
                 <div class="relative md:inline-block text-left hidden">
                     <!-- Button -->
-                    <button onclick="toggleDropdown()" class="flex space-x-2 items-center text-sm lg:text-xs text-rose-700 bg-gray-200 hover:bg-gray-300 py-2 px-3 rounded-full">
+                    <button onclick="toggleDropdown()" class="flex space-x-2 items-center text-sm lg:text-xs text-rose-700 bg-gray-200 hover:bg-gray-300 py-2 px-3 rounded-full focus:scale-95 duration-300">
                         <i class="fa-regular fa-user"></i>
                         <p class="hidden md:flex">{{ Auth::user()->full_name }}</p>
                         <i class="flex md:hidden fa-solid fa-chevron-down"></i>
@@ -132,7 +132,7 @@
                 
                 <div x-data="{ showSidebar: false }" class="relative md:hidden flex">
                     <!-- Tombol untuk membuka sidebar -->
-                    <button @click="showSidebar = true" class="p-2 bg-gray-200 rounded text-gray-700">
+                    <button @click="showSidebar = true" class="py-2 px-3 bg-gray-200 hover:bg-gray-300 focus:bg-gray-300 rounded-full text-gray-700 focus:scale-95 duration-300">
                         <i class="fa-regular fa-user text-lg"></i>
                     </button>
                 
@@ -158,12 +158,6 @@
                         <!-- Isi Menu -->
                         <ul class="py-12 px-4 space-y-2 text-sm md:text-xs">
                             <li>
-                                <a href="/profile" class="block px-4 py-3 font-medium text-gray-600 hover:text-gray-700 hover:bg-gray-100 {{ Request::is('profile') ? 'bg-gray-100 border-l-4 border-rose-600' : 'hover:bg-gray-100' }}">
-                                    <i class="fa-solid fa-user  mr-1"></i>
-                                    Profile
-                                </a>
-                            </li>
-                            <li>
                                 <a href="/offers" class="flex px-4 py-3 items-center md:text-xs font-medium text-gray-600 hover:text-gray-700 hover:bg-gray-100 {{ Request::is('user.offers') ? 'bg-gray-100 border-l-4 border-rose-600' : 'hover:bg-gray-100' }}">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-5 mr-1">
                                         <path fill-rule="evenodd" d="M9 4.5a.75.75 0 0 1 .721.544l.813 2.846a3.75 3.75 0 0 0 2.576 2.576l2.846.813a.75.75 0 0 1 0 1.442l-2.846.813a3.75 3.75 0 0 0-2.576 2.576l-.813 2.846a.75.75 0 0 1-1.442 0l-.813-2.846a3.75 3.75 0 0 0-2.576-2.576l-2.846-.813a.75.75 0 0 1 0-1.442l2.846-.813A3.75 3.75 0 0 0 7.466 7.89l.813-2.846A.75.75 0 0 1 9 4.5ZM18 1.5a.75.75 0 0 1 .728.568l.258 1.036c.236.94.97 1.674 1.91 1.91l1.036.258a.75.75 0 0 1 0 1.456l-1.036.258c-.94.236-1.674.97-1.91 1.91l-.258 1.036a.75.75 0 0 1-1.456 0l-.258-1.036a2.625 2.625 0 0 0-1.91-1.91l-1.036-.258a.75.75 0 0 1 0-1.456l1.036-.258a2.625 2.625 0 0 0 1.91-1.91l.258-1.036A.75.75 0 0 1 18 1.5ZM16.5 15a.75.75 0 0 1 .712.513l.394 1.183c.15.447.5.799.948.948l1.183.395a.75.75 0 0 1 0 1.422l-1.183.395c-.447.15-.799.5-.948.948l-.395 1.183a.75.75 0 0 1-1.422 0l-.395-1.183a1.5 1.5 0 0 0-.948-.948l-1.183-.395a.75.75 0 0 1 0-1.422l1.183-.395c.447-.15.799-.5.948-.948l.395-1.183A.75.75 0 0 1 16.5 15Z" clip-rule="evenodd" />
@@ -172,9 +166,21 @@
                                 </a>
                             </li>
                             <li>
+                                <a href="/profile" class="block px-4 py-3 font-medium text-gray-600 hover:text-gray-700 hover:bg-gray-100 {{ Request::is('profile') ? 'bg-gray-100 border-l-4 border-rose-600' : 'hover:bg-gray-100' }}">
+                                    <i class="fa-solid fa-user  mr-1"></i>
+                                    Profile
+                                </a>
+                            </li>
+                            <li>
                                 <a href="/my-booking" class="block px-4 py-3 items-center md:text-xs font-medium text-gray-600 hover:text-gray-700 hover:bg-gray-100 {{ Request::is('my-booking') ? 'bg-gray-100 border-l-4 border-rose-600' : 'hover:bg-gray-100' }}">
                                     <i class="fa-solid fa-tags mr-1"></i>
                                     Booking-Ku
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/my-deposite" class="block px-4 py-3 items-center md:text-xs font-medium text-gray-600 hover:text-gray-700 hover:bg-gray-100 {{ Request::is('my-deposite') ? 'bg-gray-100 border-l-4 border-rose-600' : 'hover:bg-gray-100' }}">
+                                    <i class="fa-solid fa-tags mr-1"></i>
+                                    Pembayaran
                                 </a>
                             </li>
                             <li>

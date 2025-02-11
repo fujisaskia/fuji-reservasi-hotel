@@ -10,52 +10,57 @@
     <div class="flex justify-center items-center mb-4">
         <form action="{{ route('receptionist.reports') }}" method="GET" class="w-full md:w-auto">
             <div class="flex flex-col md:flex-row md:items-center space-y-3 md:space-y-0 md:space-x-3">
-    {{-- Filter waktu --}}
-    <div class="flex space-x-3 w-full md:w-auto md:order-1 order-2 mt-2 md:mt-0">
-        <select 
-            name="year" 
-            class="border border-gray-300 rounded p-2 w-full md:w-auto focus:outline-none focus:ring focus:ring-yellow-200"
-        >
-            <option value="">Tahun</option>
-            @foreach(range(2023, 2025) as $year)
-                <option value="{{ $year }}" {{ request('year') == $year ? 'selected' : '' }}>
-                    {{ $year }}
-                </option>
-            @endforeach
-        </select>
-        <select 
-            name="month" 
-            class="border border-gray-300 rounded p-2 w-full md:w-auto focus:outline-none focus:ring focus:ring-yellow-200"
-        >
-            <option value="">Bulan</option>
-            @foreach(range(1, 12) as $month)
-                <option value="{{ $month }}" {{ request('month') == $month ? 'selected' : '' }}>
-                    {{ \Carbon\Carbon::create()->month($month)->format('F') }}
-                </option>
-            @endforeach
-        </select>
-    </div>
+                {{-- Filter waktu --}}
+                <div class="flex space-x-3 w-full md:w-auto md:order-1 order-2 mt-2 md:mt-0">
+                    <select 
+                        name="year" 
+                        id="yearFilter"
+                        class="border border-gray-300 rounded p-2 w-full md:w-auto focus:outline-none focus:ring focus:ring-yellow-200"
+                    >
+                        <option value="">Tahun</option>
+                        @foreach(range(2023, now()->year) as $year)
+                            <option value="{{ $year }}" {{ request('year', now()->year) == $year ? 'selected' : '' }}>
+                                {{ $year }}
+                            </option>
+                        @endforeach
+                    </select>
+                    <select 
+                        name="month" 
+                        id="monthFilter"
+                        class="border border-gray-300 rounded p-2 w-full md:w-auto focus:outline-none focus:ring focus:ring-yellow-200"
+                    >
+                        <option value="">Bulan</option>
+                        @php
+                            $selectedYear = request('year', now()->year);
+                            $maxMonth = ($selectedYear == now()->year) ? now()->month : 12;
+                        @endphp
+                        @foreach(range(1, $maxMonth) as $month)
+                            <option value="{{ $month }}" {{ request('month') == $month ? 'selected' : '' }}>
+                                {{ \Carbon\Carbon::create()->month($month)->format('F') }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
 
-
-            {{-- Search bar --}}
-            <div class="flex items-center w-full md:order-2 order-1 space-x-2 ">
-                <input 
-                    type="search" 
-                    name="search" 
-                    placeholder="Cari nama / invoice" 
-                    value="{{ request('search') }}" 
-                    class="border border-gray-300 rounded p-3 md:p-2 w-full focus:outline-none focus:ring focus:ring-yellow-200"
-                >
-                <button 
-                    type="submit" 
-                    class="bg-rose-700 hover:bg-rose-800 focus:scale-95 text-white px-4 py-2 rounded-full text-sm duration-300"
-                >
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                </button>
+                {{-- Search bar --}}
+                <div class="flex items-center w-full md:order-2 order-1 space-x-2 ">
+                    <input 
+                        type="search" 
+                        name="search" 
+                        placeholder="Cari nama / invoice" 
+                        value="{{ request('search') }}" 
+                        class="border border-gray-300 rounded p-3 md:p-2 w-full focus:outline-none focus:ring focus:ring-yellow-200"
+                    >
+                    <button 
+                        type="submit" 
+                        class="bg-rose-700 hover:bg-rose-800 focus:scale-95 text-white px-4 py-2 rounded-full text-sm duration-300"
+                    >
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                </div>
             </div>
-        </div>
-    </form>
-</div>
+        </form>
+    </div>
 
 
     {{-- button untuk cetak --}}
@@ -112,5 +117,24 @@
         {{ $reservations->links() }}
     </div>
 </div>
+
+
+<script>
+    document.getElementById('yearFilter').addEventListener('change', function () {
+        const selectedYear = this.value;
+        const currentYear = new Date().getFullYear();
+        const monthFilter = document.getElementById('monthFilter');
+
+        monthFilter.innerHTML = '<option value="">Bulan</option>';
+        const maxMonth = (selectedYear == currentYear) ? new Date().getMonth() + 1 : 12;
+
+        for (let i = 1; i <= maxMonth; i++) {
+            let option = document.createElement('option');
+            option.value = i;
+            option.textContent = new Date(2022, i - 1, 1).toLocaleString('id-ID', { month: 'long' });
+            monthFilter.appendChild(option);
+        }
+    });
+</script>
 
 @endsection

@@ -5,9 +5,33 @@
 
 @section('content')
 
-    <div class="container lg:max-w-5xl mx-auto bg-white py-8 px-4 rounded-lg shadow-md border border-gray-300 text-sm md:text-xs">
+    @if (session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil',
+                text: '{{ session('success') }}',
+                showConfirmButton: true,
+            });
+        </script>
+    @endif
+
+    @if ($errors->any())
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Terjadi Kesalahan',
+                text: '{{ $errors->first() }}',
+                showConfirmButton: true,
+            });
+        </script>
+    @endif
+
+
+    <div
+        class="container lg:max-w-5xl mx-auto bg-white py-8 px-4 rounded-lg shadow-md border border-gray-300 text-sm md:text-xs">
         <h2 class="text-lg font-semibold mb-6">KAMAR NOMOR : {{ $room->room_number }}</h2>
-        <form action="{{ route('checkin.process', $room->id) }}" method="POST">
+        <form action="{{ route('checkin.process', $room->id) }}" method="POST" id="checkin-form">
             @csrf
             <input type="hidden" name="room_id" value="{{ $room->id }}" />
 
@@ -17,7 +41,9 @@
                     <!-- Invoice -->
                     <div class="col-span-1">
                         <label for="invoice" class="block text-sm font-semibold text-gray-700"># INVOICE</label>
-                        <input id="invoice" type="text" class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-yellow-300" readonly />
+                        <input id="invoice" type="text"
+                            class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-yellow-300"
+                            readonly />
                     </div>
 
                     <!-- Detail Kamar -->
@@ -26,7 +52,8 @@
                         <div class="text-[11px] leading-relaxed">
                             <div class="flex justify-between">
                                 <p class="">Harga / Malam :</p>
-                                <span class="font-bold text-left">IDR {{ number_format($room->roomType->harga, 0, ',', ',') }}</span>
+                                <span class="font-bold text-left">IDR
+                                    {{ number_format($room->roomType->harga, 0, ',', ',') }}</span>
                             </div>
                             <div class="flex justify-between">
                                 <p>Max. Tamu:</p>
@@ -41,20 +68,19 @@
                     <!-- Nama Tamu -->
                     <div>
                         <label for="reservation" class="block text-sm font-semibold text-gray-700">Nama Tamu</label>
-                        <select name="reservation_id" id="reservation" class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-yellow-300">
+                        <select name="reservation_id" id="reservation"
+                            class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-yellow-300">
                             <option value="">Pilih Tamu</option>
                             @foreach ($reservations as $reservation)
                                 @php
                                     $invoice = $invoices->firstWhere('reservation_id', $reservation->id);
                                 @endphp
-                                <option 
-                                    value="{{ $reservation->id }}"
+                                <option value="{{ $reservation->id }}"
                                     data-identification-type="{{ $reservation->user->identification_type }}"
                                     data-identification-number="{{ $reservation->user->identification_number }}"
                                     data-checkin-date="{{ \Carbon\Carbon::parse($reservation->check_in_date)->format('M d, Y') }}"
                                     data-checkout-date="{{ \Carbon\Carbon::parse($reservation->check_out_date)->format('M d, Y') }}"
-                                    data-invoice-number="{{ $invoice ? $invoice->invoice_number : '' }}"
-                                >
+                                    data-invoice-number="{{ $invoice ? $invoice->invoice_number : '' }}">
                                     {{ $reservation->id }} - {{ $reservation->user->full_name }}
                                 </option>
                             @endforeach
@@ -64,15 +90,21 @@
                     <!-- Identitas -->
                     <div class="space-y-2">
                         <div class="flex space-x-2">
-                            <input type="text" id="identification_type" name="identification_type" class="w-1/2 block p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-300" placeholder="Jenis Identitas" readonly>
-                            <input type="text" id="identification_number" name="identification_number" class="w-1/2 block p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-300" placeholder="Nomor Identitas" readonly>
+                            <input type="text" id="identification_type" name="identification_type"
+                                class="w-1/2 block p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-300"
+                                placeholder="Jenis Identitas" readonly>
+                            <input type="text" id="identification_number" name="identification_number"
+                                class="w-1/2 block p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-300"
+                                placeholder="Nomor Identitas" readonly>
                         </div>
                     </div>
                     <!-- Deposit -->
                     <div class="space-y-2">
                         <div class="flex space-x-2 items-center">
                             <label for="deposit" class="block text-sm font-semibold text-gray-700">DEPOSIT</label>
-                            <input type="number" id="deposit" name="deposit" class="w-full block px-2 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-300" placeholder="nominal deposit">
+                            <input type="number" id="deposit" name="deposit"
+                                class="w-full block px-2 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-300"
+                                placeholder="nominal deposit">
                         </div>
                         <div class="flex items-center space-x-2 text-[10px] p-2 bg-rose-100 border-l-4 border-rose-800">
                             <i class="fa-solid fa-circle-exclamation text-sm text-rose-800"></i>
@@ -85,19 +117,29 @@
                 <div class="space-y-4">
                     <!-- Tanggal Check-In -->
                     <div>
-                        <label for="checkin-date" class="block font-semibold text-gray-700">Tanggal / Waktu <span class="text-rose-700">Check-In</span></label>
+                        <label for="checkin-date" class="block font-semibold text-gray-700">Tanggal / Waktu <span
+                                class="text-rose-700">Check-In</span></label>
                         <div class="flex space-x-2">
-                            <input id="checkin-date" name="check_in_date" class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-yellow-300" required />
-                            <input type="time" id="checkin-time" value="14:00" class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500" readonly>
+                            <input id="checkin-date" name="check_in_date"
+                                class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-yellow-300"
+                                required />
+                            <input type="time" id="checkin-time" value="14:00"
+                                class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500"
+                                readonly>
                         </div>
                     </div>
 
                     <!-- Tanggal Check-Out -->
                     <div>
-                        <label for="checkout-date" class="block font-semibold text-gray-700">Tanggal / Waktu <span class="text-rose-700">Check-Out</span></label>
+                        <label for="checkout-date" class="block font-semibold text-gray-700">Tanggal / Waktu <span
+                                class="text-rose-700">Check-Out</span></label>
                         <div class="flex space-x-2">
-                            <input id="checkout-date" name="check_out_date" class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-yellow-300" required />
-                            <input type="time" id="checkout-time" value="12:00" class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500" readonly>
+                            <input id="checkout-date" name="check_out_date"
+                                class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-yellow-300"
+                                required />
+                            <input type="time" id="checkout-time" value="12:00"
+                                class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500"
+                                readonly>
                         </div>
                     </div>
                 </div>
@@ -105,7 +147,8 @@
 
             <!-- Buttons -->
             <div class="flex justify-end mt-8 space-x-4">
-                <button type="submit" class="bg-green-500 text-white px-4 py-2 font-semibold rounded-md shadow-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 duration-300">
+                <button type="submit"
+                    class="bg-green-500 text-white px-4 py-2 font-semibold rounded-md shadow-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 duration-300">
                     Check In
                 </button>
             </div>
@@ -127,7 +170,8 @@
 
                 // Ambil data dari atribut data-*
                 const identificationType = selectedOption.getAttribute('data-identification-type') || '';
-                const identificationNumber = selectedOption.getAttribute('data-identification-number') || '';
+                const identificationNumber = selectedOption.getAttribute('data-identification-number') ||
+                    '';
                 const checkinDate = selectedOption.getAttribute('data-checkin-date') || '';
                 const checkoutDate = selectedOption.getAttribute('data-checkout-date') || '';
                 const invoiceNumber = selectedOption.getAttribute('data-invoice-number') || '';
@@ -139,6 +183,62 @@
                 checkoutDateInput.value = checkoutDate;
                 invoiceInput.value = invoiceNumber;
             });
+        });
+
+        document.getElementById('checkin-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Mencegah form submit biasa
+
+            // Mengambil form data
+            let formData = new FormData(this);
+
+            // Mengirim form data via AJAX
+            fetch(this.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
+                            'content')
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        // Jika ada masalah pada response (HTTP error)
+                        throw new Error('Terjadi masalah dengan server. Silakan coba lagi.');
+                    }
+                    return response.json(); // Mengambil response sebagai JSON
+                })
+                .then(data => {
+                    if (data.success) {
+                        // Jika sukses
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil',
+                            text: data.message || 'Check-in berhasil dan deposit telah ditambahkan!',
+                            showConfirmButton: true,
+                        }).then(() => {
+                            window.location.href = data.redirect_url; // Redirect setelah berhasil
+                        });
+                    } else {
+                        // Jika server mengembalikan error
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Terjadi Kesalahan',
+                            text: data.message ||
+                                'Terjadi kesalahan saat memproses check-in. Silakan coba lagi.',
+                            showConfirmButton: true,
+                        });
+                    }
+                })
+                .catch(error => {
+                    // Jika ada error lain (misalnya gagal koneksi)
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: error.message ||
+                            'Terjadi masalah saat menghubungi server. Silakan coba lagi.',
+                        showConfirmButton: true,
+                    });
+                });
         });
     </script>
 

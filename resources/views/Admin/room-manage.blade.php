@@ -59,13 +59,13 @@
                         <td class="px-2 py-2 border-b text-center">{{ $room->room_number }}</td>
                         <td class="px-4 py-2 border-b">{{ $room->roomType->tipe_kamar ?? 'N/A' }}</td>
                         <td class="px-4 py-2 border-b text-center">
-                            <span class="py-1 px-3 text-xs text-white rounded-3xl
+                            <span class="py-1 px-3 text-xs  rounded-3xl
                                 @if ($room->room_status === 'perawatan') 
                                 bg-yellow-100 text-yellow-700 
                             @elseif ($room->room_status === 'tersedia') 
                                 bg-green-100 text-green-600 
                             @elseif ($room->room_status === 'terisi') 
-                                bg-blue-100 text-rose-600 
+                                bg-rose-100 text-rose-600 
                             @endif">
                             {{ $room->room_status }}
                             </span>

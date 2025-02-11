@@ -1,6 +1,6 @@
 @extends('layouts/admin')
 
-@section('title', 'Ulasan Kamar | Admin')
+@section('title', 'Ulasan | Admin')
 
 @section('content')
 
@@ -46,7 +46,8 @@
                     <th class="px-4 py-2 text-left">#</th>
                     <th class="px-4 py-2 text-left">Nama User</th>
                     <th class="px-4 py-2 text-center">Rating</th>
-                    <th class="px-4 py-2 text-left">Komentar</th>
+                    <th class="px-4 py-2 text-center">Komentar</th>
+                    <th class="px-4 py-2 text-center">Status</th>
                     <th class="px-4 py-2 text-center">Aksi</th>
                 </tr>
             </thead>
@@ -59,16 +60,29 @@
                         {{ $ulasan->formattedRating() }}
                     </td>
                     <td class="px-4 py-2">{{ $ulasan->comment ?? 'Tidak ada komentar' }}</td>
+                    {{-- status --}}
+                    <td class="px-4 py-2 text-center">
+                        <div class="py-1 px-2 rounded-md {{ $ulasan->is_visible ? 'bg-blue-100 text-blue-900' : 'bg-red-100 text-red-900' }}">
+                            {{ $ulasan->is_visible ? 'Ditampilkan' : 'Disembunyikan' }}
+                        </div>
+                    </td>
+                    {{-- aksi --}}
                     <td class="px-4 py-2 text-center">
                         <form action="{{ route('ulasans.toggleVisibility', $ulasan->id) }}" method="POST">
                             @csrf
-                            @method('POST') <!-- Menggunakan POST untuk toggle -->
                             <button type="submit" 
-                                    class="{{ $ulasan->is_visible ? 'text-white bg-blue-600 p-1 rounded-md hover:bg-blue-700' : 'text-white bg-rose-600 p-1 rounded-md hover:bg-rose-700' }} text-[11px] focus:scale-95 duration-300">
-                                {{ $ulasan->is_visible ? 'Sembunyikan' : 'Tampilkan' }}
+                                    class="{{ $ulasan->is_visible ? 'text-white bg-blue-600 p-2 rounded-md hover:bg-blue-700' : 'text-white bg-rose-600 p-2 rounded-md hover:bg-rose-700' }} text-[11px] shadow-lg hover:shadow-none focus:scale-95 duration-300"
+                                    title="{{ $ulasan->is_visible ? 'Sembunyikan Ulasan' : 'Tampilkan Ulasan' }}">
+                                {{-- Ikon tombol berdasarkan status --}}
+                                @if($ulasan->is_visible)
+                                    <i class="fa-regular fa-eye-slash"></i>
+                                @else
+                                    <i class="fa-regular fa-eye"></i>
+                                @endif
                             </button>
                         </form>
-                    </td>
+                    </td>                    
+
                 </tr>
                 @empty
                 <tr>

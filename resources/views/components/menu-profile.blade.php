@@ -8,6 +8,12 @@
                         Booking-Ku
                     </button>
                 </a>
+                <a href="/my-deposite">
+                    <button class="w-full text-left p-3 hover:bg-gray-100 {{ Request::is('my-deposite') ? 'bg-gray-100 border-l-4 border-rose-600' : 'hover:bg-gray-100' }} group">
+                        <i class="fa-solid fa-tags mr-1 group-hover:scale-125 group-hover:-rotate-12 duration-300"></i>
+                        Pembayaran
+                    </button>
+                </a>
                 <a href="/profile">
                     <button class="w-full text-left p-3 hover:bg-gray-100 mt-1 {{ Request::is('profile') ? 'bg-gray-100 border-l-4 border-rose-600' : 'hover:bg-gray-100' }} group">
                         <i class="fa-solid fa-user mr-1 group-hover:scale-125 duration-300"></i>

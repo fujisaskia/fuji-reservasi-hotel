@@ -28,67 +28,72 @@
               <form  action="{{ route('register') }}" method="POST">
                 @csrf
                 <div class="mb-4">
-                  <label for="full_name" class="block  font-medium text-gray-700">Full Name</label>
+                  <label for="full_name" class="block  font-medium text-gray-700">Nama</label>
                   <div class="flex gap-2">
-                      <select name="title" class="mt-1 block w-1/4 p-2 border focus:border-rose-600 rounded-lg shadow-sm">
+                      <select name="title" class="mt-1 mb-2 block w-1/4 p-2 border focus:border-rose-600 rounded-lg shadow-sm">
                         <option value="Mr.">Mr.</option>
                         <option value="Mrs.">Mrs.</option>
                         <option value="Ms.">Ms.</option>
                       </select>                  
-                      <input type="text" name="full_name" class="mt-1 block w-3/4 p-2 border focus:border-rose-600 rounded-lg shadow-sm" placeholder="Enter your full name">
+                      <input type="text" name="full_name" value="{{ old('full_name') }}" class="mt-1 mb-2 block w-3/4 p-2 border focus:border-rose-600 rounded-lg shadow-sm" placeholder="Masukkan Nama Anda">
                     </div>                
                     @error('full_name')
-                      <span class="text-red-600 text-xs">{{ $message }}</span>
+                      <span class="text-red-700 text-[11px] p-1 bg-red-100 rounded w-full">{{ $message }}</span>
                     @enderror
                 </div>
 
                 <div class="mb-4">
                   <label for="email" class="block  font-medium text-gray-700">Email</label>
-                  <input type="email" name="email" class="mt-1 block w-full p-2 border focus:border-rose-600 rounded-lg shadow-sm" placeholder="your-email@gmail.com">
+                  <input type="email" name="email" value="{{ old('email') }}" class="mt-1 mb-2 block w-full p-2 border focus:border-rose-600 rounded-lg shadow-sm" placeholder="email-anda@gmail.com">
                   @error('email')
-                    <span class="text-red-600 text-xs">{{ $message }}</span>
+                    <span class="text-red-700 text-[11px] p-1 bg-red-100 rounded w-full">{{ $message }}</span>
                   @enderror
                 </div>
 
                 <div class="mb-4">
                   <label for="password" class="block  font-medium text-gray-700">Password</label>
-                  <input type="password" name="password" class="mt-1 block w-full p-2 border rounded-lg shadow-sm" placeholder="your  password">
+                  <input type="password" name="password" class="mt-1 mb-2 block w-full p-2 border rounded-lg shadow-sm" placeholder="Masukkan Password">
                   @error('password')
-                    <span class="text-red-600 text-xs">{{ $message }}</span>
+                    <span class="text-red-700 text-[11px] p-1 bg-red-100 rounded w-full">{{ $message }}</span>
                   @enderror
                 </div>
 
                 <div class="flex flex-col md:flex-row md:space-x-3 mb-4">
                   <div class="flex-1">
-                    <label for="phone" class="block font-medium text-gray-700">Phone Number</label>
-                    <input type="number" name="phone_number" class="mt-1 block w-full p-2 border rounded-lg shadow-sm" placeholder="Enter your phone number">
+                    <label for="phone" class="block font-medium text-gray-700">Nomor Telepon</label>
+                    <input type="number" name="phone_number" value="{{ old('phone_number') }}" class="mt-1 mb-2 block w-full p-2 border rounded-lg shadow-sm" placeholder="Nomor Telepon Anda">
                     @error('phone_number')
-                      <span class="text-red-600 text-xs">{{ $message }}</span>
+                      <span class="text-red-700 text-[11px] p-1 bg-red-100 rounded w-full">{{ $message }}</span>
                     @enderror
                   </div>
   
                   <div class="">
                       <label for="nationality" class="block  font-medium text-gray-700">nationality</label>
-                      <input type="text" name="nationality" class="mt-1 block w-full p-2 border rounded-lg shadow-sm" placeholder="your country">
+                      <input type="text" name="nationality" value="{{ old('nationality') }}" class="mt-1 mb-2 block w-full p-2 border rounded-lg shadow-sm" placeholder="Asal Negara Anda">
                       @error('nationality')
-                        <span class="text-red-600 text-xs">{{ $message }}</span>
+                        <span class="text-red-700 text-[11px] p-1 bg-red-100 rounded w-full">{{ $message }}</span>
                       @enderror
                   </div>
                 </div>
 
-                <div class="flex space-x-3">
-                  <div class="mb-4">
-                      <label for="identification_type" class="block font-medium text-gray-700">Tipe Identitas</label>
-                      <select id="identification_type" name="identification_type" class="mt-1 block w-full p-2 border rounded-lg shadow-sm">
-                          <option value="KTP">KTP</option>
-                          <option value="PASSPORT">PASSPORT</option>
-                      </select>
+                <div class=" mb-4">
+                  <div class="flex space-x-3">
+                    <div class="">
+                        <label for="identification_type" class="block font-medium text-gray-700">Tipe Identitas</label>
+                        <select id="identification_type" name="identification_type" class="mt-1 mb-2 block w-full p-2 border rounded-lg shadow-sm">
+                            <option value="KTP">KTP</option>
+                            <option value="PASSPORT">PASSPORT</option>
+                        </select>
+                    </div>
+                    
+                    <div class="flex-1">
+                        <label for="identification_number" class="block font-medium text-gray-700">Nomor Identitas</label>
+                        <input type="text" id="identification_number" name="identification_number" value="{{ old('identification_number') }}" class="mt-1 mb-2 block w-full p-2 border rounded-lg shadow-sm" placeholder="Masukkan Nomor Identitas">
+                    </div>
                   </div>
-                  
-                  <div class="mb-4 flex-1">
-                      <label for="identification_number" class="block font-medium text-gray-700">Nomor Identitas</label>
-                      <input type="text" id="identification_number" name="identification_number" class="mt-1 block w-full p-2 border rounded-lg shadow-sm" placeholder="Masukkan Nomor Identitas">
-                  </div>
+                  @error('identification_number')
+                    <span class="text-red-700 text-[11px] p-1 bg-red-100 rounded w-full">{{ $message }}</span>
+                  @enderror
                 </div>
             
                 <div class="mt-6 mx-8">
@@ -101,7 +106,7 @@
               </form>
               {{-- anchor  register--}}
               <div class="mt-6 text-center">
-                <p class=" text-gray-600">Belum punya akun? <a href="/login" class="text-blue-700 hover:text-blue-500 font-semibold">Login</a></p>
+                <p class=" text-gray-600">Sudah punya akun? <a href="/login" class="text-blue-700 hover:text-blue-500 font-semibold">Login</a></p>
               </div>
 
             </div>

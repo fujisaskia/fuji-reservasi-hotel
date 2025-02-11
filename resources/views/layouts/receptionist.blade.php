@@ -46,8 +46,8 @@
     <footer class="w-full bg-white shadow-md mt-10 bottom-0">
         <div class="md:ml-52 py-4 px-4 text-xs">
             <div class="text-start text-xs text-slate-400">
-                <p>&copy; 2024 HOTEL RUBY. All rights reserved.</p>
-                <p class="mt-2">123 Ruby St, Luxury City, 56789 | (123) 456-7890 | info@hotelruby.com</p>
+                <p>&copy; 2024 {{ $hotelSetting->name }}. All rights reserved.</p>
+                <p class="mt-2">{{ $hotelSetting->address }} | {{ $hotelSetting->phone  }} | {{ $hotelSetting->email }}</p>
             </div>
         </div>
     </footer>

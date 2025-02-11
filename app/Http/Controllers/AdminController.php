@@ -47,7 +47,6 @@ class AdminController extends Controller
         return view('admin.dashboard', compact('totalPaymentSuccess', 'totalConfirmed', 'totalPending', 'totalCancelled'));
     }
 
-    //fitur pencarian reservasi
     public function adminReservations(Request $request)
     {
         $query = Reservation::with(['invoice', 'payment'])
@@ -71,12 +70,30 @@ class AdminController extends Controller
             });
         }
     
-        // Urutkan berdasarkan status "Checked-Out" di bawah
-        $reservations = $query->orderByRaw("CASE WHEN reservation_status = 'Checked-Out' THEN 1 ELSE 0 END")
+        // Filter berdasarkan tahun
+        if ($request->filled('tahun')) {
+            $query->whereYear('created_at', $request->tahun);
+        }
+    
+        // Filter berdasarkan bulan
+        if ($request->filled('bulan')) {
+            $query->whereMonth('created_at', $request->bulan);
+        }
+    
+        // Urutkan berdasarkan status
+        $reservations = $query->orderByRaw("
+                CASE 
+                    WHEN reservation_status = 'pending' THEN 1 
+                    WHEN reservation_status = 'confirmed' THEN 2 
+                    WHEN reservation_status = 'checked-in' THEN 2 
+                    ELSE 3 
+                END
+            ")
             ->paginate(25);
-
+    
         return view('admin.reservasi', compact('reservations'));
     }
+    
 
     //konfirmasi reservasi
     public function adminConfirmReservation($id)

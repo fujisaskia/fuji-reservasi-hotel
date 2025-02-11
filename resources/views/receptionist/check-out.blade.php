@@ -6,7 +6,7 @@
 @section('content')
 <div class="container mx-auto py-8 px-2">  
     <h4 class="bg-white sticky top-24 py-3 px-4 rounded-lg shadow-md md:w-1/2 mb-8 lg:text-sm">
-        Pilih kamar untuk check-in
+        Pilih kamar untuk check-out
     </h4>
              
         <!-- resources/views/occupied-rooms.blade.php -->

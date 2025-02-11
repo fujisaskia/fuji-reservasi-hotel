@@ -63,11 +63,11 @@
                     <td class="py-3 px-4">{{ $room->roomType->tipe_kamar }}</td>
                     <td class="py-3 px-4 lg:px-8 text-[11px] text-black">
                         @if ($room->room_status == 'tersedia')
-                            <p class="w-full md:w-1/2 py-1.5 px-2 border border-green-700 bg-green-50 rounded-full text-center">Tersedia</p>
+                            <p class="w-full md:w-1/2 py-1.5 px-2 border border-green-500 bg-green-50 rounded-full text-center">Tersedia</p>
                         @elseif ($room->room_status == 'terisi') 
-                            <p class="w-full md:w-1/2 py-1.5 px-2 border border-rose-700 bg-rose-50 rounded-full text-center">Terisi</p>
+                            <p class="w-full md:w-1/2 py-1.5 px-2 border border-rose-500 bg-rose-50 rounded-full text-center">Terisi</p>
                         @elseif ($room->room_status == 'perawatan')
-                            <p class="w-full md:w-1/2 py-1.5 px-2 border border-yellow-700 bg-yellow-50 rounded-full text-center">Perawatan</p>
+                            <p class="w-full md:w-1/2 py-1.5 px-2 border border-yellow-500 bg-yellow-50 rounded-full text-center">Perawatan</p>
                         @endif
                     </td>
                     <td class="py-3 px-4">

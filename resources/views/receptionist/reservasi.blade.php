@@ -56,28 +56,28 @@
 
 
     <!-- Tambah Reservasi Button -->
-    {{-- <div class="flex justify-end">
+    <div class="flex justify-end">
         <a href="/create-reservation">
             <button class="flex space-x-2 text-white items-center bg-green-600 hover:bg-green-700 focus:bg-green-600 p-3 lg:py-2 rounded-lg mb-3 ">
                 <i class="fa-solid fa-plus"></i>
                 <p>Buat Reservasi</p>
             </button>
         </a>
-    </div> --}}
+    </div>
 
     <div class="overflow-x-auto">
         <table class="min-w-full bg-white border border-gray-200">
             <thead>
                 <tr class="bg-rose-100 border-b border-gray-300">
-                    <th class="p-3 lg:p-2 text-left font-semibold text-gray-600">No</th>
+                    <th class="p-3 lg:p-2 text-center font-semibold text-gray-600">No</th>
                     <th class="p-3 lg:p-2 text-left font-semibold text-gray-600">Nama Tamu</th>
                     <th class="p-3 lg:p-2 text-left font-semibold text-gray-600">Tipe Kamar</th>                    
                     <th class="p-3 lg:p-2 text-left font-semibold text-gray-600">Harga (IDR)</th>
                     <th class="p-3 lg:p-2 text-left font-semibold text-gray-600">Tgl. Reservasi</th>
                     <th class="p-3 lg:p-2 text-left font-semibold text-gray-600">Tgl. check-In</th>
                     {{-- <th class="p-3 lg:p-2 text-left font-semibold text-gray-600">Status Bayar</th> --}}
-                    <th class="p-3 lg:p-2 text-left font-semibold text-gray-600">Status Reservasi</th>
-                    <th class="p-3 lg:p-2 text-left font-semibold text-gray-600">Aksi</th>
+                    <th class="p-3 lg:p-2 text-center font-semibold text-gray-600">Status Reservasi</th>
+                    <th class="p-3 lg:p-2 text-center font-semibold text-gray-600">Aksi</th>
                 </tr>
             </thead>
             <tbody>
@@ -89,31 +89,24 @@
                     <td class="p-3 lg:p-2 text-gray-600">IDR  {{ number_format($reservation->total_price, 0, ',', ',') }}</td>
                     <td class="p-3 lg:p-2 text-gray-500">{{ \Carbon\Carbon::parse($reservation->reservation_date)->format('M d, Y') }}</td>
                     <td class="p-3 lg:p-2 text-gray-600">{{ \Carbon\Carbon::parse($reservation->check_in_date)->format('M d, Y') }}</td>
-                    {{-- <td class="p-2 text-[11px] font-semibold text-center">
-{{$reservation->payment->payment_status
-}} 
-                    </td>                     --}}
-                    <td class="p-2 text-[11px] text-white">
-                        <form action="{{ route('reservation.confirm', $reservation->id) }}" method="POST">
-                            @csrf
-                            <button type="submit" class="p-1 w-full text-[10px] rounded-full justify-between italic shadow-xl hover:shadow-sm focus:shadow-none 
-                                @if ($reservation->reservation_status === 'Pending') 
-                                    bg-yellow-100 text-yellow-700 
-                                @elseif ($reservation->reservation_status === 'Confirmed') 
-                                    bg-green-100 text-green-600 
-                                @elseif ($reservation->reservation_status === 'Checked-In') 
-                                    bg-blue-100 text-blue-600 
-                                @elseif ($reservation->reservation_status === 'Checked-Out') 
-                                    bg-rose-100 text-rose-600 
-                                @elseif ($reservation->reservation_status === 'Cancelled') 
-                                    bg-red-100 text-red-700 
-                                @endif">
-                                {{ $reservation->reservation_status }}
-                            </button>
-                        </form>
-                    </td>                    
-                    <td class="flex space-x-2 p-3 lg:p-2 ">
-                        <div class="flex space-x-2 justify-center">
+                    <td class="p-2 text-[11px] text-white text-center align-middle">
+                        <span class="py-1 px-3 text-[10px] rounded-full italic flex items-center justify-center
+                            @if ($reservation->reservation_status === 'Pending') 
+                                bg-yellow-50 text-yellow-700 border border-yellow-400
+                            @elseif ($reservation->reservation_status === 'Confirmed') 
+                                bg-green-50 text-green-700 border border-green-400
+                            @elseif ($reservation->reservation_status === 'Checked-In') 
+                                bg-blue-50 text-blue-700 border border-blue-400
+                            @elseif ($reservation->reservation_status === 'Checked-Out') 
+                                bg-rose-50 text-rose-700 border border-rose-400
+                            @elseif ($reservation->reservation_status === 'Cancelled') 
+                                bg-red-50 text-red-700 border border-red-400
+                            @endif">
+                            {{ $reservation->reservation_status }}
+                        </span>
+                    </td>                                       
+                    <td class="flex space-x-2 p-3 lg:p-2 justify-center">
+                        <div class="flex space-x-2">
                             
                             <div x-data="{ openDetailReservasi: false }" class="">
                                 <button  @click="openDetailReservasi = true">
@@ -121,6 +114,23 @@
                                 </button>                            
                                 @include('components.detail-reservasi')
                             </div>
+                            {{-- Tombol konfirmasi reservasi --}}
+                            <form action="{{ route('reservation.confirm', $reservation->id) }}" method="POST">
+                                @csrf
+                                <button type="submit" 
+                                        class="flex items-center text-white p-2 rounded-md shadow-lg hover:shadow-none
+                                        @if(in_array($reservation->reservation_status, ['Confirmed', 'Cancelled', 'Checked-In', 'Checked-Out']))
+                                            bg-gray-400 cursor-not-allowed
+                                        @else
+                                            bg-green-500 hover:bg-green-600 focus:scale-95 duration-300
+                                        @endif"
+                                        @if(in_array($reservation->reservation_status, ['Confirmed', 'Cancelled', 'Checked-In', 'Checked-Out']))
+                                            disabled
+                                        @endif
+                                        title="{{ $reservation->reservation_status === 'Pending' ? 'Konfirmasi Reservasi' : 'Reservasi telah di ' . strtolower($reservation->reservation_status) }}">
+                                    <i class="fa-solid fa-check"></i>
+                                </button>
+                            </form>
                         </div>
                     </td>
                 </tr>

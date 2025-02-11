@@ -27,17 +27,17 @@
                     
                         {{-- Room Info --}}
                         <div class="flex flex-col space-y-2">
-                            <h4 class="text-base font-semibold uppercase font-playfair">{{ $roomType->tipe_kamar }}</h4>
-                            <h3 class="text-base font-semibold">
+                            <h4 class="text-lg md:text-base font-semibold uppercase font-playfair">{{ $roomType->tipe_kamar }}</h4>
+                            <h3 class="text-lg md:text-base font-semibold">
                                 IDR <span id="roomPrice" class="text-rose-800" data-base-price="{{ $roomType->harga }}">{{ number_format($roomType->harga, 0, ',', ',') }}</span>
                                 <span class="text-[11px] font-medium text-gray-600">/Kamar<span id="displayNights">/</span>Malam</span>
                             </h3>                                                              
-                            <div class="text-[11px]">
+                            <div class="text-sm md:text-[11px]">
                                 <span><i class="fas fa-user"></i> {{ $roomType->kapasitas }} Orang</span>
                             </div>
                         </div>
                         <a href="/booking/{{ $roomType->id }}" class="mt-3">
-                            <button class="w-full p-2 bg-gradient-to-r from-rose-600 to-yellow-600 text-white rounded-t-lg hover:from-rose-700 hover:to-yellow-700 focus:scale-95 transition duration-300">Pilih</button>
+                            <button class="w-full p-3 md:p-2 bg-gradient-to-r from-rose-600 to-yellow-600 text-white rounded-t-lg hover:from-rose-700 hover:to-yellow-700 focus:scale-95 transition duration-300">Pilih</button>
                         </a>
                     </div>
                     @endforeach

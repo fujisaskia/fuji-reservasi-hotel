@@ -11,12 +11,51 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
      {{-- alpinejs --}}
     <script src="//unpkg.com/alpinejs" defer></script>
+    {{-- sweetalert --}}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <title>Login</title>
 
 </head>
 <body class="font-poppins text-sm lg:text-xs">
-    <div class="w-screen h-screen bg-rose-50 flex items-center justify-center p-6">
+    <div class="w-screen h-screen bg-rose-50 flex flex-col items-center justify-center p-6">
+      {{-- <div class="flex justify-start">
+        <a href="/">
+            <button class="p-2 bg-white shadow-md rounded-md">
+              kembali
+            </button>  
+          </a>  
+        </div> --}}  
+
+        @if (session('success'))
+            <script>
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Registrasi Berhasil!',
+                    text: "{{ session('success') }}",
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000
+                });
+            </script>
+        @endif
+
+
+        
+        {{-- @if (session('success'))
+            <div id="flash-message"
+                class="fixed top-0 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-4 py-2 rounded-b-lg shadow-lg z-50 transition-transform duration-300 ease-out">
+                {{ session('success') }}
+            </div>
+        
+            <script>
+                setTimeout(() => {
+                    document.getElementById('flash-message').classList.add('-translate-y-full');
+                }, 3000);
+            </script>
+        @endif --}}
+
         <div class="bg-white w-full lg:w-2/3 rounded-lg shadow-lg p-6 md:p-8">
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div class="flex justify-center items-center">
@@ -33,17 +72,17 @@
                 @csrf
                 <div class="mb-4">
                   <label for="email" class="block  font-medium text-gray-700">Email</label>
-                  <input type="email" name="email" class="mt-1 block w-full p-2 border focus:border-rose-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-400" placeholder="your@email.com">
+                  <input type="email" name="email" value="{{ old('email') }}" class="my-2 block w-full p-2 border focus:border-rose-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-400" placeholder="email-anda@email.com">
                   @error('email')
-                    <span class="text-red-600 text-xs">{{ $message }}</span>
+                    <span class="text-red-700 text-xs p-1 rounded bg-red-100">{{ $message }}</span>
                   @enderror
                 </div>
 
                 <div class="mb-4">
                   <label for="password" class="block  font-medium text-gray-700">Password</label>
-                  <input type="password" name="password" class="mt-1 block w-full p-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-400" placeholder="masukkan password">
+                  <input type="password" name="password" class="my-2 block w-full p-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-400" placeholder="masukkan password">
                   @error('password')
-                    <span class="text-red-600 text-xs">{{ $message }}</span>
+                    <span class="text-red-700 text-xs p-1 rounded bg-red-100">{{ $message }}</span>
                   @enderror
                 </div>
             

@@ -25,7 +25,7 @@ class UlasanController extends Controller
                                  $query->where('full_name', 'like', '%' . $search . '%');
                              });
             })
-            ->paginate(25);
+            ->paginate(10);
     
         // Kembalikan data ke view
         return view('admin.ulasan', compact('ulasans'));

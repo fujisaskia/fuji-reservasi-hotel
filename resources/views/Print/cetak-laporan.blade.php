@@ -110,7 +110,7 @@
                         <th class="text-center">No</th>
                         <th>Nama Tamu</th>
                         <th>Invoice</th>
-                        <th class="text-center">Nomor Kamar</th>
+                        {{-- <th class="text-center">Nomor Kamar</th> --}}
                         <th class="text-center">Durasi Menginap</th>
                         <th>Tgl. Check-Out</th>
                         <th>Total Biaya</th>

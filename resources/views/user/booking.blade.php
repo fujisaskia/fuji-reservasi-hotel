@@ -88,7 +88,7 @@
 <form action="{{ route('reservations.store', ['roomTypeId' => $roomType->id]) }}" method="POST" class="bg-white shadow-lg hover:shadow-rose-200 rounded-lg p-4 border-y-2 border-rose-200 sticky top-20 duration-500 {{ $roomType->available_rooms_count == 0 ? 'bg-gray-100 disabled' : '' }} inline-block max-h-max">
     @csrf
     <div class="flex justify-center pb-3 border-b">
-        <span class="text-lg font-semibold">Pemesanan</span>
+        <span class="text-lg font-semibold">Buat Reservasi</span>
     </div>
 
     @if(session('error'))
@@ -193,7 +193,7 @@
             <span class="text-xs">IDR {{ number_format($roomType->harga, 0, ',', ',') }}</span>
             <span class="text-[11px] text-gray-600" id="price-details">1 kamar x 1 malam</span>
         </div>
-        <span id="total-price" class="font-semibold text-gray-900">IDR {{ number_format($roomType->harga, 0, ',', ',') }}</span>
+        <span id="total-price" class="text-sm md:text-xs font-semibold text-rose-800">IDR {{ number_format($roomType->harga, 0, ',', ',') }}</span>
     </div>
 
     {{-- Button Booking --}}
@@ -216,6 +216,12 @@
         // Elemen DOM
         const roomQuantityInput = document.getElementById('room_quantity');
         const guestQuantityInput = document.getElementById('guest_quantity');
+        const decrementRoom = document.getElementById("decrement-room");
+        const incrementRoom = document.getElementById("increment-room");
+        const decrementGuest = document.getElementById("decrement-guest");
+        const incrementGuest = document.getElementById("increment-guest");
+        // const maxRooms = {{ $roomType->available_rooms_count }};
+        const maxGuestsPerRoom = {{ $roomType->kapasitas ?? 2 }}; // Default 2 orang per kamar
         const checkInInput = document.getElementById('checkin');
         const checkOutInput = document.getElementById('checkout');
         const totalPriceElement = document.getElementById('total-price');
@@ -261,37 +267,46 @@
         roomQuantityInput.addEventListener('input', calculateTotalPrice);
         guestQuantityInput.addEventListener('input', calculateTotalPrice);
 
-        // Fungsi untuk mengurangi jumlah kamar
-        document.getElementById('decrement-room').addEventListener('click', () => {
-            let quantity = parseInt(roomQuantityInput.value);
-            if (quantity > 1) {
-                roomQuantityInput.value = quantity - 1;
-                calculateTotalPrice();
+        function updateGuestLimit() {
+            let totalRooms = parseInt(roomQuantityInput.value);
+            let maxGuests = totalRooms * maxGuestsPerRoom;
+            guestQuantityInput.max = maxGuests;
+
+            if (parseInt(guestQuantityInput.value) > maxGuests) {
+                guestQuantityInput.value = maxGuests;
+            }
+        }
+
+        // Event listener untuk kamar
+        incrementRoom.addEventListener("click", function () {
+            if (roomQuantityInput.value < maxRooms) {
+                roomQuantityInput.value = parseInt(roomQuantityInput.value) + 1;
+                updateGuestLimit();
             }
         });
 
-        // Fungsi untuk menambah jumlah kamar
-        document.getElementById('increment-room').addEventListener('click', () => {
-            let quantity = parseInt(roomQuantityInput.value);
-            if (quantity < maxRooms) {
-                roomQuantityInput.value = quantity + 1;
-                calculateTotalPrice();
+        decrementRoom.addEventListener("click", function () {
+            if (roomQuantityInput.value > 1) {
+                roomQuantityInput.value = parseInt(roomQuantityInput.value) - 1;
+                updateGuestLimit();
             }
         });
 
-        // Fungsi untuk mengurangi jumlah tamu
-        document.getElementById('decrement-guest').addEventListener('click', () => {
-            let quantity = parseInt(guestQuantityInput.value);
-            if (quantity > 1) {
-                guestQuantityInput.value = quantity - 1;
+        // Event listener untuk tamu
+        incrementGuest.addEventListener("click", function () {
+            if (parseInt(guestQuantityInput.value) < parseInt(guestQuantityInput.max)) {
+                guestQuantityInput.value = parseInt(guestQuantityInput.value) + 1;
             }
         });
 
-        // Fungsi untuk menambah jumlah tamu
-        document.getElementById('increment-guest').addEventListener('click', () => {
-            let quantity = parseInt(guestQuantityInput.value);
-            guestQuantityInput.value = quantity + 1;
+        decrementGuest.addEventListener("click", function () {
+            if (guestQuantityInput.value > 1) {
+                guestQuantityInput.value = parseInt(guestQuantityInput.value) - 1;
+            }
         });
+
+        // Update batas tamu saat pertama kali halaman dimuat
+        updateGuestLimit();
     });
 
 </script>

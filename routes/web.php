@@ -13,6 +13,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\RoomTypeController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ManualReservationController;
 // use App\Http\Controllers\PaymentServiceController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\ReceptionistController;
@@ -123,6 +124,18 @@ Route::middleware(['auth:receptionist'])->group(function () {
         ->name('reservation.confirm');
     Route::patch('/reservations/{id}/cancel', [ReceptionistController::class, 'cancelReservationByReceptionist'])->name('reservations.cancel-by-receptionist');
 
+    // Manual Reservation
+    Route::get('/create-reservation', [ManualReservationController::class, 'showCreateReservationPage']);
+    Route::get('/create-account-guest', [ManualReservationController::class, 'createAccountForGuest'])->name('guest.create');
+    Route::post('/create-guest-account', [ManualReservationController::class, 'createGuestAccount'])->name('create-guest-account');
+    Route::post('/create-reservation-by-hotel', [ManualReservationController::class, 'store'])->name('reservations.create-by-hotel');
+    Route::delete('/cancel-create-reservation/{id}', [ManualReservationController::class, 'destroy'])->name('create-reservation.destroy');
+    //Manual Reservation Payment 
+    Route::post('/process-cash-payment', [ManualReservationController::class, 'processCashPayment']);
+    Route::post('/get-snap-token', [ManualReservationController::class, 'getSnapToken']);
+    Route::post('/payment/status-success', [ManualReservationController::class, 'updatePaymentStatusReservation'])->name('payments.updateStatus');
+    
+
     // menampilkan data kamar "tersedia" di fitur check-in
     Route::get('/check-in/receptionist', [ReceptionistController::class, 'showAvailableRooms']);
     Route::get('/check-in/in-room/{id}', [ReceptionistController::class, 'showCheckInForm'])->name('checkin.form');
@@ -151,9 +164,7 @@ Route::middleware(['auth:receptionist'])->group(function () {
     Route::get('/new-inroom', function () {
         return view('receptionist.new-inroom');
     });
-    Route::get('/create-reservation', function () {
-        return view('receptionist.create-reservation');
-    });
+    
     //rute fitur ketersediaan kamar
     Route::get('/rooms/receptionist', [ReceptionistController::class, 'showRoomsData'])->name('receptionist.rooms.index');
     Route::get('/rooms/receptionist/{id}/edit', [ReceptionistController::class, 'editRoomStatus'])->name('receptionist.rooms.edit');
@@ -174,6 +185,10 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/profile/edit', [ProfileController::class, 'update'])->name('user.profile.update');
     Route::get('/my-booking', [UserController::class, 'showBookings'])->name('user.my-booking');
     Route::get('/my-booking/details/{id}', [UserController::class, 'showBookingDetails'])->name('booking.details');
+    Route::get('/my-deposite', [UserController::class, 'showActiveDeposite'])->name('user.my-deposite');
+    // Route::get('/my-deposite', function () {
+    //     return view('user.my-deposite');
+    // });
     Route::get('/ulasan/form', [UlasanController::class, 'showForm'])->name('ulasan.form');
     Route::post('/ulasan', [UlasanController::class, 'store'])->name('ulasan.store');
 

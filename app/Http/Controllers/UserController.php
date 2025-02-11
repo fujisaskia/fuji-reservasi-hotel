@@ -73,4 +73,44 @@ class UserController extends Controller
         ]);
     }
 
+    public function showActiveDeposite()
+    {
+        // Ambil user yang sedang login
+        $user = auth()->user();
+        
+        // Mengambil semua reservasi dengan status 'checked-in' dan relasi invoice milik user yang sedang login
+        $reservations = Reservation::where('reservation_status', 'checked-in') // Filter status checked-in
+                                    ->where('user_id', $user->id) // Pastikan hanya milik user yang sedang login
+                                    ->with('invoice', 'serviceOrders') // Ambil relasi invoice dan serviceOrders
+                                    ->get();
+        
+        // Hitung total harga per reservasi
+        $totalHarga = $reservations->sum(function ($reservation) {
+            return $reservation->serviceOrders->sum('total_price'); // Menghitung total harga per layanan yang dipesan
+        });
+    
+        // Deposit yang sudah dibayar dan kembalian/pembayaran tambahan
+        $remainingDeposit = 0;
+        $additionalPaymentRequired = 0;
+    
+        foreach ($reservations as $reservation) {
+            // Mengambil invoice dari setiap reservasi
+            $invoice = $reservation->invoice;
+    
+            // Pastikan invoice ada sebelum mengakses deposit
+            if ($invoice) {
+                $deposit = $invoice->deposit;
+    
+                // Hitung kembalian deposit atau pembayaran tambahan
+                if ($totalHarga > $deposit) {
+                    $additionalPaymentRequired = $totalHarga - $deposit; // Pembayaran tambahan
+                } else {
+                    $remainingDeposit = $deposit - $totalHarga; // Sisa deposit
+                }
+            }
+        }
+    
+        return view('user.my-deposite', compact('reservations', 'totalHarga', 'remainingDeposit', 'additionalPaymentRequired'));
+    }    
+
 }
