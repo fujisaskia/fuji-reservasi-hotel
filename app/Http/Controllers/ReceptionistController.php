@@ -5,12 +5,15 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use App\Models\Room;
 use App\Models\Invoice;
+use App\Models\RoomType;
 use App\Models\Reservation;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use App\Models\ReservationRoom;
 use Barryvdh\DomPDF\Facade\Pdf;
-use App\Mail\ReservationConfirmationMail;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use App\Mail\InvoiceCheckoutSuccessMail;
+use App\Mail\ReservationConfirmationMail;
 
 
 class ReceptionistController extends Controller
@@ -53,9 +56,6 @@ class ReceptionistController extends Controller
     
         return view('receptionist.reservasi', compact('reservations'));
     }
-    
-
-
 
     //resepsionist mengonfirmasi reservasi user   
     public function confirmReservation($id)
@@ -106,51 +106,67 @@ class ReceptionistController extends Controller
         ], 400);
     }
 
-
-    //menampilkan data kamar yang "tersedia" di fitur check-in
     public function showAvailableRooms()
     {
-        $availableRooms = Room::with('roomType')->where('room_status', 'tersedia')->get();
-        return view('receptionist.check-in', compact('availableRooms'));
+        $availableRoomTypes = RoomType::whereHas('rooms', function ($query) {
+            $query->where('room_status', 'tersedia');
+        })->get();
+    
+        return view('receptionist.check-in', compact('availableRoomTypes'));
     }
 
-    //mengirim data untuk form check-in
+    //menampilkan form check-in
     public function showCheckInForm($id)
     {
-        // Ambil detail kamar berdasarkan ID
-        $room = Room::with('roomType')->findOrFail($id);
-
-        // Ambil reservasi yang pending
-        $reservations = Reservation::where('reservation_status', 'Confirmed')->get();
+        // Ambil tipe kamar berdasarkan ID yang dipilih
+        $roomType = RoomType::findOrFail($id);
+    
+        // Ambil semua kamar yang termasuk dalam tipe kamar tersebut dan tersedia
+        $rooms = Room::where('room_type_id', $roomType->id)
+                     ->where('room_status', 'tersedia')
+                     ->get();
+    
+        // Ambil reservasi yang statusnya "Confirmed" dan memiliki room_type_id yang dipilih
+        $reservations = Reservation::where('reservation_status', 'Confirmed')
+                        ->whereHas('roomType', function ($query) use ($roomType) {
+                            $query->where('room_type_id', $roomType->id);
+                        })
+                        ->get();
+    
+        // Ambil invoice dari reservasi yang telah difilter
         $invoices = Invoice::whereIn('reservation_id', $reservations->pluck('id'))->get();
-
-        // Tampilkan form check-in dengan data kamar dan reservasi
-        return view('receptionist.in-room', compact('room', 'reservations', 'invoices'));
+    
+        // Menambahkan perhitungan jumlah malam
+        $reservationsWithNights = $reservations->map(function($reservation) {
+            // Menghitung selisih malam antara check-in dan check-out
+            $checkInDate = \Carbon\Carbon::parse($reservation->check_in_date);
+            $checkOutDate = \Carbon\Carbon::parse($reservation->check_out_date);
+            $nights = $checkInDate->diffInDays($checkOutDate); // Menghitung jumlah malam
+            $reservation->nights = $nights; // Menambahkan jumlah malam ke objek reservasi
+            return $reservation;
+        });
+    
+        return view('receptionist.in-room', compact('roomType', 'rooms', 'reservationsWithNights', 'invoices', 'reservations'));
     }
+    
+    
 
-    public function processCheckIn(Request $request, $roomId)
+    //proses check-in
+    public function processCheckIn(Request $request)
     {
         // Validasi input
         $validatedData = $request->validate([
             'reservation_id' => 'required|exists:reservations,id',
-            'room_id' => 'required|exists:rooms,id',
+            'room_id' => 'required|array',
+            'room_id.*' => 'exists:rooms,id',
             'deposit' => 'nullable|numeric|min:0',
         ]);
 
-        // Ambil data kamar berdasarkan ID
-        $room = Room::findOrFail($roomId);
-
-        // Periksa apakah kamar tersedia
-        if ($room->room_status !== 'tersedia') {
-            return response()->json([
-                'success' => false,
-                'message' => 'Kamar tidak tersedia untuk check-in.',
-            ], 400);
-        }
-
+        // dd($validatedData);
+    
         // Ambil reservasi berdasarkan ID
         $reservation = Reservation::findOrFail($validatedData['reservation_id']);
-
+    
         // Periksa apakah reservasi valid dan statusnya "Confirmed"
         if ($reservation->reservation_status !== 'Confirmed') {
             return response()->json([
@@ -158,39 +174,44 @@ class ReceptionistController extends Controller
                 'message' => 'Reservasi tidak valid atau sudah di-check-in.',
             ], 400);
         }
-
-        // Periksa apakah kamar yang dipilih sesuai dengan tipe kamar yang dipesan
-        if ($room->room_type !== $reservation->room_type) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Tipe kamar tidak sesuai dengan reservasi.',
-            ], 400);
-        }
-
-        // Proses check-in dengan menambahkan deposit
+    
         try {
-            DB::transaction(function () use ($room, $reservation, $validatedData) {
-                // Tambahkan kamar ke tabel pivot
-                $reservation->room()->attach($room->id);
-
-                // Update status kamar menjadi 'terisi'
-                $room->update(['room_status' => 'terisi']);
-
+            DB::transaction(function () use ($validatedData, $reservation) {
+                foreach ($validatedData['room_id'] as $roomId) {
+                    $room = Room::findOrFail($roomId);
+    
+                    // Periksa apakah kamar tersedia
+                    // if ($room->room_status !== 'tersedia') {
+                    //     throw new \Exception("Kamar {$room->room_number} tidak tersedia untuk check-in.");
+                    // }
+    
+                    // Periksa apakah kamar yang dipilih sesuai dengan tipe kamar yang dipesan
+                    if ($room->room_type !== $reservation->room_type) {
+                        throw new \Exception("Tipe kamar {$room->room_number} tidak sesuai dengan reservasi.");
+                    }
+    
+                    // Tambahkan kamar ke tabel pivot
+                    $reservation->room()->attach($room->id);
+    
+                    // Update status kamar menjadi 'terisi'
+                    $room->update(['room_status' => 'terisi']);
+                }
+    
                 // Hitung jumlah kamar yang sudah dipilih di pivot
                 $checkedInRooms = $reservation->room()->count();
-
+    
                 // Jika jumlah kamar yang dipilih di pivot sudah sama dengan total_rooms
-                if ($checkedInRooms == $reservation->total_room) {
+                if ($checkedInRooms >= $reservation->total_room) {
                     // Ubah status reservasi menjadi 'Checked-In'
                     $reservation->update(['reservation_status' => 'Checked-In']);
                 }
-
+    
                 // Update kolom deposit di tabel invoices
                 Invoice::where('reservation_id', $reservation->id)->update([
                     'deposit' => $validatedData['deposit'],
                 ]);
             });
-
+    
             // Return JSON response sukses
             return response()->json([
                 'success' => true,
@@ -201,57 +222,59 @@ class ReceptionistController extends Controller
             // Tangani error jika ada kegagalan dalam proses transaksi
             return response()->json([
                 'success' => false,
-                'message' => 'Terjadi kesalahan saat memproses check-in. Silakan coba lagi.',
+                'message' => 'Terjadi kesalahan saat memproses check-in. Silakan coba lagi.'. $e->getMessage(),
             ], 500);
         }
     }
 
-
-
-    //menampilkan data kamar yang "terisi" di fitur check-in
-    public function showOccupiedRooms()
+    //menampilkan data kamar terisi dan reservasi check-in
+    public function getCheckedInRooms()
     {
-        // Mengambil kamar yang berstatus "terisi"
-        $occupiedRooms = Room::with('roomType')->where('room_status', 'terisi')->get();
-
-        // Passing data ke view
+        $occupiedRooms = Room::where('room_status', 'terisi') // Hanya kamar yang terisi
+            ->whereHas('reservation', function ($query) {
+                $query->where('reservation_status', 'Checked-In'); // Hanya reservasi Checked-In
+            })
+            ->with(['reservation' => function ($query) {
+                $query->where('reservation_status', 'Checked-In')->distinct(); // Hindari duplikasi reservasi
+            }, 'reservation.user'])
+            ->distinct() // Hindari duplikasi kamar
+            ->get();
+    
         return view('receptionist.check-out', compact('occupiedRooms'));
     }
-
-    public function showCheckOutForm($id)
+    
+    public function showInvoiceByReservation($reservationId)
     {
-        // Ambil detail kamar berdasarkan ID
-        $room = Room::with('roomType')->findOrFail($id);
-
-        // Ambil data reservasi aktif berdasarkan ID kamar menggunakan relasi
-        $reservation = Reservation::with(['serviceOrders', 'payment', 'invoice'])
-            ->whereHas('room', function ($query) use ($id) {
-                $query->where('rooms.id', $id); // Menyesuaikan dengan ID kamar
-            })
+        // Ambil data reservasi berdasarkan ID reservasi
+        $reservation = Reservation::with(['room', 'serviceOrders', 'payment', 'invoice'])
+            ->where('id', $reservationId) // Menggunakan ID reservasi
             ->where('reservation_status', '!=', 'Checked-Out') // Pastikan reservasi belum check-out
             ->firstOrFail();
-
+    
+        // Ambil detail kamar berdasarkan ID kamar yang terkait dengan reservasi
+        $room = $reservation->room()->with('roomType')->firstOrFail();
+    
         // Hitung selisih hari antara check-in dan check-out
         $checkInDate = Carbon::parse($reservation->check_in_date);
         $checkOutDate = Carbon::parse($reservation->check_out_date);
         $nights = $checkInDate->diffInDays($checkOutDate);
-
+    
         // Menghitung harga per malam untuk kamar
         $totalRoom = $reservation->total_room; // Asumsi ada total_room
         $roomPricePerNight = $reservation->payment->amount / ($nights * $totalRoom);
-
+    
         // Hitung total pembayaran reservasi kamar
         $roomPaymentTotal = $reservation->payment->amount;
-
+    
         // Hitung total biaya service orders
         $serviceOrderTotal = $reservation->serviceOrders->sum('total_price');
-
+    
         // Hitung total keseluruhan
         $grandTotal = $roomPaymentTotal + $serviceOrderTotal;
-
+    
         // Deposit yang sudah dibayar
         $deposit = $reservation->invoice->deposit;
-
+    
         // Hitung kembalian deposit atau pembayaran tambahan
         if ($serviceOrderTotal > $deposit) {
             $additionalPaymentRequired = $serviceOrderTotal - $deposit;
@@ -260,74 +283,77 @@ class ReceptionistController extends Controller
             $remainingDeposit = $deposit - $serviceOrderTotal;
             $additionalPaymentRequired = 0; // Tidak ada pembayaran tambahan, deposit cukup
         }
-
+    
         // Kirim data ke view
         return view('receptionist.out-room', compact('room', 'reservation', 'roomPaymentTotal', 'serviceOrderTotal', 'grandTotal', 'nights', 'deposit', 'remainingDeposit', 'additionalPaymentRequired', 'roomPricePerNight'));
     }
-
-
-    public function processCheckOut($id)
+    
+    
+    //proses check-out
+    public function processCheckout(Request $request)
     {
-        DB::beginTransaction(); // Mulai transaksi atomik
+        $selectedRooms = $request->input('selected_rooms', []);
+        $reservationIds = $request->input('reservation_ids', []);
+
+        if (empty($selectedRooms)) {
+            return redirect()->back()->with('error', 'Pilih setidaknya satu kamar untuk checkout.');
+        }
+
+        DB::beginTransaction();
 
         try {
-            // Ambil reservasi berdasarkan ID dengan kamar terkait
-            $reservation = Reservation::with(['room', 'serviceOrders', 'invoice'])->findOrFail($id);
+            foreach ($selectedRooms as $roomId) {
+                $reservationId = $reservationIds[$roomId] ?? null;
 
-            // Validasi apakah status reservasi sudah Checked-Out
-            if ($reservation->reservation_status === 'Checked-Out') {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Reservasi ini sudah dalam status Checked-Out.'
-                ], 400);
+                if (!$reservationId) {
+                    continue;
+                }
+
+                $room = Room::find($roomId);
+                $reservation = Reservation::find($reservationId);
+
+                if ($room && $reservation) {
+                    $checkedOutRooms = ReservationRoom::where('reservation_id', $reservation->id)
+                        ->whereHas('room', function ($query) {
+                            $query->where('room_status', 'perawatan');
+                        })
+                        ->count();
+
+                    $totalRooms = $reservation->total_room;
+
+                    $serviceOrderTotal = $reservation->serviceOrders()->sum('total_price');
+
+                    $invoice = $reservation->invoice;
+                    if ($invoice) {
+                        $invoice->update([
+                            'total_amount' => $invoice->total_amount + $serviceOrderTotal,
+                        ]);
+                    }
+
+                    if ($checkedOutRooms + 1 < $totalRooms) {
+                        $room->update(['room_status' => 'perawatan']);
+                    } else {
+                        $room->update(['room_status' => 'perawatan']);
+                        $reservation->update(['reservation_status' => 'Checked-Out']);
+
+                        // Kirim email ke tamu
+                        // \Log::info("Mengirim email ke: " . $reservation->user->email);
+                        // Mail::to($reservation->user->email)->send(new InvoiceCheckoutSuccessMail($reservation));
+                        // \Log::info("Email berhasil dikirim.");                        
+                    }
+                }
             }
 
-            // Periksa semua kamar yang terkait dengan reservasi
-            $rooms = $reservation->room; // Ambil semua kamar melalui relasi many-to-many
-            if ($rooms->isEmpty()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Tidak ditemukan kamar yang terkait dengan reservasi ini.'
-                ], 404);
-            }
+            DB::commit();
 
-            // Loop untuk mengubah semua kamar menjadi "perawatan"
-            foreach ($rooms as $room) {
-                $room->update(['room_status' => 'perawatan']);
-            }
-
-            // Ubah status reservasi menjadi "Checked-Out"
-            $reservation->update(['reservation_status' => 'Checked-Out']);
-
-            // Hitung total biaya layanan yang berstatus "paid"
-            $serviceOrderTotal = $reservation->serviceOrders()->sum('total_price');
-
-            // Tambahkan total biaya layanan ke kolom total_amount pada tabel invoice
-            $invoice = $reservation->invoice;
-            if ($invoice) {
-                $invoice->update([
-                    'total_amount' => $invoice->total_amount + $serviceOrderTotal,
-                ]);
-            }
-
-            DB::commit(); // Simpan semua perubahan
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Tamu Berhasil Check-Out!',
-                'redirect_url' => route('check-out.index') // URL untuk redirect setelah sukses
-            ]);
+            return redirect()->back()->with('success', 'Tamu Berhasil Check-Out');
         } catch (\Exception $e) {
-            DB::rollBack(); // Rollback jika terjadi kesalahan
+            DB::rollBack();
 
-            return response()->json([
-                'success' => false,
-                'message' => 'Terjadi kesalahan saat memproses check-out: ' . $e->getMessage()
-            ], 500);
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat Check-Out: ' . $e->getMessage());
         }
     }
-
-
+    
     //menampilkan user yang sudah check-in ke fitur tamu receptionist
     public function showCheckedInReservations(Request $request)
     {
@@ -414,5 +440,43 @@ class ReceptionistController extends Controller
         $pdf = Pdf::loadView('print.invoice', $data);
         return $pdf->download("summary-{$invoiceNumber}.pdf");
     }
+
+    public function sendInvoiceEmail($reservationId)
+    {
+        // Ambil data reservasi berdasarkan ID reservasi
+        $reservation = Reservation::with(['room', 'serviceOrders', 'payment', 'invoice'])
+            ->where('id', $reservationId) // Menggunakan ID reservasi
+            ->where('reservation_status', '!=', 'Checked-Out') // Pastikan reservasi belum check-out
+            ->firstOrFail();
+    
+        // Ambil detail kamar berdasarkan ID kamar yang terkait dengan reservasi
+        $room = $reservation->room()->with('roomType')->firstOrFail();
+    
+        // Hitung rincian seperti di showInvoiceByReservation
+        $checkInDate = Carbon::parse($reservation->check_in_date);
+        $checkOutDate = Carbon::parse($reservation->check_out_date);
+        $nights = $checkInDate->diffInDays($checkOutDate);
+        $totalRoom = $reservation->total_room;
+        $roomPricePerNight = $reservation->payment->amount / ($nights * $totalRoom);
+        $roomPaymentTotal = $reservation->payment->amount;
+        $serviceOrderTotal = $reservation->serviceOrders->sum('total_price');
+        $grandTotal = $roomPaymentTotal + $serviceOrderTotal;
+        $deposit = $reservation->invoice->deposit;
+    
+        if ($serviceOrderTotal > $deposit) {
+            $additionalPaymentRequired = $serviceOrderTotal - $deposit;
+            $remainingDeposit = 0;
+        } else {
+            $remainingDeposit = $deposit - $serviceOrderTotal;
+            $additionalPaymentRequired = 0;
+        }
+    
+        // Kirim email
+        Mail::to($reservation->user->email) // Ganti dengan email tamu yang sesuai
+            ->send(new InvoiceCheckoutSuccessMail($room, $reservation, $roomPaymentTotal, $serviceOrderTotal, $grandTotal, $nights, $deposit, $remainingDeposit, $additionalPaymentRequired, $roomPricePerNight));
+    
+            return redirect()->back()->with('success', 'Invoice Email berhasil terkirim!');
+    }
+    
     
 }

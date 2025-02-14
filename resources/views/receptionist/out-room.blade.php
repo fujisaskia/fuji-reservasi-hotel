@@ -9,7 +9,7 @@
         <script>
             Swal.fire({
                 icon: 'success',
-                title: 'Berhasil',
+                title: 'Terkirim!',
                 text: '{{ session('success') }}',
                 showConfirmButton: true,
             });
@@ -27,14 +27,9 @@
         </script>
     @endif
 
-    {{-- <a href="" class="flex w-40 bg-green-500 space-x-2 text-center text-white justify-center items-center font-semibold text-sm lg:text-xs rounded-t-lg hover:bg-green-600">
-        <i class="fa-solid fa-plus"></i>
-       <p class="py-1">Extend</p>        
-    </a> --}}
-
 
     <div
-        class="container lg:max-w-5xl mx-auto bg-white py-8 px-4 rounded-lg shadow-md border border-gray-300 text-sm md:text-xs">
+        class="max-w-4xl mx-auto bg-white py-8 px-4 rounded-lg shadow-md border border-gray-300 text-sm md:text-xs">
         <h2 class="uppercase text-lg font-semibold mb-4">KAMAR NOMOR : {{ $room->room_number }}</h2>
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-5">
             {{-- grid 1 --}}
@@ -214,14 +209,13 @@
 
         <!-- Buttons -->
         <div class="flex justify-end mt-12 space-x-4 text-sm lg:text-xs">
-            <form action="{{ route('checkout.process', $reservation->id) }}" method="POST" id="checkout-form">
-                @csrf
-                <button
-                    class="bg-rose-500 text-white px-4 py-2 font-semibold rounded-md shadow-md hover:bg-rose-600 focus:outline-none focus:ring-2 focus:ring-rose-500 hover:-translate-y-1 duration-300">
-                    Check Out
-                </button>
-            </form>
 
+            <a href="{{ route('send.invoice', $reservation->id) }}"
+                class="flex space-x-2 bg-yellow-500 items-center text-white px-4 py-2 font-semibold rounded-md hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 hover:-translate-y-1 duration-300">
+                <i class="fa-solid fa-print"></i>
+                <p>Kirim <span class="uppercase tracking-wide ml-1">Invoice-Mail</span></p>
+            </a>
+            
             <a href="{{ route('invoice.print', $reservation->id) }}"
                 class="flex space-x-2 bg-blue-500 items-center text-white px-4 py-2 font-semibold rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 hover:-translate-y-1 duration-300">
                 <i class="fa-solid fa-print"></i>
@@ -229,6 +223,7 @@
             </a>
         </div>
     </div>
+
 
     <script>
         document.getElementById('checkout-form').addEventListener('submit', function(event) {

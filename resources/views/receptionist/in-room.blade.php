@@ -30,12 +30,11 @@
 
     <div
         class="container lg:max-w-5xl mx-auto bg-white py-8 px-4 rounded-lg shadow-md border border-gray-300 text-sm md:text-xs">
-        <h2 class="text-lg font-semibold mb-6">KAMAR NOMOR : {{ $room->room_number }}</h2>
-        <form action="{{ route('checkin.process', $room->id) }}" method="POST" id="checkin-form">
+        <h2 class="text-lg mb-6 uppercase text-gray-900">- Tipe Kamar : <span class="font-semibold text-rose-900">{{ $roomType->tipe_kamar }}</span> - </h2>
+        <form action="{{ route('checkin.process') }}" method="POST" id="checkin-form">
             @csrf
-            <input type="hidden" name="room_id" value="{{ $room->id }}" />
 
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
                 <!-- Grid 1 -->
                 <div class="space-y-4">
                     <!-- Invoice -->
@@ -48,16 +47,18 @@
 
                     <!-- Detail Kamar -->
                     <div class="col-span-1 bg-yellow-50 p-4 rounded-md border border-yellow-300">
-                        <h3 class="text-base font-bold text-rose-900 mb-2">{{ $room->roomType->tipe_kamar }}</h3>
+                        <h3 class="text-base font-bold text-rose-900 mb-2">{{ $roomType->tipe_kamar }}</h3>
                         <div class="text-[11px] leading-relaxed">
-                            <div class="flex justify-between">
-                                <p class="">Harga / Malam :</p>
-                                <span class="font-bold text-left">IDR
-                                    {{ number_format($room->roomType->harga, 0, ',', ',') }}</span>
+                            <div class="flex justify-between mb-2">
+                                <div class="">
+                                    <p class="font-bold text-left">IDR <span class="">{{ number_format($roomType->harga, 0, ',', ',') }}</span></p>
+                                    <p class="md:text-[10px]"><span id="total-room">1</span > Kamar x <span id="total-nights">1</span> Malam</p>
+                                </div>
+                                <p class="text-sm font-bold text-left text-rose-800">IDR <span class="" id="total-price">{{ number_format($roomType->harga, 0, ',', ',') }}</span></p>
                             </div>
                             <div class="flex justify-between">
                                 <p>Max. Tamu:</p>
-                                <span class="font-bold text-left">{{ $room->roomType->kapasitas }} Orang</span>
+                                <span class="font-bold text-left"><span id="total-guest">{{ $roomType->kapasitas }}</span> Orang</span>
                             </div>
                         </div>
                     </div>
@@ -80,8 +81,12 @@
                                     data-identification-number="{{ $reservation->user->identification_number }}"
                                     data-checkin-date="{{ \Carbon\Carbon::parse($reservation->check_in_date)->format('M d, Y') }}"
                                     data-checkout-date="{{ \Carbon\Carbon::parse($reservation->check_out_date)->format('M d, Y') }}"
-                                    data-invoice-number="{{ $invoice ? $invoice->invoice_number : '' }}">
-                                    {{ $reservation->id }} - {{ $reservation->user->full_name }}
+                                    data-invoice-number="{{ $invoice ? $invoice->invoice_number : '' }}"
+                                    data-total-room="{{ $reservation->total_room }}"
+                                    data-total-guest="{{ $reservation->total_guest }}"
+                                    data-total-price="{{ number_format($reservation->total_price, 0, ',', ',') }}"
+                                    data-total-nights="{{ $reservation->nights }}">
+                                    {{ $reservation->user->full_name }}
                                 </option>
                             @endforeach
                         </select>
@@ -145,6 +150,40 @@
                 </div>
             </div>
 
+            <h2 class="text-lg mb-6 uppercase text-gray-900 font-semibold">- Pilih Kamar - </h2>
+
+            <table class="min-w-full bg-white border border-gray-300 mb-5">
+                <thead>
+                    <tr class="bg-gray-200">
+                        <th class="py-3 px-4 border">No. Kamar</th>
+                        <th class="py-3 px-4 border">Status</th>
+                        <th class="py-3 px-4 border">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($rooms as $index => $room)
+                        <tr class="border hover:bg-gray-100">
+                            <td class="py-3 px-4 text-center">
+                                {{ $roomType->tipe_kamar }} - {{ $room->room_number }}
+                            </td>
+                            <td class="py-3 px-4 text-center">
+                                {{ $room->room_status }}
+                            </td>
+                            <td class="py-3 px-4 text-center">
+                                <label class="flex items-center justify-center">
+                                    <input type="checkbox" name="room_id[]" value="{{ $room->id }}"
+                                        class="room-checkbox">
+                                    <span class="ml-2">Pilih</span>
+                                </label>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+
+            </table>
+
+
+
             <!-- Buttons -->
             <div class="flex justify-end mt-8 space-x-4">
                 <button type="submit"
@@ -157,88 +196,112 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const reservationSelect = document.getElementById('reservation');
-            const invoiceInput = document.getElementById('invoice');
-            const identificationTypeInput = document.getElementById('identification_type');
-            const identificationNumberInput = document.getElementById('identification_number');
-            const checkinDateInput = document.getElementById('checkin-date');
-            const checkoutDateInput = document.getElementById('checkout-date');
+        document.addEventListener("DOMContentLoaded", () => {
+            const reservationSelect = document.getElementById("reservation");
+            const invoiceInput = document.getElementById("invoice");
+            const identificationTypeInput = document.getElementById("identification_type");
+            const identificationNumberInput = document.getElementById("identification_number");
+            const checkinDateInput = document.getElementById("checkin-date");
+            const checkoutDateInput = document.getElementById("checkout-date");
+            const totalRoomElement = document.getElementById("total-room");
+            const totalGuestElement = document.getElementById("total-guest");
+            const totalPriceReservationElement = document.getElementById("total-price");
+            const totalNightsReservationElement = document.getElementById("total-nights");
 
-            reservationSelect.addEventListener('change', (event) => {
-                const selectedOption = event.target.options[event.target.selectedIndex];
+            if (reservationSelect) {
+                reservationSelect.addEventListener("change", (event) => {
+                    const selectedOption = event.target.options[event.target.selectedIndex];
 
-                // Ambil data dari atribut data-*
-                const identificationType = selectedOption.getAttribute('data-identification-type') || '';
-                const identificationNumber = selectedOption.getAttribute('data-identification-number') ||
-                    '';
-                const checkinDate = selectedOption.getAttribute('data-checkin-date') || '';
-                const checkoutDate = selectedOption.getAttribute('data-checkout-date') || '';
-                const invoiceNumber = selectedOption.getAttribute('data-invoice-number') || '';
+                    identificationTypeInput.value = selectedOption.getAttribute(
+                        "data-identification-type") || "";
+                    identificationNumberInput.value = selectedOption.getAttribute(
+                        "data-identification-number") || "";
+                    checkinDateInput.value = selectedOption.getAttribute("data-checkin-date") || "";
+                    checkoutDateInput.value = selectedOption.getAttribute("data-checkout-date") || "";
+                    invoiceInput.value = selectedOption.getAttribute("data-invoice-number") || "";
+                    totalRoomElement.textContent = selectedOption.getAttribute("data-total-room") || "";
+                    totalGuestElement.textContent = selectedOption.getAttribute("data-total-guest") || "";
+                    totalPriceReservationElement.textContent = selectedOption.getAttribute("data-total-price") || "";
+                    totalNightsReservationElement.textContent = selectedOption.getAttribute("data-total-nights") || "";
+                });
+            }
 
-                // Isi input dengan data terkait
-                identificationTypeInput.value = identificationType;
-                identificationNumberInput.value = identificationNumber;
-                checkinDateInput.value = checkinDate;
-                checkoutDateInput.value = checkoutDate;
-                invoiceInput.value = invoiceNumber;
+            document.querySelectorAll(".select-room").forEach(button => {
+                button.addEventListener("click", function() {
+                    let selectedRoomId = this.getAttribute("data-room-id");
+                    document.getElementById("selected-room").value = selectedRoomId;
+
+                    document.querySelectorAll(".select-room").forEach(btn => btn.classList.remove(
+                        "bg-blue-700"));
+                    this.classList.add("bg-blue-700");
+                });
             });
-        });
 
-        document.getElementById('checkin-form').addEventListener('submit', function(event) {
-            event.preventDefault(); // Mencegah form submit biasa
+            document.getElementById("checkin-form").addEventListener("submit", async function(event) {
+                event.preventDefault();
 
-            // Mengambil form data
-            let formData = new FormData(this);
+                let formData = new FormData(this);
+                let selectedRooms = [];
 
-            // Mengirim form data via AJAX
-            fetch(this.action, {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
-                            'content')
-                    }
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        // Jika ada masalah pada response (HTTP error)
-                        throw new Error('Terjadi masalah dengan server. Silakan coba lagi.');
-                    }
-                    return response.json(); // Mengambil response sebagai JSON
-                })
-                .then(data => {
-                    if (data.success) {
-                        // Jika sukses
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Berhasil',
-                            text: data.message || 'Check-in berhasil dan deposit telah ditambahkan!',
-                            showConfirmButton: true,
-                        }).then(() => {
-                            window.location.href = data.redirect_url; // Redirect setelah berhasil
-                        });
-                    } else {
-                        // Jika server mengembalikan error
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Terjadi Kesalahan',
-                            text: data.message ||
-                                'Terjadi kesalahan saat memproses check-in. Silakan coba lagi.',
-                            showConfirmButton: true,
-                        });
-                    }
-                })
-                .catch(error => {
-                    // Jika ada error lain (misalnya gagal koneksi)
+                // Ambil semua checkbox yang dicentang
+                document.querySelectorAll(".room-checkbox:checked").forEach(checkbox => {
+                    selectedRooms.push(checkbox.value);
+                });
+
+                if (selectedRooms.length === 0) {
                     Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: error.message ||
-                            'Terjadi masalah saat menghubungi server. Silakan coba lagi.',
+                        icon: "warning",
+                        title: "Pilih Kamar!",
+                        text: "Silakan pilih setidaknya satu kamar sebelum check-in.",
                         showConfirmButton: true,
                     });
+                    return;
+                }
+
+                // Tambahkan reservation_id jika ada
+                let reservationId = document.getElementById("reservation").value;
+                formData.append("reservation_id", reservationId);
+
+                // Kirim setiap room_id sebagai array
+                selectedRooms.forEach(roomId => {
+                    formData.append("room_id[]", roomId);
                 });
+
+                try {
+                    let response = await fetch(this.action, {
+                        method: "POST",
+                        body: formData,
+                        headers: {
+                            "X-CSRF-TOKEN": document.querySelector("meta[name='csrf-token']")
+                                .getAttribute("content"),
+                            "Accept": "application/json"
+                        },
+                    });
+
+                    let data = await response.json();
+
+                    if (!response.ok) {
+                        throw new Error(data.message || "Terjadi kesalahan.");
+                    }
+
+                    Swal.fire({
+                        icon: "success",
+                        title: "Berhasil",
+                        text: data.message || "Check-in berhasil!",
+                        showConfirmButton: true,
+                    }).then(() => {
+                        window.location.href = data.redirect_url;
+                    });
+
+                } catch (error) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error",
+                        text: error.message || "Terjadi masalah saat menghubungi server.",
+                        showConfirmButton: true,
+                    });
+                }
+            });
         });
     </script>
 

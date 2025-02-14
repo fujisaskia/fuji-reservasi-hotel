@@ -10,6 +10,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
+
 class ReservationCancelledMail extends Mailable
 {
     use Queueable, SerializesModels;

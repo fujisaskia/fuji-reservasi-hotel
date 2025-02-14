@@ -117,6 +117,9 @@
             </div>
         </div>
 
+        <input type="hidden" id="hidden_total_room" name="total_room">
+
+
         {{-- Rincian Pesanan Kamar --}}
         <div id="order-summary" class="mt-4 hidden">
             <div class="flex items-center p-2 mb-4 text-rose-800 rounded-lg bg-rose-50 text-[11px]" role="alert">
@@ -180,11 +183,11 @@
         <div class="flex justify-between space-x-2 mb-2">
             <div class="bg-gray-100  p-4 w-full rounded-l-lg">
                 <h4 class="text-xs text-gray-800 rounded uppercase mb-1">Jumlah Kamar :</h4>
-                <span class="total-room text-sm text-gray-700 font-semibold">1 Kamar</span>
+                <span class="total-room text-sm text-gray-700 font-semibold">0 Kamar</span>
             </div>
             <div class="bg-gray-100  p-4 w-full rounded-r-lg">
                 <h4 class="text-xs text-gray-800 rounded uppercase mb-1">Jumlah Tamu :</h4>
-                <span class="total-guest text-sm text-gray-700 font-semibold">2 Tamu</span>
+                <span class="total-guest text-sm text-gray-700 font-semibold">0 Tamu</span>
             </div>
         </div>
         {{-- room confirmation --}}
@@ -194,9 +197,9 @@
                 <div class="flex justify-between text-sm text-gray-700 font-semibold">
                     <div class="flex flex-col">
                         <span class="room-type">Tipe Kamar</span>
-                        <span class="text-[11px] text-gray-400">1 kamar x 2 malam</span>
+                        {{-- <span class="text-[11px] text-gray-400">0 kamar x 0 malam</span> --}}
                     </div>
-                    <span class="total-price text-rose-900">500,000,000</span>
+                    <span class="total-price text-rose-900">000,000,000</span>
                 </div>
             </div>
         </div>
@@ -259,11 +262,22 @@
     // Handle room selection
     document.querySelectorAll('.select-room').forEach(button => {
         button.addEventListener('click', function () {
-            // Dapatkan detail kamar dari atribut tombol
+            // Ambil baris tabel yang sesuai dengan tombol yang diklik
+            const selectedRow = this.closest('tr');
+            const totalRoomsInput = selectedRow.querySelector('input[name="total_room"]');
+
+            if (!totalRoomsInput) {
+                alert("Input jumlah kamar tidak ditemukan.");
+                return;
+            }
+
+            // Ambil nilai dari input jumlah kamar yang sesuai
+            const totalRooms = totalRoomsInput.value;
+
+            // Ambil detail kamar dari atribut tombol
             roomTypeId = this.getAttribute('data-room-id');
             const roomTypeName = this.getAttribute('data-room-name');
-            const roomPrice = this.getAttribute('data-room-price');
-            const totalRooms = document.querySelector('input[name="total_room"]').value;
+            const roomPrice = parseFloat(this.getAttribute('data-room-price')) || 0;
             const checkInDate = document.querySelector('input[name="check_in_date"]').value;
             const checkOutDate = document.querySelector('input[name="check_out_date"]').value;
 
@@ -279,11 +293,14 @@
                 maximumFractionDigits: 0,
             })}`;
 
+            // Pastikan nilai jumlah kamar dikirim dalam form
+            document.getElementById('hidden_total_room').value = totalRooms;
 
             // Tampilkan Ringkasan Reservasi
             document.getElementById('order-summary').classList.remove('hidden');
         });
     });
+
 
     // Submit reservation form
     document.getElementById('reservation-form').addEventListener('submit', function (event) {
@@ -296,6 +313,8 @@
 
         const formData = new FormData(this);
         formData.append('room_type_id', roomTypeId);
+
+        console.log([...formData.entries()]); // Cek apakah total_room terkirim
 
         // Tambahkan token CSRF jika diperlukan
         const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');

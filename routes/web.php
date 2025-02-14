@@ -140,7 +140,7 @@ Route::middleware(['auth:receptionist'])->group(function () {
     Route::get('/check-in/receptionist', [ReceptionistController::class, 'showAvailableRooms']);
     Route::get('/check-in/in-room/{id}', [ReceptionistController::class, 'showCheckInForm'])->name('checkin.form');
     // Route::get('/search-invoice', [ReceptionistController::class, 'search'])->name('invoice.search');
-    Route::post('/check-in/in-room/{id}', [ReceptionistController::class, 'processCheckIn'])->name('checkin.process');
+    Route::post('/check-in/in-room', [ReceptionistController::class, 'processCheckIn'])->name('checkin.process');
 
     // Route untuk halaman index Guedt
     Route::get('/guest', [ReceptionistController::class, 'showCheckedInReservations'])->name('guest.checked_in');
@@ -156,9 +156,12 @@ Route::middleware(['auth:receptionist'])->group(function () {
     Route::get('/service-order/{reservationId}', [ServiceOrderController::class, 'showReservationSummary'])->name('service-order');
 
     // menampilkan data kamar "Terisi" di fitur check-in
-    Route::get('/check-out', [ReceptionistController::class, 'showOccupiedRooms'])->name('check-out.index');
-    Route::get('/check-out/{id}', [ReceptionistController::class, 'showCheckOutForm'])->name('check-out.show');
-    Route::post('/checkout/{id}', [ReceptionistController::class, 'processCheckOut'])->name('checkout.process');
+    // Route::get('/check-out', [ReceptionistController::class, 'showOccupiedRooms'])->name('check-out.index');
+    Route::get('/check-out', [ReceptionistController::class, 'getCheckedInRooms'])->name('check-out.index');
+    Route::get('/get-invoice/{id}', [ReceptionistController::class, 'showInvoiceByReservation'])->name('invoice.show');
+    Route::get('/send-invoice/{id}', [ReceptionistController::class, 'sendInvoiceEmail'])->name('send.invoice');
+    // Route::post('/checkout/{id}', [ReceptionistController::class, 'processCheckOut'])->name('checkout.process');
+    Route::post('/checkout', [ReceptionistController::class, 'processCheckout'])->name('checkout.process');
     Route::get('/invoice/{id}/print', [ReceptionistController::class, 'printInvoice'])->name('invoice.print');
 
     Route::get('/new-inroom', function () {
